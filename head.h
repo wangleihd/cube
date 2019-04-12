@@ -7,24 +7,23 @@
 #include <assert.h>
 // #include <conio.h>    //window lib
 
-
-typedef struct point_type
-{
+typedef struct point_type {
     /* data */
     int x, y;
     int id;
-
 }point, *pos;
 
-typedef struct cube
-{
+typedef struct cube {
     /* data */
     point  dot[4];
-    double height;
     int id;
     int floor;
+    int row;
+    int column;
+    int width;
+    int height;
     struct cube *top;
-    struct cube *below;
+    struct cube *bottom;
     struct cube *left;
     struct cube *right;
 }cubes, *cu;
