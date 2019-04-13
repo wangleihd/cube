@@ -27,11 +27,12 @@ void min_cube_init(){
             head.left = p;
             p->id = num;
             p->floor = 0;
-            p->row = k + 1;
-            p->column = i + 1;
+            p->row = i + 1;
+            p->column = k + 1;
             p->height = min_side;
             printf("\nid = %d\t floot = %d\t row = %d\t column = %d\t height = %d\n", p -> id, p -> floor, p -> row, p -> column, p -> height);
             cube_dot( p );
+            cube_link( &head, p);
         }
     }
 }
@@ -79,7 +80,23 @@ void cube_dot( struct cube * c ) {
 }
 
 void cube_link( struct cube * h, struct cube * p ) {
+    struct cube *tmpright = h;
+    struct cube *tmptop = h->top;
+    int i = 1;
+    int j = 1;
 
+    
+    while ( tmpright->right ) {
+        tmpright = tmpright->right;
+        i++;
+    }
+        printf("i = %d\n", i);
+    if(i < 10) {
+        tmpright->right = p;
+    } else {
+        printf("i = %d\n", i);
+
+    }
 
 }
 
