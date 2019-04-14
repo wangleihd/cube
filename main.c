@@ -12,18 +12,21 @@ void result_out ( struct cube * head );
 void curve_x (double * result, int step);
 void curve_y (double * res, int step);
 
-void cube_search(struct cube *, float * , int, struct dot_in_cube *);
+void cube_search(struct cube *, float * , int, int, struct dot_in_cube *);
+struct cube * search(struct cube * head, int row, int column);
 
 int main(void) {
     struct cube head;
     struct dot_in_cube result;
     float dot_x[] = {21, 41, 61, 81, 101, 121, 141, 161, 181, 201};
-    float dot_y[] = {4.5, 9.5, 14.5, 19.5, 24.5, 29.5, 34.5, 44.5, 49.5};
+    float dot_y[] = {4.5, 9.5, 14.5, 19.5, 24.5, 29.5, 34.5, 39.5, 44.5, 49.5};
     int len = 10;
     min_cube_init(&head);
 
     result_out( &head );
-    cube_search( &head, dot_x, len, &result);
+    // flag = 1  x, flag  =2 y.
+    cube_search( &head, dot_x, len, 1,  &result);
+    cube_search( &head, dot_y, len, 2,  &result);
     return 0;
 }
 
@@ -127,12 +130,13 @@ void cube_link( struct cube * h, struct cube * p ) {
 void result_out ( struct cube *m ) {
     struct cube * h = m->right;
     struct cube * row = m->right->top;
+    int i;
 
     while (h) {
         printf("column: %d", h->column);
         if(!(h->column % min_side)) {
             printf("\n\nid = %d\t floot = %d\t row = %d\t column = %d\t height = %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
-            for (int i = 0; i < 4; i++) {
+            for (i = 0; i < 4; i++) {
                 printf("dot->id = %d\t (x, y) =  (%d, %d)\n", h->dot[i].id, h->dot[i].x, h->dot[i].y);
             }
             if(!row){
@@ -143,7 +147,7 @@ void result_out ( struct cube *m ) {
             }
         }
         printf("\n\nid = %d\t floot = %d\t row = %d\t column = %d\t height = %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
-        for (int i = 0; i < 4; i++) {
+        for (i = 0; i < 4; i++) {
             printf("dot->id = %d\t (x, y) =  (%d, %d)\n", h->dot[i].id, h->dot[i].x, h->dot[i].y);
         }
         h = h->right;
@@ -152,28 +156,66 @@ void result_out ( struct cube *m ) {
 
 
 void curve_x (double * result, int step) {
-    for (int x = 0, i = 0; x <= max_side; x += step, i++) {
+    int x, i;
+    for (x = 0, i = 0; x <= max_side; x += step, i++) {
         double y = sin(x * pi / 180) + 1;
         result[i] = y;
     }
 }
 
 void curve_y (double * res, int step) {
-    for(int y = 0; y <= max_side; y += step){
+    int y;
+    for(y = 0; y <= max_side; y += step){
         // double y = sin(x * PI/180) +1;
         double x = asin(y % 10);
             printf("y = %d, x = %f\n", y, x);
     }
 }
 
-void cube_search(struct cube * head, float * coordinate, int len, struct dot_in_cube * res) {
+void cube_search(struct cube * head, float * coordinate, int len, int flag, struct dot_in_cube * res) {
     int i = 1;
+    int step_x = 0;
+    int step_y = 0;
+    struct cube * p;
+    struct cube * h = head;
+
+            printf("flag: %d\n", flag);
     for(; i <= len; i++) {
-        printf("(x,y): (%d, %f)\n", i*10, *coordinate);
+        if(*coordinate > max_side) {
+            coordinate ++;
+            continue;
+        } else {
+            if(1 == flag) {
+            step_x = i;
+            if(step_x <=1) {
+                step_x = 1;
+            }
+            step_y = (int)*coordinate / min_side + 1;
+            p = search(head, step_x, step_y);
+
+            } else {
+                step_y = i;
+                if(step_y <= 1) {
+                    step_y = 1;
+                }
+                step_x = (int)*coordinate / min_side + 1;
+            p = search(head, step_x, step_y);
+            }
+        }
+            printf("(x, y) = [%d, %d], row = %d, column = %d, id = %d\n", step_x, step_y, p->row, p->column, p->id);
         coordinate ++;
 
     }
 }
 
-
+struct cube * search(struct cube * head, int column, int row) {
+    struct cube * tmp = head->right;
+    while(tmp->row != row) {
+        tmp = tmp->top;
+    }
+    while(tmp->column != column) {
+        tmp = tmp->right;
+    }
+    return tmp;
+}
 

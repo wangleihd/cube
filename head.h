@@ -15,6 +15,10 @@ typedef struct point_type {
 
 typedef struct cube {
     /* data */
+    // (0,1) -> bottom point (0)
+    // (1,2) -> right  point (1)
+    // (2,3) -> top    point (2)
+    // (3,0) -> left   point (3)
     point  dot[4];
     int id;
     int floor;
@@ -29,6 +33,8 @@ typedef struct cube {
 }cubes, *cu;
 
 typedef struct dot_in_cube {
+    float x;
+    float y;
     struct cube *top;
     struct cube *bottom;
     struct cube *left;

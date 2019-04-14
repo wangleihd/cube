@@ -1,791 +1,716 @@
-head.id=0
+column: 1
 
 id = 1	 floot = 0	 row = 1	 column = 1	 height = 10
 dot->id = 0	 (x, y) =  (0, 0)
 dot->id = 1	 (x, y) =  (10, 0)
 dot->id = 2	 (x, y) =  (10, 10)
 dot->id = 3	 (x, y) =  (0, 10)
-i = 1
+column: 2
 
 id = 2	 floot = 0	 row = 1	 column = 2	 height = 10
 dot->id = 0	 (x, y) =  (0, 10)
 dot->id = 1	 (x, y) =  (10, 10)
 dot->id = 2	 (x, y) =  (10, 20)
 dot->id = 3	 (x, y) =  (0, 20)
-i = 2
+column: 3
 
 id = 3	 floot = 0	 row = 1	 column = 3	 height = 10
 dot->id = 0	 (x, y) =  (0, 20)
 dot->id = 1	 (x, y) =  (10, 20)
 dot->id = 2	 (x, y) =  (10, 30)
 dot->id = 3	 (x, y) =  (0, 30)
-i = 3
+column: 4
 
 id = 4	 floot = 0	 row = 1	 column = 4	 height = 10
 dot->id = 0	 (x, y) =  (0, 30)
 dot->id = 1	 (x, y) =  (10, 30)
 dot->id = 2	 (x, y) =  (10, 40)
 dot->id = 3	 (x, y) =  (0, 40)
-i = 4
+column: 5
 
 id = 5	 floot = 0	 row = 1	 column = 5	 height = 10
 dot->id = 0	 (x, y) =  (0, 40)
 dot->id = 1	 (x, y) =  (10, 40)
 dot->id = 2	 (x, y) =  (10, 50)
 dot->id = 3	 (x, y) =  (0, 50)
-i = 5
+column: 6
 
 id = 6	 floot = 0	 row = 1	 column = 6	 height = 10
 dot->id = 0	 (x, y) =  (0, 50)
 dot->id = 1	 (x, y) =  (10, 50)
 dot->id = 2	 (x, y) =  (10, 60)
 dot->id = 3	 (x, y) =  (0, 60)
-i = 6
+column: 7
 
 id = 7	 floot = 0	 row = 1	 column = 7	 height = 10
 dot->id = 0	 (x, y) =  (0, 60)
 dot->id = 1	 (x, y) =  (10, 60)
 dot->id = 2	 (x, y) =  (10, 70)
 dot->id = 3	 (x, y) =  (0, 70)
-i = 7
+column: 8
 
 id = 8	 floot = 0	 row = 1	 column = 8	 height = 10
 dot->id = 0	 (x, y) =  (0, 70)
 dot->id = 1	 (x, y) =  (10, 70)
 dot->id = 2	 (x, y) =  (10, 80)
 dot->id = 3	 (x, y) =  (0, 80)
-i = 8
+column: 9
 
 id = 9	 floot = 0	 row = 1	 column = 9	 height = 10
 dot->id = 0	 (x, y) =  (0, 80)
 dot->id = 1	 (x, y) =  (10, 80)
 dot->id = 2	 (x, y) =  (10, 90)
 dot->id = 3	 (x, y) =  (0, 90)
-i = 9
+column: 10
 
 id = 10	 floot = 0	 row = 1	 column = 10	 height = 10
 dot->id = 0	 (x, y) =  (0, 90)
 dot->id = 1	 (x, y) =  (10, 90)
 dot->id = 2	 (x, y) =  (10, 100)
 dot->id = 3	 (x, y) =  (0, 100)
-i = 10
+
 
 id = 11	 floot = 0	 row = 2	 column = 1	 height = 10
 dot->id = 0	 (x, y) =  (10, 0)
 dot->id = 1	 (x, y) =  (20, 0)
 dot->id = 2	 (x, y) =  (20, 10)
 dot->id = 3	 (x, y) =  (10, 10)
-i = 11
-i = 11
+column: 2
 
 id = 12	 floot = 0	 row = 2	 column = 2	 height = 10
 dot->id = 0	 (x, y) =  (10, 10)
 dot->id = 1	 (x, y) =  (20, 10)
 dot->id = 2	 (x, y) =  (20, 20)
 dot->id = 3	 (x, y) =  (10, 20)
-i = 11
-i = 11
+column: 3
 
 id = 13	 floot = 0	 row = 2	 column = 3	 height = 10
 dot->id = 0	 (x, y) =  (10, 20)
 dot->id = 1	 (x, y) =  (20, 20)
 dot->id = 2	 (x, y) =  (20, 30)
 dot->id = 3	 (x, y) =  (10, 30)
-i = 11
-i = 11
+column: 4
 
 id = 14	 floot = 0	 row = 2	 column = 4	 height = 10
 dot->id = 0	 (x, y) =  (10, 30)
 dot->id = 1	 (x, y) =  (20, 30)
 dot->id = 2	 (x, y) =  (20, 40)
 dot->id = 3	 (x, y) =  (10, 40)
-i = 11
-i = 11
+column: 5
 
 id = 15	 floot = 0	 row = 2	 column = 5	 height = 10
 dot->id = 0	 (x, y) =  (10, 40)
 dot->id = 1	 (x, y) =  (20, 40)
 dot->id = 2	 (x, y) =  (20, 50)
 dot->id = 3	 (x, y) =  (10, 50)
-i = 11
-i = 11
+column: 6
 
 id = 16	 floot = 0	 row = 2	 column = 6	 height = 10
 dot->id = 0	 (x, y) =  (10, 50)
 dot->id = 1	 (x, y) =  (20, 50)
 dot->id = 2	 (x, y) =  (20, 60)
 dot->id = 3	 (x, y) =  (10, 60)
-i = 11
-i = 11
+column: 7
 
 id = 17	 floot = 0	 row = 2	 column = 7	 height = 10
 dot->id = 0	 (x, y) =  (10, 60)
 dot->id = 1	 (x, y) =  (20, 60)
 dot->id = 2	 (x, y) =  (20, 70)
 dot->id = 3	 (x, y) =  (10, 70)
-i = 11
-i = 11
+column: 8
 
 id = 18	 floot = 0	 row = 2	 column = 8	 height = 10
 dot->id = 0	 (x, y) =  (10, 70)
 dot->id = 1	 (x, y) =  (20, 70)
 dot->id = 2	 (x, y) =  (20, 80)
 dot->id = 3	 (x, y) =  (10, 80)
-i = 11
-i = 11
+column: 9
 
 id = 19	 floot = 0	 row = 2	 column = 9	 height = 10
 dot->id = 0	 (x, y) =  (10, 80)
 dot->id = 1	 (x, y) =  (20, 80)
 dot->id = 2	 (x, y) =  (20, 90)
 dot->id = 3	 (x, y) =  (10, 90)
-i = 11
-i = 11
+column: 10
 
 id = 20	 floot = 0	 row = 2	 column = 10	 height = 10
 dot->id = 0	 (x, y) =  (10, 90)
 dot->id = 1	 (x, y) =  (20, 90)
 dot->id = 2	 (x, y) =  (20, 100)
 dot->id = 3	 (x, y) =  (10, 100)
-i = 11
-i = 11
+
 
 id = 21	 floot = 0	 row = 3	 column = 1	 height = 10
 dot->id = 0	 (x, y) =  (20, 0)
 dot->id = 1	 (x, y) =  (30, 0)
 dot->id = 2	 (x, y) =  (30, 10)
 dot->id = 3	 (x, y) =  (20, 10)
-i = 11
-i = 11
+column: 2
 
 id = 22	 floot = 0	 row = 3	 column = 2	 height = 10
 dot->id = 0	 (x, y) =  (20, 10)
 dot->id = 1	 (x, y) =  (30, 10)
 dot->id = 2	 (x, y) =  (30, 20)
 dot->id = 3	 (x, y) =  (20, 20)
-i = 11
-i = 11
+column: 3
 
 id = 23	 floot = 0	 row = 3	 column = 3	 height = 10
 dot->id = 0	 (x, y) =  (20, 20)
 dot->id = 1	 (x, y) =  (30, 20)
 dot->id = 2	 (x, y) =  (30, 30)
 dot->id = 3	 (x, y) =  (20, 30)
-i = 11
-i = 11
+column: 4
 
 id = 24	 floot = 0	 row = 3	 column = 4	 height = 10
 dot->id = 0	 (x, y) =  (20, 30)
 dot->id = 1	 (x, y) =  (30, 30)
 dot->id = 2	 (x, y) =  (30, 40)
 dot->id = 3	 (x, y) =  (20, 40)
-i = 11
-i = 11
+column: 5
 
 id = 25	 floot = 0	 row = 3	 column = 5	 height = 10
 dot->id = 0	 (x, y) =  (20, 40)
 dot->id = 1	 (x, y) =  (30, 40)
 dot->id = 2	 (x, y) =  (30, 50)
 dot->id = 3	 (x, y) =  (20, 50)
-i = 11
-i = 11
+column: 6
 
 id = 26	 floot = 0	 row = 3	 column = 6	 height = 10
 dot->id = 0	 (x, y) =  (20, 50)
 dot->id = 1	 (x, y) =  (30, 50)
 dot->id = 2	 (x, y) =  (30, 60)
 dot->id = 3	 (x, y) =  (20, 60)
-i = 11
-i = 11
+column: 7
 
 id = 27	 floot = 0	 row = 3	 column = 7	 height = 10
 dot->id = 0	 (x, y) =  (20, 60)
 dot->id = 1	 (x, y) =  (30, 60)
 dot->id = 2	 (x, y) =  (30, 70)
 dot->id = 3	 (x, y) =  (20, 70)
-i = 11
-i = 11
+column: 8
 
 id = 28	 floot = 0	 row = 3	 column = 8	 height = 10
 dot->id = 0	 (x, y) =  (20, 70)
 dot->id = 1	 (x, y) =  (30, 70)
 dot->id = 2	 (x, y) =  (30, 80)
 dot->id = 3	 (x, y) =  (20, 80)
-i = 11
-i = 11
+column: 9
 
 id = 29	 floot = 0	 row = 3	 column = 9	 height = 10
 dot->id = 0	 (x, y) =  (20, 80)
 dot->id = 1	 (x, y) =  (30, 80)
 dot->id = 2	 (x, y) =  (30, 90)
 dot->id = 3	 (x, y) =  (20, 90)
-i = 11
-i = 11
+column: 10
 
 id = 30	 floot = 0	 row = 3	 column = 10	 height = 10
 dot->id = 0	 (x, y) =  (20, 90)
 dot->id = 1	 (x, y) =  (30, 90)
 dot->id = 2	 (x, y) =  (30, 100)
 dot->id = 3	 (x, y) =  (20, 100)
-i = 11
-i = 11
+
 
 id = 31	 floot = 0	 row = 4	 column = 1	 height = 10
 dot->id = 0	 (x, y) =  (30, 0)
 dot->id = 1	 (x, y) =  (40, 0)
 dot->id = 2	 (x, y) =  (40, 10)
 dot->id = 3	 (x, y) =  (30, 10)
-i = 11
-i = 11
+column: 2
 
 id = 32	 floot = 0	 row = 4	 column = 2	 height = 10
 dot->id = 0	 (x, y) =  (30, 10)
 dot->id = 1	 (x, y) =  (40, 10)
 dot->id = 2	 (x, y) =  (40, 20)
 dot->id = 3	 (x, y) =  (30, 20)
-i = 11
-i = 11
+column: 3
 
 id = 33	 floot = 0	 row = 4	 column = 3	 height = 10
 dot->id = 0	 (x, y) =  (30, 20)
 dot->id = 1	 (x, y) =  (40, 20)
 dot->id = 2	 (x, y) =  (40, 30)
 dot->id = 3	 (x, y) =  (30, 30)
-i = 11
-i = 11
+column: 4
 
 id = 34	 floot = 0	 row = 4	 column = 4	 height = 10
 dot->id = 0	 (x, y) =  (30, 30)
 dot->id = 1	 (x, y) =  (40, 30)
 dot->id = 2	 (x, y) =  (40, 40)
 dot->id = 3	 (x, y) =  (30, 40)
-i = 11
-i = 11
+column: 5
 
 id = 35	 floot = 0	 row = 4	 column = 5	 height = 10
 dot->id = 0	 (x, y) =  (30, 40)
 dot->id = 1	 (x, y) =  (40, 40)
 dot->id = 2	 (x, y) =  (40, 50)
 dot->id = 3	 (x, y) =  (30, 50)
-i = 11
-i = 11
+column: 6
 
 id = 36	 floot = 0	 row = 4	 column = 6	 height = 10
 dot->id = 0	 (x, y) =  (30, 50)
 dot->id = 1	 (x, y) =  (40, 50)
 dot->id = 2	 (x, y) =  (40, 60)
 dot->id = 3	 (x, y) =  (30, 60)
-i = 11
-i = 11
+column: 7
 
 id = 37	 floot = 0	 row = 4	 column = 7	 height = 10
 dot->id = 0	 (x, y) =  (30, 60)
 dot->id = 1	 (x, y) =  (40, 60)
 dot->id = 2	 (x, y) =  (40, 70)
 dot->id = 3	 (x, y) =  (30, 70)
-i = 11
-i = 11
+column: 8
 
 id = 38	 floot = 0	 row = 4	 column = 8	 height = 10
 dot->id = 0	 (x, y) =  (30, 70)
 dot->id = 1	 (x, y) =  (40, 70)
 dot->id = 2	 (x, y) =  (40, 80)
 dot->id = 3	 (x, y) =  (30, 80)
-i = 11
-i = 11
+column: 9
 
 id = 39	 floot = 0	 row = 4	 column = 9	 height = 10
 dot->id = 0	 (x, y) =  (30, 80)
 dot->id = 1	 (x, y) =  (40, 80)
 dot->id = 2	 (x, y) =  (40, 90)
 dot->id = 3	 (x, y) =  (30, 90)
-i = 11
-i = 11
+column: 10
 
 id = 40	 floot = 0	 row = 4	 column = 10	 height = 10
 dot->id = 0	 (x, y) =  (30, 90)
 dot->id = 1	 (x, y) =  (40, 90)
 dot->id = 2	 (x, y) =  (40, 100)
 dot->id = 3	 (x, y) =  (30, 100)
-i = 11
-i = 11
+
 
 id = 41	 floot = 0	 row = 5	 column = 1	 height = 10
 dot->id = 0	 (x, y) =  (40, 0)
 dot->id = 1	 (x, y) =  (50, 0)
 dot->id = 2	 (x, y) =  (50, 10)
 dot->id = 3	 (x, y) =  (40, 10)
-i = 11
-i = 11
+column: 2
 
 id = 42	 floot = 0	 row = 5	 column = 2	 height = 10
 dot->id = 0	 (x, y) =  (40, 10)
 dot->id = 1	 (x, y) =  (50, 10)
 dot->id = 2	 (x, y) =  (50, 20)
 dot->id = 3	 (x, y) =  (40, 20)
-i = 11
-i = 11
+column: 3
 
 id = 43	 floot = 0	 row = 5	 column = 3	 height = 10
 dot->id = 0	 (x, y) =  (40, 20)
 dot->id = 1	 (x, y) =  (50, 20)
 dot->id = 2	 (x, y) =  (50, 30)
 dot->id = 3	 (x, y) =  (40, 30)
-i = 11
-i = 11
+column: 4
 
 id = 44	 floot = 0	 row = 5	 column = 4	 height = 10
 dot->id = 0	 (x, y) =  (40, 30)
 dot->id = 1	 (x, y) =  (50, 30)
 dot->id = 2	 (x, y) =  (50, 40)
 dot->id = 3	 (x, y) =  (40, 40)
-i = 11
-i = 11
+column: 5
 
 id = 45	 floot = 0	 row = 5	 column = 5	 height = 10
 dot->id = 0	 (x, y) =  (40, 40)
 dot->id = 1	 (x, y) =  (50, 40)
 dot->id = 2	 (x, y) =  (50, 50)
 dot->id = 3	 (x, y) =  (40, 50)
-i = 11
-i = 11
+column: 6
 
 id = 46	 floot = 0	 row = 5	 column = 6	 height = 10
 dot->id = 0	 (x, y) =  (40, 50)
 dot->id = 1	 (x, y) =  (50, 50)
 dot->id = 2	 (x, y) =  (50, 60)
 dot->id = 3	 (x, y) =  (40, 60)
-i = 11
-i = 11
+column: 7
 
 id = 47	 floot = 0	 row = 5	 column = 7	 height = 10
 dot->id = 0	 (x, y) =  (40, 60)
 dot->id = 1	 (x, y) =  (50, 60)
 dot->id = 2	 (x, y) =  (50, 70)
 dot->id = 3	 (x, y) =  (40, 70)
-i = 11
-i = 11
+column: 8
 
 id = 48	 floot = 0	 row = 5	 column = 8	 height = 10
 dot->id = 0	 (x, y) =  (40, 70)
 dot->id = 1	 (x, y) =  (50, 70)
 dot->id = 2	 (x, y) =  (50, 80)
 dot->id = 3	 (x, y) =  (40, 80)
-i = 11
-i = 11
+column: 9
 
 id = 49	 floot = 0	 row = 5	 column = 9	 height = 10
 dot->id = 0	 (x, y) =  (40, 80)
 dot->id = 1	 (x, y) =  (50, 80)
 dot->id = 2	 (x, y) =  (50, 90)
 dot->id = 3	 (x, y) =  (40, 90)
-i = 11
-i = 11
+column: 10
 
 id = 50	 floot = 0	 row = 5	 column = 10	 height = 10
 dot->id = 0	 (x, y) =  (40, 90)
 dot->id = 1	 (x, y) =  (50, 90)
 dot->id = 2	 (x, y) =  (50, 100)
 dot->id = 3	 (x, y) =  (40, 100)
-i = 11
-i = 11
+
 
 id = 51	 floot = 0	 row = 6	 column = 1	 height = 10
 dot->id = 0	 (x, y) =  (50, 0)
 dot->id = 1	 (x, y) =  (60, 0)
 dot->id = 2	 (x, y) =  (60, 10)
 dot->id = 3	 (x, y) =  (50, 10)
-i = 11
-i = 11
+column: 2
 
 id = 52	 floot = 0	 row = 6	 column = 2	 height = 10
 dot->id = 0	 (x, y) =  (50, 10)
 dot->id = 1	 (x, y) =  (60, 10)
 dot->id = 2	 (x, y) =  (60, 20)
 dot->id = 3	 (x, y) =  (50, 20)
-i = 11
-i = 11
+column: 3
 
 id = 53	 floot = 0	 row = 6	 column = 3	 height = 10
 dot->id = 0	 (x, y) =  (50, 20)
 dot->id = 1	 (x, y) =  (60, 20)
 dot->id = 2	 (x, y) =  (60, 30)
 dot->id = 3	 (x, y) =  (50, 30)
-i = 11
-i = 11
+column: 4
 
 id = 54	 floot = 0	 row = 6	 column = 4	 height = 10
 dot->id = 0	 (x, y) =  (50, 30)
 dot->id = 1	 (x, y) =  (60, 30)
 dot->id = 2	 (x, y) =  (60, 40)
 dot->id = 3	 (x, y) =  (50, 40)
-i = 11
-i = 11
+column: 5
 
 id = 55	 floot = 0	 row = 6	 column = 5	 height = 10
 dot->id = 0	 (x, y) =  (50, 40)
 dot->id = 1	 (x, y) =  (60, 40)
 dot->id = 2	 (x, y) =  (60, 50)
 dot->id = 3	 (x, y) =  (50, 50)
-i = 11
-i = 11
+column: 6
 
 id = 56	 floot = 0	 row = 6	 column = 6	 height = 10
 dot->id = 0	 (x, y) =  (50, 50)
 dot->id = 1	 (x, y) =  (60, 50)
 dot->id = 2	 (x, y) =  (60, 60)
 dot->id = 3	 (x, y) =  (50, 60)
-i = 11
-i = 11
+column: 7
 
 id = 57	 floot = 0	 row = 6	 column = 7	 height = 10
 dot->id = 0	 (x, y) =  (50, 60)
 dot->id = 1	 (x, y) =  (60, 60)
 dot->id = 2	 (x, y) =  (60, 70)
 dot->id = 3	 (x, y) =  (50, 70)
-i = 11
-i = 11
+column: 8
 
 id = 58	 floot = 0	 row = 6	 column = 8	 height = 10
 dot->id = 0	 (x, y) =  (50, 70)
 dot->id = 1	 (x, y) =  (60, 70)
 dot->id = 2	 (x, y) =  (60, 80)
 dot->id = 3	 (x, y) =  (50, 80)
-i = 11
-i = 11
+column: 9
 
 id = 59	 floot = 0	 row = 6	 column = 9	 height = 10
 dot->id = 0	 (x, y) =  (50, 80)
 dot->id = 1	 (x, y) =  (60, 80)
 dot->id = 2	 (x, y) =  (60, 90)
 dot->id = 3	 (x, y) =  (50, 90)
-i = 11
-i = 11
+column: 10
 
 id = 60	 floot = 0	 row = 6	 column = 10	 height = 10
 dot->id = 0	 (x, y) =  (50, 90)
 dot->id = 1	 (x, y) =  (60, 90)
 dot->id = 2	 (x, y) =  (60, 100)
 dot->id = 3	 (x, y) =  (50, 100)
-i = 11
-i = 11
+
 
 id = 61	 floot = 0	 row = 7	 column = 1	 height = 10
 dot->id = 0	 (x, y) =  (60, 0)
 dot->id = 1	 (x, y) =  (70, 0)
 dot->id = 2	 (x, y) =  (70, 10)
 dot->id = 3	 (x, y) =  (60, 10)
-i = 11
-i = 11
+column: 2
 
 id = 62	 floot = 0	 row = 7	 column = 2	 height = 10
 dot->id = 0	 (x, y) =  (60, 10)
 dot->id = 1	 (x, y) =  (70, 10)
 dot->id = 2	 (x, y) =  (70, 20)
 dot->id = 3	 (x, y) =  (60, 20)
-i = 11
-i = 11
+column: 3
 
 id = 63	 floot = 0	 row = 7	 column = 3	 height = 10
 dot->id = 0	 (x, y) =  (60, 20)
 dot->id = 1	 (x, y) =  (70, 20)
 dot->id = 2	 (x, y) =  (70, 30)
 dot->id = 3	 (x, y) =  (60, 30)
-i = 11
-i = 11
+column: 4
 
 id = 64	 floot = 0	 row = 7	 column = 4	 height = 10
 dot->id = 0	 (x, y) =  (60, 30)
 dot->id = 1	 (x, y) =  (70, 30)
 dot->id = 2	 (x, y) =  (70, 40)
 dot->id = 3	 (x, y) =  (60, 40)
-i = 11
-i = 11
+column: 5
 
 id = 65	 floot = 0	 row = 7	 column = 5	 height = 10
 dot->id = 0	 (x, y) =  (60, 40)
 dot->id = 1	 (x, y) =  (70, 40)
 dot->id = 2	 (x, y) =  (70, 50)
 dot->id = 3	 (x, y) =  (60, 50)
-i = 11
-i = 11
+column: 6
 
 id = 66	 floot = 0	 row = 7	 column = 6	 height = 10
 dot->id = 0	 (x, y) =  (60, 50)
 dot->id = 1	 (x, y) =  (70, 50)
 dot->id = 2	 (x, y) =  (70, 60)
 dot->id = 3	 (x, y) =  (60, 60)
-i = 11
-i = 11
+column: 7
 
 id = 67	 floot = 0	 row = 7	 column = 7	 height = 10
 dot->id = 0	 (x, y) =  (60, 60)
 dot->id = 1	 (x, y) =  (70, 60)
 dot->id = 2	 (x, y) =  (70, 70)
 dot->id = 3	 (x, y) =  (60, 70)
-i = 11
-i = 11
+column: 8
 
 id = 68	 floot = 0	 row = 7	 column = 8	 height = 10
 dot->id = 0	 (x, y) =  (60, 70)
 dot->id = 1	 (x, y) =  (70, 70)
 dot->id = 2	 (x, y) =  (70, 80)
 dot->id = 3	 (x, y) =  (60, 80)
-i = 11
-i = 11
+column: 9
 
 id = 69	 floot = 0	 row = 7	 column = 9	 height = 10
 dot->id = 0	 (x, y) =  (60, 80)
 dot->id = 1	 (x, y) =  (70, 80)
 dot->id = 2	 (x, y) =  (70, 90)
 dot->id = 3	 (x, y) =  (60, 90)
-i = 11
-i = 11
+column: 10
 
 id = 70	 floot = 0	 row = 7	 column = 10	 height = 10
 dot->id = 0	 (x, y) =  (60, 90)
 dot->id = 1	 (x, y) =  (70, 90)
 dot->id = 2	 (x, y) =  (70, 100)
 dot->id = 3	 (x, y) =  (60, 100)
-i = 11
-i = 11
+
 
 id = 71	 floot = 0	 row = 8	 column = 1	 height = 10
 dot->id = 0	 (x, y) =  (70, 0)
 dot->id = 1	 (x, y) =  (80, 0)
 dot->id = 2	 (x, y) =  (80, 10)
 dot->id = 3	 (x, y) =  (70, 10)
-i = 11
-i = 11
+column: 2
 
 id = 72	 floot = 0	 row = 8	 column = 2	 height = 10
 dot->id = 0	 (x, y) =  (70, 10)
 dot->id = 1	 (x, y) =  (80, 10)
 dot->id = 2	 (x, y) =  (80, 20)
 dot->id = 3	 (x, y) =  (70, 20)
-i = 11
-i = 11
+column: 3
 
 id = 73	 floot = 0	 row = 8	 column = 3	 height = 10
 dot->id = 0	 (x, y) =  (70, 20)
 dot->id = 1	 (x, y) =  (80, 20)
 dot->id = 2	 (x, y) =  (80, 30)
 dot->id = 3	 (x, y) =  (70, 30)
-i = 11
-i = 11
+column: 4
 
 id = 74	 floot = 0	 row = 8	 column = 4	 height = 10
 dot->id = 0	 (x, y) =  (70, 30)
 dot->id = 1	 (x, y) =  (80, 30)
 dot->id = 2	 (x, y) =  (80, 40)
 dot->id = 3	 (x, y) =  (70, 40)
-i = 11
-i = 11
+column: 5
 
 id = 75	 floot = 0	 row = 8	 column = 5	 height = 10
 dot->id = 0	 (x, y) =  (70, 40)
 dot->id = 1	 (x, y) =  (80, 40)
 dot->id = 2	 (x, y) =  (80, 50)
 dot->id = 3	 (x, y) =  (70, 50)
-i = 11
-i = 11
+column: 6
 
 id = 76	 floot = 0	 row = 8	 column = 6	 height = 10
 dot->id = 0	 (x, y) =  (70, 50)
 dot->id = 1	 (x, y) =  (80, 50)
 dot->id = 2	 (x, y) =  (80, 60)
 dot->id = 3	 (x, y) =  (70, 60)
-i = 11
-i = 11
+column: 7
 
 id = 77	 floot = 0	 row = 8	 column = 7	 height = 10
 dot->id = 0	 (x, y) =  (70, 60)
 dot->id = 1	 (x, y) =  (80, 60)
 dot->id = 2	 (x, y) =  (80, 70)
 dot->id = 3	 (x, y) =  (70, 70)
-i = 11
-i = 11
+column: 8
 
 id = 78	 floot = 0	 row = 8	 column = 8	 height = 10
 dot->id = 0	 (x, y) =  (70, 70)
 dot->id = 1	 (x, y) =  (80, 70)
 dot->id = 2	 (x, y) =  (80, 80)
 dot->id = 3	 (x, y) =  (70, 80)
-i = 11
-i = 11
+column: 9
 
 id = 79	 floot = 0	 row = 8	 column = 9	 height = 10
 dot->id = 0	 (x, y) =  (70, 80)
 dot->id = 1	 (x, y) =  (80, 80)
 dot->id = 2	 (x, y) =  (80, 90)
 dot->id = 3	 (x, y) =  (70, 90)
-i = 11
-i = 11
+column: 10
 
 id = 80	 floot = 0	 row = 8	 column = 10	 height = 10
 dot->id = 0	 (x, y) =  (70, 90)
 dot->id = 1	 (x, y) =  (80, 90)
 dot->id = 2	 (x, y) =  (80, 100)
 dot->id = 3	 (x, y) =  (70, 100)
-i = 11
-i = 11
+
 
 id = 81	 floot = 0	 row = 9	 column = 1	 height = 10
 dot->id = 0	 (x, y) =  (80, 0)
 dot->id = 1	 (x, y) =  (90, 0)
 dot->id = 2	 (x, y) =  (90, 10)
 dot->id = 3	 (x, y) =  (80, 10)
-i = 11
-i = 11
+column: 2
 
 id = 82	 floot = 0	 row = 9	 column = 2	 height = 10
 dot->id = 0	 (x, y) =  (80, 10)
 dot->id = 1	 (x, y) =  (90, 10)
 dot->id = 2	 (x, y) =  (90, 20)
 dot->id = 3	 (x, y) =  (80, 20)
-i = 11
-i = 11
+column: 3
 
 id = 83	 floot = 0	 row = 9	 column = 3	 height = 10
 dot->id = 0	 (x, y) =  (80, 20)
 dot->id = 1	 (x, y) =  (90, 20)
 dot->id = 2	 (x, y) =  (90, 30)
 dot->id = 3	 (x, y) =  (80, 30)
-i = 11
-i = 11
+column: 4
 
 id = 84	 floot = 0	 row = 9	 column = 4	 height = 10
 dot->id = 0	 (x, y) =  (80, 30)
 dot->id = 1	 (x, y) =  (90, 30)
 dot->id = 2	 (x, y) =  (90, 40)
 dot->id = 3	 (x, y) =  (80, 40)
-i = 11
-i = 11
+column: 5
 
 id = 85	 floot = 0	 row = 9	 column = 5	 height = 10
 dot->id = 0	 (x, y) =  (80, 40)
 dot->id = 1	 (x, y) =  (90, 40)
 dot->id = 2	 (x, y) =  (90, 50)
 dot->id = 3	 (x, y) =  (80, 50)
-i = 11
-i = 11
+column: 6
 
 id = 86	 floot = 0	 row = 9	 column = 6	 height = 10
 dot->id = 0	 (x, y) =  (80, 50)
 dot->id = 1	 (x, y) =  (90, 50)
 dot->id = 2	 (x, y) =  (90, 60)
 dot->id = 3	 (x, y) =  (80, 60)
-i = 11
-i = 11
+column: 7
 
 id = 87	 floot = 0	 row = 9	 column = 7	 height = 10
 dot->id = 0	 (x, y) =  (80, 60)
 dot->id = 1	 (x, y) =  (90, 60)
 dot->id = 2	 (x, y) =  (90, 70)
 dot->id = 3	 (x, y) =  (80, 70)
-i = 11
-i = 11
+column: 8
 
 id = 88	 floot = 0	 row = 9	 column = 8	 height = 10
 dot->id = 0	 (x, y) =  (80, 70)
 dot->id = 1	 (x, y) =  (90, 70)
 dot->id = 2	 (x, y) =  (90, 80)
 dot->id = 3	 (x, y) =  (80, 80)
-i = 11
-i = 11
+column: 9
 
 id = 89	 floot = 0	 row = 9	 column = 9	 height = 10
 dot->id = 0	 (x, y) =  (80, 80)
 dot->id = 1	 (x, y) =  (90, 80)
 dot->id = 2	 (x, y) =  (90, 90)
 dot->id = 3	 (x, y) =  (80, 90)
-i = 11
-i = 11
+column: 10
 
 id = 90	 floot = 0	 row = 9	 column = 10	 height = 10
 dot->id = 0	 (x, y) =  (80, 90)
 dot->id = 1	 (x, y) =  (90, 90)
 dot->id = 2	 (x, y) =  (90, 100)
 dot->id = 3	 (x, y) =  (80, 100)
-i = 11
-i = 11
+
 
 id = 91	 floot = 0	 row = 10	 column = 1	 height = 10
 dot->id = 0	 (x, y) =  (90, 0)
 dot->id = 1	 (x, y) =  (100, 0)
 dot->id = 2	 (x, y) =  (100, 10)
 dot->id = 3	 (x, y) =  (90, 10)
-i = 11
-i = 11
+column: 2
 
 id = 92	 floot = 0	 row = 10	 column = 2	 height = 10
 dot->id = 0	 (x, y) =  (90, 10)
 dot->id = 1	 (x, y) =  (100, 10)
 dot->id = 2	 (x, y) =  (100, 20)
 dot->id = 3	 (x, y) =  (90, 20)
-i = 11
-i = 11
+column: 3
 
 id = 93	 floot = 0	 row = 10	 column = 3	 height = 10
 dot->id = 0	 (x, y) =  (90, 20)
 dot->id = 1	 (x, y) =  (100, 20)
 dot->id = 2	 (x, y) =  (100, 30)
 dot->id = 3	 (x, y) =  (90, 30)
-i = 11
-i = 11
+column: 4
 
 id = 94	 floot = 0	 row = 10	 column = 4	 height = 10
 dot->id = 0	 (x, y) =  (90, 30)
 dot->id = 1	 (x, y) =  (100, 30)
 dot->id = 2	 (x, y) =  (100, 40)
 dot->id = 3	 (x, y) =  (90, 40)
-i = 11
-i = 11
+column: 5
 
 id = 95	 floot = 0	 row = 10	 column = 5	 height = 10
 dot->id = 0	 (x, y) =  (90, 40)
 dot->id = 1	 (x, y) =  (100, 40)
 dot->id = 2	 (x, y) =  (100, 50)
 dot->id = 3	 (x, y) =  (90, 50)
-i = 11
-i = 11
+column: 6
 
 id = 96	 floot = 0	 row = 10	 column = 6	 height = 10
 dot->id = 0	 (x, y) =  (90, 50)
 dot->id = 1	 (x, y) =  (100, 50)
 dot->id = 2	 (x, y) =  (100, 60)
 dot->id = 3	 (x, y) =  (90, 60)
-i = 11
-i = 11
+column: 7
 
 id = 97	 floot = 0	 row = 10	 column = 7	 height = 10
 dot->id = 0	 (x, y) =  (90, 60)
 dot->id = 1	 (x, y) =  (100, 60)
 dot->id = 2	 (x, y) =  (100, 70)
 dot->id = 3	 (x, y) =  (90, 70)
-i = 11
-i = 11
+column: 8
 
 id = 98	 floot = 0	 row = 10	 column = 8	 height = 10
 dot->id = 0	 (x, y) =  (90, 70)
 dot->id = 1	 (x, y) =  (100, 70)
 dot->id = 2	 (x, y) =  (100, 80)
 dot->id = 3	 (x, y) =  (90, 80)
-i = 11
-i = 11
+column: 9
 
 id = 99	 floot = 0	 row = 10	 column = 9	 height = 10
 dot->id = 0	 (x, y) =  (90, 80)
 dot->id = 1	 (x, y) =  (100, 80)
 dot->id = 2	 (x, y) =  (100, 90)
 dot->id = 3	 (x, y) =  (90, 90)
-i = 11
-i = 11
+column: 10
 
 id = 100	 floot = 0	 row = 10	 column = 10	 height = 10
 dot->id = 0	 (x, y) =  (90, 90)
 dot->id = 1	 (x, y) =  (100, 90)
 dot->id = 2	 (x, y) =  (100, 100)
 dot->id = 3	 (x, y) =  (90, 100)
-i = 11
-i = 11
+flag: 1
+(x, y) = [1, 3], row = 3, column = 1, id = 21
+(x, y) = [2, 5], row = 5, column = 2, id = 42
+(x, y) = [3, 7], row = 7, column = 3, id = 63
+(x, y) = [4, 9], row = 9, column = 4, id = 84
+flag: 2
+(x, y) = [1, 1], row = 1, column = 1, id = 1
+(x, y) = [1, 2], row = 2, column = 1, id = 11
+(x, y) = [2, 3], row = 3, column = 2, id = 22
+(x, y) = [2, 4], row = 4, column = 2, id = 32
+(x, y) = [3, 5], row = 5, column = 3, id = 43
+(x, y) = [3, 6], row = 6, column = 3, id = 53
+(x, y) = [4, 7], row = 7, column = 4, id = 64
+(x, y) = [4, 8], row = 8, column = 4, id = 74
+(x, y) = [5, 9], row = 9, column = 5, id = 85
+(x, y) = [5, 10], row = 10, column = 5, id = 95
