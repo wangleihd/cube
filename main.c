@@ -2,7 +2,7 @@
 
 const int max_side = 100;
 const int min_side = 10;
-const double PI = 3.1415926;
+const double pi = 3.1415926;
 
 void min_cube_init();
 void cube_init ( struct cube * cube);
@@ -41,8 +41,6 @@ void min_cube_init(){
         }
     }
     result_out( &head);
-    // curve_x(res, min_side);
-    // curve_y (res, min_side);
 }
 
 void cube_init( struct cube * p ) {
@@ -93,7 +91,6 @@ void cube_link( struct cube * h, struct cube * p ) {
     int dot = 0;
     while ( tmpright->right ) {
         tmpright = tmpright->right;
-        // printf("1. cube->id = %d\t %d  column%%10 = %d\n", tmpright->id, tmpright->column, tmpright->column % min_side);
         if(0 == (tmpright->column % min_side)) {
             if(tmptop->top) {
                 tmpright = tmptop->top;
@@ -104,22 +101,6 @@ void cube_link( struct cube * h, struct cube * p ) {
                 break;
             }
         }
-        // if(((tmpright->column) % min_side) == 0) {
-        //         printf("i %d %d\n", tmptop->id, p->column);
-        //         // if(tmptop) {
-        //         //     dot = 0;
-        //         // } else {
-        //         //     dot = 1;
-        //         //     break;
-        //         // }
-        //         tmpright = tmptop;
-        //         tmptop = tmptop->top;
-        // } else {
-        
-
-        // }
-        
-        // printf("2. cube->id = %d\t %d\n", tmpright->id, tmpright->column);
     }
         if(dot == 1) {
             tmpright->top = p;
@@ -127,13 +108,11 @@ void cube_link( struct cube * h, struct cube * p ) {
         } else {
             tmpright->right = p;
             p->left = tmpright;
-            printf("row: %d\n", tmpright->row);
         if(tmpright->row > 1) {
                 tmpright->bottom->right->top = p;
                 p->bottom = tmpright->bottom->right;
         }
         }
-
 }
 
 void result_out ( struct cube *m ) {
@@ -143,19 +122,18 @@ void result_out ( struct cube *m ) {
     while (h) {
         printf("column: %d", h->column);
         if(!(h->column % min_side)) {
-            printf("\n*****\nid = %d\t floot = %d\t row = %d\t column = %d\t height = %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
+            printf("\n\nid = %d\t floot = %d\t row = %d\t column = %d\t height = %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
             for (int i = 0; i < 4; i++) {
                 printf("dot->id = %d\t (x, y) =  (%d, %d)\n", h->dot[i].id, h->dot[i].x, h->dot[i].y);
             }
-
-            h = row;
-            row = row->top;
-            if(!h){
-                break;
+            if(!row){
+                return;
+            } else {
+                h = row;
+                row = row->top;
             }
-            printf("\n\n1111. coumn[%d] = %d\t\n", h->id, h->column);
         }
-        printf("\nid = %d\t floot = %d\t row = %d\t column = %d\t height = %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
+        printf("\n\nid = %d\t floot = %d\t row = %d\t column = %d\t height = %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
         for (int i = 0; i < 4; i++) {
             printf("dot->id = %d\t (x, y) =  (%d, %d)\n", h->dot[i].id, h->dot[i].x, h->dot[i].y);
         }
@@ -165,9 +143,8 @@ void result_out ( struct cube *m ) {
 
 
 void curve_x (double * result, int step) {
-
     for (int x = 0, i = 0; x <= max_side; x += step, i++) {
-        double y = sin(x * PI / 180) + 1;
+        double y = sin(x * pi / 180) + 1;
         result[i] = y;
     }
 }
