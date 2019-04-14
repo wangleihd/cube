@@ -4,7 +4,7 @@ const int max_side = 100;
 const int min_side = 10;
 const double pi = 3.1415926;
 
-void min_cube_init();
+void min_cube_init(struct cube *);
 void cube_init ( struct cube * cube);
 void cube_dot ( struct cube * cube );
 void cube_link ( struct cube * head, struct cube * cube);
@@ -12,35 +12,44 @@ void result_out ( struct cube * head );
 void curve_x (double * result, int step);
 void curve_y (double * res, int step);
 
+void cube_search(struct cube *, float * , int, struct dot_in_cube *);
+
 int main(void) {
-    min_cube_init();
+    struct cube head;
+    struct dot_in_cube result;
+    float dot_x[] = {21, 41, 61, 81, 101, 121, 141, 161, 181, 201};
+    float dot_y[] = {4.5, 9.5, 14.5, 19.5, 24.5, 29.5, 34.5, 44.5, 49.5};
+    int len = 10;
+    min_cube_init(&head);
+
+    result_out( &head );
+    cube_search( &head, dot_x, len, &result);
     return 0;
 }
 
-void min_cube_init(){
+void min_cube_init(struct cube * head){
     int i, k;
-    struct cube head, *p;
+    struct cube *p;
     int num = 0;
     double res[12] = {0};
 
-    cube_init(&head);
+    cube_init( head );
     // printf("head.id=%d\n", head.id);
     for(i = 0; i < 100/10; i++){
         for(k = 0; k < 100/10; k++){
             num += 1;
             p = malloc( sizeof( struct cube ) );
             cube_init( p );
-            head.left = p;
+            head->left = p;
             p->id = num;
             p->floor = 0;
             p->row = i + 1;
             p->column = k + 1;
             p->height = min_side;
             cube_dot( p );
-            cube_link( &head, p);
+            cube_link( head, p);
         }
     }
-    result_out( &head);
 }
 
 void cube_init( struct cube * p ) {
@@ -156,3 +165,15 @@ void curve_y (double * res, int step) {
             printf("y = %d, x = %f\n", y, x);
     }
 }
+
+void cube_search(struct cube * head, float * coordinate, int len, struct dot_in_cube * res) {
+    int i = 1;
+    for(; i <= len; i++) {
+        printf("(x,y): (%d, %f)\n", i*10, *coordinate);
+        coordinate ++;
+
+    }
+}
+
+
+

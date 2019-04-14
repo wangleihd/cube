@@ -28,7 +28,12 @@ typedef struct cube {
     struct cube *right;
 }cubes, *cu;
 
-
+typedef struct dot_in_cube {
+    struct cube *top;
+    struct cube *bottom;
+    struct cube *left;
+    struct cube *right;
+}dots, *dot;
 
 
 
