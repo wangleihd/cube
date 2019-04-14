@@ -88,25 +88,39 @@ void cube_dot( struct cube * c ) {
 
 void cube_link( struct cube * h, struct cube * p ) {
     struct cube *tmpright = h;
-    struct cube *tmptop = h;
+    struct cube *tmptop = h->right;
     int i = 0;
     int dot = 0;
     while ( tmpright->right ) {
         tmpright = tmpright->right;
-        if(!(p->column % min_side))
-         {
-            tmpright = tmptop;
-            tmptop = tmptop->top;
-            printf("i %d %d\n", i, tmptop, p->column);
-            if(tmptop) {
-                dot = 0;
+        printf("1. cube->id = %d\t %d  column%%10 = %d\n", tmpright->id, tmpright->column, tmpright->column % min_side);
+        if(0 == (tmpright->column % min_side)) {
+            if(tmptop->top) {
+                tmpright = tmptop->top;
+                tmptop = tmptop->top;
             } else {
                 dot = 1;
+                tmpright = tmptop;
                 break;
             }
         }
-    }
+        // if(((tmpright->column) % min_side) == 0) {
+        //         printf("i %d %d\n", tmptop->id, p->column);
+        //         // if(tmptop) {
+        //         //     dot = 0;
+        //         // } else {
+        //         //     dot = 1;
+        //         //     break;
+        //         // }
+        //         tmpright = tmptop;
+        //         tmptop = tmptop->top;
+        // } else {
         
+
+        // }
+        
+        // printf("2. cube->id = %d\t %d\n", tmpright->id, tmpright->column);
+    }
         if(dot == 1) {
             tmpright->top = p;
             p->bottom = tmpright;
@@ -123,14 +137,22 @@ void cube_link( struct cube * h, struct cube * p ) {
 
 void result_out ( struct cube *m ) {
     struct cube * h = m->right;
-    struct cube * row = m->top;
+    struct cube * row = m->right->top;
 
     while (h) {
         printf("column: %d", h->column);
         if(!(h->column % min_side)) {
+            printf("\n*****\nid = %d\t floot = %d\t row = %d\t column = %d\t height = %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
+            for (int i = 0; i < 4; i++) {
+                printf("dot->id = %d\t (x, y) =  (%d, %d)\n", h->dot[i].id, h->dot[i].x, h->dot[i].y);
+            }
+
             h = row;
             row = row->top;
-            printf("\n\ncoumn[%d] = %d\t\n", h->id, h->column);
+            if(!h){
+                break;
+            }
+            printf("\n\n1111. coumn[%d] = %d\t\n", h->id, h->column);
         }
         printf("\nid = %d\t floot = %d\t row = %d\t column = %d\t height = %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
         for (int i = 0; i < 4; i++) {
