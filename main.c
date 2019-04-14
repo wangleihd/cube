@@ -93,7 +93,7 @@ void cube_link( struct cube * h, struct cube * p ) {
     int dot = 0;
     while ( tmpright->right ) {
         tmpright = tmpright->right;
-        printf("1. cube->id = %d\t %d  column%%10 = %d\n", tmpright->id, tmpright->column, tmpright->column % min_side);
+        // printf("1. cube->id = %d\t %d  column%%10 = %d\n", tmpright->id, tmpright->column, tmpright->column % min_side);
         if(0 == (tmpright->column % min_side)) {
             if(tmptop->top) {
                 tmpright = tmptop->top;
@@ -127,10 +127,11 @@ void cube_link( struct cube * h, struct cube * p ) {
         } else {
             tmpright->right = p;
             p->left = tmpright;
-        // if(tmpright->column > 0) {
-        //         tmpright->bottom->right->top = p;
-        //         p->bottom = tmpright->bottom->right;
-        // }
+            printf("row: %d\n", tmpright->row);
+        if(tmpright->row > 1) {
+                tmpright->bottom->right->top = p;
+                p->bottom = tmpright->bottom->right;
+        }
         }
 
 }
