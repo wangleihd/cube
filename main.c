@@ -205,7 +205,17 @@ void cube_search(struct cube * head, float * coordinate, int len, int flag, stru
             p = search(head, step_x, step_y);
             }
         }
-            printf("(x, y) = [%d, %d], row = %d, column = %d, id = %d\n", step_x, step_y, p->row, p->column, p->id);
+        if(flag == 1) {
+            printf("(x, y) = P(%d, %f)  [%d, %d], id = %d row = %d, column = %d,", i* min_side, *coordinate, step_x, step_y, p->id, p->row, p->column);
+            if(p->right)
+            printf("\tnext.id = %d, next.row = %d next.column = %d\n",p->right->id, p->right->row, p->right->column);
+
+        } else {
+            printf("(x, y) = P(%f, %d)  [%d, %d], id = %d row = %d, column = %d,", *coordinate, i * min_side, step_x, step_y, p->id, p->row, p->column);
+            if(p->top)
+            printf("\tnext.id = %d, next.row = %d next.column = %d\n", p->top->id, p->top->row, p->top->column);
+
+        }
         coordinate ++;
 
     }
