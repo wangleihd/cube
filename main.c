@@ -31,27 +31,30 @@ int main(void) {
 }
 
 void min_cube_init(struct cube * head){
-    int i, k;
+    int i, k, f;
     struct cube *p;
     int num = 0;
     double res[12] = {0};
 
     cube_init( head );
     // printf("head.id=%d\n", head.id);
+    for(f = 0; f < max_side / min_side; f++) {
     for(i = 0; i < 100/10; i++){
         for(k = 0; k < 100/10; k++){
             num += 1;
             p = malloc( sizeof( struct cube ) );
             cube_init( p );
-            head->left = p;
+            // head->left = p;
             p->id = num;
-            p->floor = 0;
+            p->floor = f + 1;
             p->row = i + 1;
             p->column = k + 1;
-            p->height = min_side;
+            p->width = min_side;
             cube_dot( p );
             cube_link( head, p);
         }
+    }
+
     }
 }
 
@@ -71,7 +74,7 @@ void cube_init( struct cube * p ) {
 
 void cube_dot( struct cube * c ) {
     int i = 0;
-    int side_lenght = c->height;
+    int side_lenght = min_side;
     int row = c->row;
     int column = c->column;
 
