@@ -3,6 +3,7 @@
 const int max_side = 100;
 const int min_side = 10;
 const double pi = 3.1415926;
+const int dotleng = 8;
 
 void min_cube_init(struct cube *);
 void cube_init ( struct cube * cube);
@@ -39,22 +40,21 @@ void min_cube_init(struct cube * head){
     cube_init( head );
     // printf("head.id=%d\n", head.id);
     for(f = 0; f < max_side / min_side; f++) {
-    for(i = 0; i < 100/10; i++){
-        for(k = 0; k < 100/10; k++){
-            num += 1;
-            p = malloc( sizeof( struct cube ) );
-            cube_init( p );
-            // head->left = p;
-            p->id = num;
-            p->floor = f + 1;
-            p->row = i + 1;
-            p->column = k + 1;
-            p->width = min_side;
-            cube_dot( p );
-            cube_link( head, p);
+        for(i = 0; i < 100/10; i++){
+            for(k = 0; k < 100/10; k++){
+                num += 1;
+                p = malloc( sizeof( struct cube ) );
+                cube_init( p );
+                // head->left = p;
+                p->id = num;
+                p->floor = f + 1;
+                p->row = i + 1;
+                p->column = k + 1;
+                p->width = min_side;
+                cube_dot( p );
+                cube_link( head, p);
+            }
         }
-    }
-
     }
 }
 
@@ -77,24 +77,50 @@ void cube_dot( struct cube * c ) {
     int side_lenght = min_side;
     int row = c->row;
     int column = c->column;
+    int floor = c->floor;
+    c->height = min_side;
 
-    for ( ; i < 4; i++) {
+    for ( ; i < dotleng; i++) {
         c->dot[i].id = i;
         if (i == 0) {
         c->dot[i].x = (row - 1) * side_lenght;
         c->dot[i].y = (column - 1) * side_lenght;
+        c->dot[i].z = (floor - 1) * side_lenght;
         }
         if (i == 1) {
         c->dot[i].x = row * side_lenght;
         c->dot[i].y = (column - 1) * side_lenght;
+        c->dot[i].z = (floor - 1) * side_lenght;
         }
         if (i == 2) {
         c->dot[i].x = row * side_lenght;
         c->dot[i].y = column * side_lenght;
+        c->dot[i].z = (floor - 1) * side_lenght;
         }
         if (i == 3) {
         c->dot[i].x = (row - 1) * side_lenght;
         c->dot[i].y = column * side_lenght;
+        c->dot[i].z = (floor - 1) * side_lenght;
+        }
+        if (i == 4) {
+        c->dot[i].x = (row - 1) * side_lenght;
+        c->dot[i].y = (column - 1) * side_lenght;
+        c->dot[i].z = (floor) * side_lenght;
+        }
+        if (i == 5) {
+        c->dot[i].x = row * side_lenght;
+        c->dot[i].y = (column - 1) * side_lenght;
+        c->dot[i].z = (floor) * side_lenght;
+        }
+        if (i == 6) {
+        c->dot[i].x = row * side_lenght;
+        c->dot[i].y = column * side_lenght;
+        c->dot[i].z = (floor) * side_lenght;
+        }
+        if (i == 7) {
+        c->dot[i].x = (row - 1) * side_lenght;
+        c->dot[i].y = column * side_lenght;
+        c->dot[i].z = (floor) * side_lenght;
         }
     }
 }
@@ -139,8 +165,8 @@ void result_out ( struct cube *m ) {
         printf("column: %d", h->column);
         if(!(h->column % min_side)) {
             printf("\n\nid = %d\t floot = %d\t row = %d\t column = %d\t height = %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
-            for (i = 0; i < 4; i++) {
-                printf("dot->id = %d\t (x, y) =  (%d, %d)\n", h->dot[i].id, h->dot[i].x, h->dot[i].y);
+            for (i = 0; i < dotleng; i++) {
+                printf("dot->id = %d\t (x, y, z) =  (%d, %d, %d)\n", h->dot[i].id, h->dot[i].x, h->dot[i].y, h->dot[i].z);
             }
             if(!row){
                 return;
@@ -150,8 +176,8 @@ void result_out ( struct cube *m ) {
             }
         }
         printf("\n\nid = %d\t floot = %d\t row = %d\t column = %d\t height = %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
-        for (i = 0; i < 4; i++) {
-            printf("dot->id = %d\t (x, y) =  (%d, %d)\n", h->dot[i].id, h->dot[i].x, h->dot[i].y);
+        for (i = 0; i < dotleng; i++) {
+            printf("dot->id = %d\t (x, y, z) =  (%d, %d, %d)\n", h->dot[i].id, h->dot[i].x, h->dot[i].y, h->dot[i].z);
         }
         h = h->right;
     }

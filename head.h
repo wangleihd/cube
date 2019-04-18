@@ -9,7 +9,7 @@
 
 typedef struct point_type {
     /* data */
-    int x, y;
+    int x, y, z;
     int id;
 }point, *pos;
 
@@ -22,7 +22,7 @@ typedef struct cube {
     // (1,2) -> right  
     // (2,3) -> top   
     // (3,0) -> left 
-    point  dot[4];
+    point  dot[8];
     int id;
     int row;
     int width;
