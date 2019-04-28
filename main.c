@@ -64,7 +64,7 @@ int main(void)
     //LeftOvalANDLineIntersectionPoint( 20, 50, 3, 2,  1);
     chead.next = NULL;
     chead.id = 0;
-    for (i = 0; i < 11; i++)
+    for (i = 0; i < 10; i++)
     {
         camera_link(&chead, x[i], y[i], i + 1);
     }
@@ -632,9 +632,9 @@ int LeftOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct ca
         tem[1] = y1;
         tem[2] = x2;
         tem[3] = y2;
+            printf("x0 =%f, y0 = %f\t x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", X0, Y0, x1, y1, x2, y2);
         if (x1 <= 100 && x1 >= 0)
         {
-            // printf("x0 =%f, y0 = %f\t x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", X0, Y0, x1, y1, x2, y2);
             c->select[0] = 1;
             c->point[0][0] = x1;
             c->point[0][1] = y1;
@@ -661,6 +661,7 @@ int LeftOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct ca
     if (flag == 0)
     {
         // printf("NO IntersectionPoint! \n");
+        // printf("LeftOvalANDLineIntersectionPoint: NO IntersectionPoint! \n");
     }
     return 1;
 }
@@ -719,7 +720,7 @@ int RigthOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct c
     }
     if (flag == 0)
     {
-        // printf("NO IntersectionPoint! \n");
+        // printf("LeftOvalANDLineIntersectionPoint: NO IntersectionPoint! \n");
     }
     return 1;
 }
