@@ -73,4 +73,13 @@ typedef struct point
     struct point * next;
 } poi;
 
+typedef struct line {
+    float startx, starty;
+    float endx, endy;
+    float timestamp; 
+    int total;
+    struct camerainfo cinfo[100];
+    struct line * next;
+} l;
+
 #endif

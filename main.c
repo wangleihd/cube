@@ -38,6 +38,9 @@ int judgement(int X0, int Y0, int h, struct camera * c, struct point * gp);
 void search_gridpoint_in_camera(struct point *, struct camera *);
 void output_gridpoint(struct point * head);
 void grid_init(struct point * t);
+void link_point(struct point * p, struct line * lp);
+float distance(struct point * p, struct point * q);
+void out_line(struct line * lp);
 
 int main(void)
 {
@@ -48,6 +51,7 @@ int main(void)
     struct point phead, grid_point;
     struct camera chead;
     struct camera *p;
+    struct line lhead;
     float x[] = {10, 20, 30, 40, 55, 65, 75, 89, 95, 100};
     float y[] = {20, 40, 60, 80, 80, 70, 60, 50, 40, 40};
     //    float x = 0.0;
@@ -67,6 +71,7 @@ int main(void)
     //LeftOvalANDLineIntersectionPoint( 20, 50, 3, 2,  1);
     chead.next = NULL;
     grid_point.next = NULL;
+    lhead.next = NULL;
     chead.id = 0;
     for (i = 0; i < 10; i++)
     {
@@ -80,6 +85,9 @@ int main(void)
     }
     search_point_in_camera(&phead, &chead);
     search_gridpoint_in_camera(&grid_point, &chead);
+    output_gridpoint(&grid_point);
+    link_point(&grid_point, &lhead);
+    out_line(&lhead);
     return 0;
 }
 
@@ -837,7 +845,7 @@ int judgement(int X0, int Y0, int h, struct camera * c, struct point * gp)
     for (i = 0; i < 25; i++)
     {
         if (x[0][i] <= X0 + r && x[0][i] >= X0 - r && x[1][i] <= Y0 + r && x[1][i] >= Y0 - r) {
-            printf("the (%f, %f) is in the circle\n", x[0][i], x[1][i]);
+            // printf("the (%f, %f) is in the circle\n", x[0][i], x[1][i]);
 
             if(gp->total == 3) {
             tmp = malloc(sizeof(struct point));
@@ -854,7 +862,7 @@ int judgement(int X0, int Y0, int h, struct camera * c, struct point * gp)
 
         if ((3 * (x[0][i] - X0 + h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1)
         {
-            printf("the (%f, %f) is in the leftOval\n", x[0][i], x[1][i]);
+            // printf("the (%f, %f) is in the leftOval\n", x[0][i], x[1][i]);
                 gp->x = x[0][i];
                 gp->y = x[1][i];
                 gp->total += 1;
@@ -865,7 +873,7 @@ int judgement(int X0, int Y0, int h, struct camera * c, struct point * gp)
 
         if ((3 * (x[0][i] - X0 - h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1)
         {
-            printf("the (%f, %f) is in the rightOval\n", x[0][i], x[1][i]);
+            // printf("the (%f, %f) is in the rightOval\n", x[0][i], x[1][i]);
                 gp->x = x[0][i];
                 gp->y = x[1][i];
                 gp->total += 1;
@@ -921,7 +929,56 @@ void search_gridpoint_in_camera(struct point * gp, struct camera * cp) {
         }
         c = c->next;
     }
-    output_gridpoint(htmp);
 }
 
+float distance(struct point *p,struct point *q) {
+return sqrt((p->x - q->x)*(p->x - q->x) + (p->y - q->y)*(p->y - q->y));
 
+}
+void link_point(struct point * p, struct line *lp) {
+    struct line * tmp;
+    struct point * ptmp = p->next;
+    struct point *a, *b;
+    int i, j, ret;
+    while(ptmp->next) {
+        a = ptmp;
+        b = ptmp->next;
+        ret = 0;
+        if(a->total == b->total) {
+            for(i = 0; i < 3; i++) {
+                if(a->cinfo[i].ca.id == b->cinfo[i].ca.id) {
+                    ret += 1;
+                }
+            }
+            if(ret == a->total) {
+                tmp = malloc(sizeof(struct line));
+                tmp->startx = a->x;
+                tmp->starty = a->y;
+                tmp->endx = b->x;
+                tmp->endy = b->y;
+                tmp->total = a->total;
+                for(j = 0; j < a->total; j++) {
+                tmp->cinfo[j] = a->cinfo[j];
+                }
+                tmp->timestamp = distance(a, b);
+                while(lp->next){
+                    lp = lp->next;
+                }
+                lp->next = tmp;
+            }
+        }
+        ptmp = ptmp->next;
+    }
+}
+void out_line(struct line * lp) {
+    struct line *g = lp->next;
+    int i;
+    while(g) {
+        printf("grid start x = %f, start y = %f, end x = %f, end y = %f total = %d, next = %p\n", g->startx, g->starty, g->endx, g->endy, g->total, g->next);
+        for(i = 0; i < g->total; i++) {
+            printf("\ttotal = %d select = %d camera ID = %d\n ", i, g->cinfo[i].pos, g->cinfo[i].ca.id);
+        }
+        printf("\n");
+        g = g->next;
+    }
+}
