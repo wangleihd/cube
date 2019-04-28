@@ -36,6 +36,8 @@ int LeftOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct ca
 int RigthOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct camera *c);
 int judgement(int X0, int Y0, int h, struct camera * c, struct point * gp);
 void search_gridpoint_in_camera(struct point *, struct camera *);
+void output_gridpoint(struct point * head);
+void grid_init(struct point * t);
 
 int main(void)
 {
