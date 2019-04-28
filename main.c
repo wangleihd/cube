@@ -607,7 +607,7 @@ int circleANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct came
 
 int LeftOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct camera *c) //Coordinates of the intersection of an ellipse and a line
 {
-    float x1, y1, x2, y2;
+    double x1, y1, x2, y2;
     float tem[4];
     int k, b;
     int flag = 0; //if or not has a IntersectionPoint
@@ -623,41 +623,49 @@ int LeftOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct ca
     }
     if (X0 <= 100)
     {
-        x1 = (6 * X0 + 24 * k * Y0 - 2 * sqrt(3) * h - 24 * k * b + sqrt((2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 - 2 * sqrt(3) * X0 - 3 * h * h))) / (24 * k * k + 6);
-        y1 = k * x1 + b;
-        x2 = (6 * X0 + 24 * k * Y0 - 2 * sqrt(3) * h - 24 * k * b - sqrt((2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 - 2 * sqrt(3) * X0 - 3 * h * h))) / (24 * k * k + 6);
-        y2 = k * x2 + b;
-
-        tem[0] = x1;
-        tem[1] = y1;
-        tem[2] = x2;
-        tem[3] = y2;
-            printf("x0 =%f, y0 = %f\t x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", X0, Y0, x1, y1, x2, y2);
-        if (x1 <= 100 && x1 >= 0)
+        if ((2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 - 2 * sqrt(3) * X0 * h - 3 * h * h) >= 0)
         {
-            c->select[0] = 1;
-            c->point[0][0] = x1;
-            c->point[0][1] = y1;
-            c->point[0][2] = x2;
-            c->point[0][3] = y2;
+            x1 = (6 * X0 + 24 * k * Y0 - 2 * sqrt(3) * h - 24 * k * b + sqrt((2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 - 2 * sqrt(3) * X0 * h - 3 * h * h))) / (24 * k * k + 6);
+            y1 = k * x1 + b;
+            x2 = (6 * X0 + 24 * k * Y0 - 2 * sqrt(3) * h - 24 * k * b - sqrt((2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 - 2 * sqrt(3) * X0 * h - 3 * h * h))) / (24 * k * k + 6);
+            y2 = k * x2 + b;
 
-            pitem[p_total].x = x1;
-            pitem[p_total].y = y1;
-            pitem[p_total].total = 1;
-            pitem[p_total].cinfo[pitem[p_total].total - 1].pos = 0;
-            pitem[p_total].cinfo[pitem[p_total].total - 1].ca = *c;
-            p_total += 1;
+            tem[0] = x1;
+            tem[1] = y1;
+            tem[2] = x2;
+            tem[3] = y2;
+            printf("x0 =%f, y0 = %f\t x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", X0, Y0, x1, y1, x2, y2);
+            if (x1 <= 100 && x1 >= 0)
+            {
+                c->select[0] = 1;
+                c->point[0][0] = x1;
+                c->point[0][1] = y1;
+                c->point[0][2] = x2;
+                c->point[0][3] = y2;
 
-            pitem[p_total].x = x2;
-            pitem[p_total].y = y2;
-            pitem[p_total].total = 1;
-            pitem[p_total].cinfo[pitem[p_total].total - 1].pos = 0;
-            pitem[p_total].cinfo[pitem[p_total].total - 1].ca = *c;
-            p_total += 1;
+                pitem[p_total].x = x1;
+                pitem[p_total].y = y1;
+                pitem[p_total].total = 1;
+                pitem[p_total].cinfo[pitem[p_total].total - 1].pos = 0;
+                pitem[p_total].cinfo[pitem[p_total].total - 1].ca = *c;
+                p_total += 1;
 
-            flag = 1;
+                pitem[p_total].x = x2;
+                pitem[p_total].y = y2;
+                pitem[p_total].total = 1;
+                pitem[p_total].cinfo[pitem[p_total].total - 1].pos = 0;
+                pitem[p_total].cinfo[pitem[p_total].total - 1].ca = *c;
+                p_total += 1;
+
+                flag = 1;
+            }
         }
     }
+    else
+    {
+        printf(" NO ");
+    }
+
     if (flag == 0)
     {
         // printf("NO IntersectionPoint! \n");
@@ -684,9 +692,9 @@ int RigthOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct c
     }
     if (X0 <= 100)
     {
-        x1 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b + sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 + 2 * sqrt(3) * X0 - 3 * h * h))) / (24 * k * k + 6);
+        x1 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b + sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 + 2 * sqrt(3) * X0 *h - 3 * h * h))) / (24 * k * k + 6);
         y1 = k * x1 + b;
-        x2 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b - sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 + 2 * sqrt(3) * X0 - 3 * h * h))) / (24 * k * k + 6);
+        x2 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b - sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 + 2 * sqrt(3) * X0 *h - 3 * h * h))) / (24 * k * k + 6);
         y2 = k * x2 + b;
         tem[0] = x1;
         tem[1] = y1;
