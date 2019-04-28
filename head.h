@@ -69,6 +69,8 @@ typedef struct point
     float y;
     int total;
     struct camerainfo cinfo[100];
+    struct camerainfo cg;
+    struct point * next;
 } poi;
 
 #endif

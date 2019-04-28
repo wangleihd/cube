@@ -34,7 +34,8 @@ struct cube *search(struct cube *head, int row, int column);
 int circleANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct camera *c);
 int LeftOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct camera *c);
 int RigthOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct camera *c);
-int judgement(int X0, int Y0, int h);
+int judgement(int X0, int Y0, int h, struct camera * c, struct point * gp);
+void search_gridpoint_in_camera(struct point *, struct camera *);
 
 int main(void)
 {
@@ -42,7 +43,7 @@ int main(void)
     //struct dot_in_cube result;
     // float dot_x[] = {21, 41, 61, 81, 101, 121, 141, 161, 181, 201};
     // float dot_y[] = {4.5, 9.5, 14.5, 19.5, 24.5, 29.5, 34.5, 39.5, 44.5, 49.5};
-    struct point phead;
+    struct point phead, grid_point;
     struct camera chead;
     struct camera *p;
     float x[] = {10, 20, 30, 40, 55, 65, 75, 89, 95, 100};
@@ -63,6 +64,7 @@ int main(void)
     //circleANDLineIntersectionPoint(20,40,5,2,1);
     //LeftOvalANDLineIntersectionPoint( 20, 50, 3, 2,  1);
     chead.next = NULL;
+    grid_point.next = NULL;
     chead.id = 0;
     for (i = 0; i < 10; i++)
     {
@@ -75,6 +77,7 @@ int main(void)
         p = p->next;
     }
     search_point_in_camera(&phead, &chead);
+    search_gridpoint_in_camera(&grid_point, &chead);
     return 0;
 }
 
@@ -807,7 +810,6 @@ void search_point_in_camera(struct point *p, struct camera *e)
         RigthOvalANDLineIntersectionPoint(x, y, 3, 1, c);
         circleANDLineIntersectionPoint(x, y, 3, 0, c);
         circleANDLineIntersectionPoint(x, y, 3, 1, c);
-        judgement(x, y, 3);
         c = c->next;
     }
 
@@ -819,34 +821,97 @@ void search_point_in_camera(struct point *p, struct camera *e)
         // }
         printf("select = %d   x = %f, y = %f, \t camera.x = %f camera.y = %f\n", pitem[i].cinfo[pitem[i].total - 1].pos, pitem[i].x, pitem[i].y, pitem[i].cinfo[pitem[i].total - 1].ca.x, pitem[i].cinfo[pitem[i].total - 1].ca.y);
     }
-
-    // circleANDLineIntersectionPoint(20,40,5,2,1);
-
-    // RigthOvalANDLineIntersectionPoint(20, 50, 3, 2, 1);
 }
 
-int judgement(int X0, int Y0, int h)
+int judgement(int X0, int Y0, int h, struct camera * c, struct point * gp)
 {
 
     int r = h / sqrt(3);
+    int ret = 0;
     float x[2][25] = {4.500000, 9.500000, 14.500000, 19.500000, 24.500000, 29.500000, 34.500000, 39.500000, 44.500000, 96.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 100.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 21.000000, 41.000000, 61.000000, 81.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 36.000000};
     int i;
 
     for (i = 0; i < 25; i++)
     {
-        if (x[0][i] <= X0 + r && x[0][i] >= X0 - r && x[1][i] <= Y0 + r && x[1][i] >= Y0 - r)
-        {
+        if (x[0][i] <= X0 + r && x[0][i] >= X0 - r && x[1][i] <= Y0 + r && x[1][i] >= Y0 - r) {
             printf("the (%f, %f) is in the circle\n", x[0][i], x[1][i]);
+                gp->x = x[0][i];
+                gp->y = x[1][i];
+                gp->total += 1;
+                gp->cinfo[gp->total - 1].pos = 1;
+                gp->cinfo[gp->total - 1].ca = *c;
+                ret =  1;
         }
 
         if ((3 * (x[0][i] - X0 + h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1)
         {
             printf("the (%f, %f) is in the leftOval\n", x[0][i], x[1][i]);
+                gp->x = x[0][i];
+                gp->y = x[1][i];
+                gp->total += 1;
+                gp->cinfo[gp->total - 1].pos = 0;
+                gp->cinfo[gp->total - 1].ca = *c;
+                ret =  1;
         }
 
         if ((3 * (x[0][i] - X0 - h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1)
         {
             printf("the (%f, %f) is in the rightOval\n", x[0][i], x[1][i]);
+                gp->x = x[0][i];
+                gp->y = x[1][i];
+                gp->total += 1;
+                gp->cinfo[gp->total - 1].pos = 2;
+                gp->cinfo[gp->total - 1].ca = *c;
+                ret =  1;
         }
     }
+    return ret;
 }
+void grid_init(struct point * t) {
+    t->total = 0;
+    t->x = -1.0;
+    t->y = -1.0;
+}
+
+void output_gridpoint(struct point * head){
+    struct point *g = head;
+    int i;
+    while(g) {
+        
+        printf("grid x = %f, y = %f, total = %d, next = %p\n", g->x, g->y, g->total, g->next);
+        for(i = 0; i < g->total; i++) {
+            printf("\ttotal = %d select = %d\n ", i, g->cinfo[i].pos);
+        }
+        printf("\n");
+        g = g->next;
+    }
+
+}
+
+void search_gridpoint_in_camera(struct point * gp, struct camera * cp) {
+    struct camera *c = cp->next;
+    struct point * gtmp;
+    struct point * htmp = gp;
+    int x = c->x;
+    int y = c->y;
+    int ret;
+    while (c) {
+        gtmp = malloc(sizeof(struct point));
+        grid_init(gtmp);
+        x = c->x;
+        y = c->y;
+        ret = judgement(x, y, 3, c, gtmp);
+        if(ret) {
+            while(gp->next) {
+                gp = gp->next;
+            } 
+            gp->next = gtmp;
+        } else {
+            free(gtmp);
+        }
+        c = c->next;
+    }
+    output_gridpoint(htmp);
+}
+
+
