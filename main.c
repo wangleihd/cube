@@ -45,7 +45,7 @@ int main(void)
     struct point phead;
     struct camera chead;
     struct camera *p;
-    float x[] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    float x[] = {10, 20, 30, 40, 55, 65, 75, 89, 95, 100};
     float y[] = {20, 40, 60, 80, 80, 70, 60, 50, 40, 40};
     //    float x = 0.0;
     //    float y = 0.0;
@@ -574,7 +574,7 @@ int circleANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct came
         if (x1 >= 0 && x1 <= 100)
         {
             flag = 1;
-            printf("x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", x1, y1, x2, y2);
+            // printf("x1=%lf,y1=%gcc mlf,x2=%lf,y2=%lf\n", x1, y1, x2, y2);
 
             c->select[1] = 1;
             c->point[1][0] = x1;
@@ -599,7 +599,7 @@ int circleANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct came
     }
     if (flag == 0)
     {
-        printf("NO IntersectionPoint\n");
+        // printf("NO IntersectionPoint\n");
     }
 
     return 1;
@@ -634,7 +634,7 @@ int LeftOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct ca
         tem[3] = y2;
         if (x1 <= 100 && x1 >= 0)
         {
-            printf("x0 =%f, y0 = %f\t x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", X0, Y0, x1, y1, x2, y2);
+            // printf("x0 =%f, y0 = %f\t x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", X0, Y0, x1, y1, x2, y2);
             c->select[0] = 1;
             c->point[0][0] = x1;
             c->point[0][1] = y1;
@@ -660,7 +660,7 @@ int LeftOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct ca
     }
     if (flag == 0)
     {
-        printf("NO IntersectionPoint! \n");
+        // printf("NO IntersectionPoint! \n");
     }
     return 1;
 }
@@ -693,7 +693,7 @@ int RigthOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct c
         tem[3] = y2;
         if (x1 <= 100 && x1 >= 0)
         {
-            printf("x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", x1, y1, x2, y2);
+            // printf("x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", x1, y1, x2, y2);
             c->select[2] = 1;
             c->point[2][0] = x1;
             c->point[2][1] = y1;
@@ -719,7 +719,7 @@ int RigthOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct c
     }
     if (flag == 0)
     {
-        printf("NO IntersectionPoint! \n");
+        // printf("NO IntersectionPoint! \n");
     }
     return 1;
 }
@@ -770,10 +770,8 @@ void camera_link(struct camera *c, float x, float y, int id)
     struct camera *tmp;
     tmp = malloc(sizeof(struct camera));
     init_camera(tmp);
-    while (c->next)
-    {
+    while (c->next) {
         c = c->next;
-        printf("line: %d\n", c->id);
     }
     c->next = tmp;
     tmp->x = x;
@@ -798,6 +796,7 @@ void search_point_in_camera(struct point *p, struct camera *e)
         RigthOvalANDLineIntersectionPoint(x, y, 3, 1, c);
         circleANDLineIntersectionPoint(x, y, 3, 0, c);
         circleANDLineIntersectionPoint(x, y, 3, 1, c);
+        judgement(x, y, 3);
         c = c->next;
     }
 
@@ -819,33 +818,21 @@ void search_point_in_camera(struct point *p, struct camera *e)
 int judgement(int X0, int Y0, int h){
 
     int r = h / sqrt(3);
-    int x[2][25] = {4.500000, 9.500000, 14.500000, 19.500000, 24.500000, 29.500000, 34.500000, 39.500000, 44.500000, 96.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 100.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 21.000000, 41.000000, 61.000000, 81.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 36.000000};
+    float x[2][25] = {4.500000, 9.500000, 14.500000, 19.500000, 24.500000, 29.500000, 34.500000, 39.500000, 44.500000, 96.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 100.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 21.000000, 41.000000, 61.000000, 81.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 36.000000};
     int i;
 
     for (i = 0; i < 25; i++)
     {
-        if (x[0][i] <= X0 + r && x[0][i] >= X0 - r && x[1][i] <= Y0 + r && x[1][i] >= Y0 - r)
-        {
-            printf("the (%d,%d) is in the circle\n", x[0][i], x[1][i]);
+        if (x[0][i] <= X0 + r && x[0][i] >= X0 - r && x[1][i] <= Y0 + r && x[1][i] >= Y0 - r) {
+            printf("the (%f, %f) is in the circle\n", x[0][i], x[1][i]);
         }
-    }
 
-    for (i = 0; i < 25; i++)
-    {
-
-        if ((3 * (x[0][i] - X0 + h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1)
-        {
-
-            printf("the (%d,%d) is in the leftOval\n", x[0][i], x[1][i]);
+        if ((3 * (x[0][i] - X0 + h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1) {
+            printf("the (%f, %f) is in the leftOval\n", x[0][i], x[1][i]);
         }
-    }
 
-    for (i = 0; i < 25; i++)
-    {
-
-        if ((3 * (x[0][i] - X0 - h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1)
-        {
-            printf("the (%d,%d) is in the rightOval\n", x[0][i], x[1][i]);
+        if ((3 * (x[0][i] - X0 - h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1) {
+            printf("the (%f, %f) is in the rightOval\n", x[0][i], x[1][i]);
         }
     }
 }
