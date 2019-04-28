@@ -34,6 +34,7 @@ struct cube *search(struct cube *head, int row, int column);
 int circleANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct camera *c);
 int LeftOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct camera *c);
 int RigthOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct camera *c);
+int judgement(int X0, int Y0, int h);
 
 int main(void)
 {
@@ -812,4 +813,39 @@ void search_point_in_camera(struct point *p, struct camera *e)
     // circleANDLineIntersectionPoint(20,40,5,2,1);
 
     // RigthOvalANDLineIntersectionPoint(20, 50, 3, 2, 1);
+}
+
+
+int judgement(int X0, int Y0, int h){
+
+    int r = h / sqrt(3);
+    int x[2][25] = {4.500000, 9.500000, 14.500000, 19.500000, 24.500000, 29.500000, 34.500000, 39.500000, 44.500000, 96.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 100.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 21.000000, 41.000000, 61.000000, 81.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 36.000000};
+    int i;
+
+    for (i = 0; i < 25; i++)
+    {
+        if (x[0][i] <= X0 + r && x[0][i] >= X0 - r && x[1][i] <= Y0 + r && x[1][i] >= Y0 - r)
+        {
+            printf("the (%d,%d) is in the circle\n", x[0][i], x[1][i]);
+        }
+    }
+
+    for (i = 0; i < 25; i++)
+    {
+
+        if ((3 * (x[0][i] - X0 + h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1)
+        {
+
+            printf("the (%d,%d) is in the leftOval\n", x[0][i], x[1][i]);
+        }
+    }
+
+    for (i = 0; i < 25; i++)
+    {
+
+        if ((3 * (x[0][i] - X0 - h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1)
+        {
+            printf("the (%d,%d) is in the rightOval\n", x[0][i], x[1][i]);
+        }
+    }
 }
