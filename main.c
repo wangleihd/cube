@@ -422,7 +422,7 @@ void fpWriteCoord(double x, int height)
                 //  y = 10*sin(x*3.14/180);
                 y = (x - 1) / 2; //反函数
                 //if ((y == j || y == i|| x == i|| x == j )&& x!=0)
-                if ((x == i) ||( x == j && x != 0 && x <= 91 && y <= 45))
+                if ((x == i) || (x == j && x != 0 && x <= 91 && y <= 45))
                 //if (y == j || y == i|| x == i|| x == j )
                 {
                     printf("The intersection point is :x= %lf ,y= %lf\n", y, x); //横纵坐标换一下输出
@@ -454,7 +454,7 @@ void fpWriteCoord(double x, int height)
                 //  y = 10*sin(x*3.14/180);
                 y = -1 * x + 136;
                 //if ((y == j || y == i|| x == i|| x == j )&& x!=0)
-                if ((x == i )|| (x == j && x != 0 && x <= 100 && y <= 91))
+                if ((x == i) || (x == j && x != 0 && x <= 100 && y <= 91))
                 //if (y == j || y == i|| x == i|| x == j )
                 {
                     printf("The intersection point is :x= %lf ,y= %lf\n", x, y);
@@ -546,7 +546,7 @@ int fpReadCoord()
 int circleANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct camera *c)
 {
     double x1, y1, x2, y2;
-    int r = h/sqrt(3);
+    int r = h / sqrt(3);
     double tem[4];
     int k, b;
     int flag = 0; //if or not has a IntersectionPoint
@@ -661,10 +661,6 @@ int LeftOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct ca
             }
         }
     }
-    else
-    {
-        printf(" NO ");
-    }
 
     if (flag == 0)
     {
@@ -692,39 +688,44 @@ int RigthOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct c
     }
     if (X0 <= 100)
     {
-        x1 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b + sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 + 2 * sqrt(3) * X0 *h - 3 * h * h))) / (24 * k * k + 6);
-        y1 = k * x1 + b;
-        x2 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b - sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 + 2 * sqrt(3) * X0 *h - 3 * h * h))) / (24 * k * k + 6);
-        y2 = k * x2 + b;
-        tem[0] = x1;
-        tem[1] = y1;
-        tem[2] = x2;
-        tem[3] = y2;
-        if (x1 <= 100 && x1 >= 0)
+        if ((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 + 2 * sqrt(3) * X0 * h - 3 * h * h) >= 0)
         {
-            // printf("x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", x1, y1, x2, y2);
-            c->select[2] = 1;
-            c->point[2][0] = x1;
-            c->point[2][1] = y1;
-            c->point[2][2] = x2;
-            c->point[2][3] = y2;
+            x1 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b + sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 + 2 * sqrt(3) * X0 * h - 3 * h * h))) / (24 * k * k + 6);
+            y1 = k * x1 + b;
+            x2 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b - sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 + 2 * sqrt(3) * X0 * h - 3 * h * h))) / (24 * k * k + 6);
+            y2 = k * x2 + b;
+            tem[0] = x1;
+            tem[1] = y1;
+            tem[2] = x2;
+            tem[3] = y2;
+            printf("x0 =%f, y0 = %f\t x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", X0, Y0, x1, y1, x2, y2);
+            if (x1 <= 100 && x1 >= 0)
+            {
+                // printf("x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", x1, y1, x2, y2);
+                c->select[2] = 1;
+                c->point[2][0] = x1;
+                c->point[2][1] = y1;
+                c->point[2][2] = x2;
+                c->point[2][3] = y2;
 
-            pitem[p_total].x = x1;
-            pitem[p_total].y = y1;
-            pitem[p_total].total = 1;
-            pitem[p_total].cinfo[pitem[p_total].total - 1].pos = 2;
-            pitem[p_total].cinfo[pitem[p_total].total - 1].ca = *c;
-            p_total += 1;
+                pitem[p_total].x = x1;
+                pitem[p_total].y = y1;
+                pitem[p_total].total = 1;
+                pitem[p_total].cinfo[pitem[p_total].total - 1].pos = 2;
+                pitem[p_total].cinfo[pitem[p_total].total - 1].ca = *c;
+                p_total += 1;
 
-            pitem[p_total].x = x2;
-            pitem[p_total].y = y2;
-            pitem[p_total].total = 1;
-            pitem[p_total].cinfo[pitem[p_total].total - 1].pos = 2;
-            pitem[p_total].cinfo[pitem[p_total].total - 1].ca = *c;
-            p_total += 1;
+                pitem[p_total].x = x2;
+                pitem[p_total].y = y2;
+                pitem[p_total].total = 1;
+                pitem[p_total].cinfo[pitem[p_total].total - 1].pos = 2;
+                pitem[p_total].cinfo[pitem[p_total].total - 1].ca = *c;
+                p_total += 1;
 
-            flag = 1;
+                flag = 1;
+            }
         }
+      
     }
     if (flag == 0)
     {
@@ -779,7 +780,8 @@ void camera_link(struct camera *c, float x, float y, int id)
     struct camera *tmp;
     tmp = malloc(sizeof(struct camera));
     init_camera(tmp);
-    while (c->next) {
+    while (c->next)
+    {
         c = c->next;
     }
     c->next = tmp;
@@ -815,7 +817,7 @@ void search_point_in_camera(struct point *p, struct camera *e)
         //     if(pitem[i].cinfo[pitem[i].total - 1].ca.selecg[j])
         //     printf("select = %d\t", j);
         // }
-        printf("select = %d   x = %f, y = %f, \t camera.x = %f camera.y = %f\n", pitem[i].cinfo[pitem[i].total - 1].pos,  pitem[i].x, pitem[i].y, pitem[i].cinfo[pitem[i].total - 1].ca.x, pitem[i].cinfo[pitem[i].total - 1].ca.y);
+        printf("select = %d   x = %f, y = %f, \t camera.x = %f camera.y = %f\n", pitem[i].cinfo[pitem[i].total - 1].pos, pitem[i].x, pitem[i].y, pitem[i].cinfo[pitem[i].total - 1].ca.x, pitem[i].cinfo[pitem[i].total - 1].ca.y);
     }
 
     // circleANDLineIntersectionPoint(20,40,5,2,1);
@@ -823,8 +825,8 @@ void search_point_in_camera(struct point *p, struct camera *e)
     // RigthOvalANDLineIntersectionPoint(20, 50, 3, 2, 1);
 }
 
-
-int judgement(int X0, int Y0, int h){
+int judgement(int X0, int Y0, int h)
+{
 
     int r = h / sqrt(3);
     float x[2][25] = {4.500000, 9.500000, 14.500000, 19.500000, 24.500000, 29.500000, 34.500000, 39.500000, 44.500000, 96.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 100.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 21.000000, 41.000000, 61.000000, 81.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 36.000000};
@@ -832,15 +834,18 @@ int judgement(int X0, int Y0, int h){
 
     for (i = 0; i < 25; i++)
     {
-        if (x[0][i] <= X0 + r && x[0][i] >= X0 - r && x[1][i] <= Y0 + r && x[1][i] >= Y0 - r) {
+        if (x[0][i] <= X0 + r && x[0][i] >= X0 - r && x[1][i] <= Y0 + r && x[1][i] >= Y0 - r)
+        {
             printf("the (%f, %f) is in the circle\n", x[0][i], x[1][i]);
         }
 
-        if ((3 * (x[0][i] - X0 + h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1) {
+        if ((3 * (x[0][i] - X0 + h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1)
+        {
             printf("the (%f, %f) is in the leftOval\n", x[0][i], x[1][i]);
         }
 
-        if ((3 * (x[0][i] - X0 - h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1) {
+        if ((3 * (x[0][i] - X0 - h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) / (4 * h * h) + (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <= 1)
+        {
             printf("the (%f, %f) is in the rightOval\n", x[0][i], x[1][i]);
         }
     }
