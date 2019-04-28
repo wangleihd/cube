@@ -44,8 +44,8 @@ int main(void)
     struct point phead;
     struct camera chead;
     struct camera *p;
-    float x[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    float y[] = {0, 20, 40, 60, 80, 80, 70, 60, 50, 40, 40};
+    float x[] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    float y[] = {20, 40, 60, 80, 80, 70, 60, 50, 40, 40};
     //    float x = 0.0;
     //    float y = 0.0;
     int i;
@@ -545,7 +545,7 @@ int fpReadCoord()
 int circleANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct camera *c)
 {
     double x1, y1, x2, y2;
-    int r = 5;
+    int r = h/sqrt(3);
     double tem[4];
     int k, b;
     int flag = 0; //if or not has a IntersectionPoint
@@ -683,7 +683,7 @@ int RigthOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct c
     if (X0 <= 100)
     {
         x1 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b + sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 + 2 * sqrt(3) * X0 - 3 * h * h))) / (24 * k * k + 6);
-        y1 = k * x1 + B1;
+        y1 = k * x1 + b;
         x2 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b - sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) * (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) - 4 * (12 * k * k + 3) * (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 + 2 * sqrt(3) * X0 - 3 * h * h))) / (24 * k * k + 6);
         y2 = k * x2 + b;
         tem[0] = x1;
@@ -791,12 +791,12 @@ void search_point_in_camera(struct point *p, struct camera *e)
     {
         x = c->x;
         y = c->y;
-        LeftOvalANDLineIntersectionPoint(x, y, 5, 0, c);
-        LeftOvalANDLineIntersectionPoint(x, y, 5, 1, c);
-        RigthOvalANDLineIntersectionPoint(x, y, 5, 0, c);
-        RigthOvalANDLineIntersectionPoint(x, y, 5, 1, c);
-        circleANDLineIntersectionPoint(x, y, 5, 0, c);
-        circleANDLineIntersectionPoint(x, y, 5, 1, c);
+        LeftOvalANDLineIntersectionPoint(x, y, 3, 0, c);
+        LeftOvalANDLineIntersectionPoint(x, y, 3, 1, c);
+        RigthOvalANDLineIntersectionPoint(x, y, 3, 0, c);
+        RigthOvalANDLineIntersectionPoint(x, y, 3, 1, c);
+        circleANDLineIntersectionPoint(x, y, 3, 0, c);
+        circleANDLineIntersectionPoint(x, y, 3, 1, c);
         c = c->next;
     }
 

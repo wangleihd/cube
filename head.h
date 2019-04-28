@@ -68,7 +68,7 @@ typedef struct point
     float x;
     float y;
     int total;
-    struct camerainfo cinfo[CMAX];
+    struct camerainfo cinfo[100];
 } poi;
 
 #endif
