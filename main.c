@@ -827,6 +827,7 @@ int judgement(int X0, int Y0, int h, struct camera * c, struct point * gp)
 {
 
     int r = h / sqrt(3);
+    struct point * tmp;
     int ret = 0;
     float x[2][25] = {4.500000, 9.500000, 14.500000, 19.500000, 24.500000, 29.500000, 34.500000, 39.500000, 44.500000, 96.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 100.000000, 10.000000, 20.000000, 30.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 40.000000, 50.000000, 60.000000, 70.000000, 80.000000, 90.000000, 21.000000, 41.000000, 61.000000, 81.000000, 86.000000, 76.000000, 66.000000, 56.000000, 46.000000, 36.000000};
     int i;
@@ -835,6 +836,12 @@ int judgement(int X0, int Y0, int h, struct camera * c, struct point * gp)
     {
         if (x[0][i] <= X0 + r && x[0][i] >= X0 - r && x[1][i] <= Y0 + r && x[1][i] >= Y0 - r) {
             printf("the (%f, %f) is in the circle\n", x[0][i], x[1][i]);
+
+            if(gp->total == 3) {
+            tmp = malloc(sizeof(struct point));
+            gp->next = tmp;
+            gp = gp->next;
+        }
                 gp->x = x[0][i];
                 gp->y = x[1][i];
                 gp->total += 1;
@@ -864,6 +871,7 @@ int judgement(int X0, int Y0, int h, struct camera * c, struct point * gp)
                 gp->cinfo[gp->total - 1].ca = *c;
                 ret =  1;
         }
+        
     }
     return ret;
 }
@@ -874,13 +882,13 @@ void grid_init(struct point * t) {
 }
 
 void output_gridpoint(struct point * head){
-    struct point *g = head;
+    struct point *g = head->next;
     int i;
     while(g) {
         
         printf("grid x = %f, y = %f, total = %d, next = %p\n", g->x, g->y, g->total, g->next);
         for(i = 0; i < g->total; i++) {
-            printf("\ttotal = %d select = %d\n ", i, g->cinfo[i].pos);
+            printf("\ttotal = %d select = %d camera ID = %d\n ", i, g->cinfo[i].pos, g->cinfo[i].ca.id);
         }
         printf("\n");
         g = g->next;
