@@ -974,7 +974,7 @@ void out_line(struct line * lp) {
     struct line *g = lp->next;
     int i;
     while(g) {
-        printf("grid start x = %f, start y = %f, end x = %f, end y = %f total = %d, next = %p\n", g->startx, g->starty, g->endx, g->endy, g->total, g->next);
+        printf("grid start x = %f, start y = %f, end x = %f, end y = %f total = %d, length = %f\n", g->startx, g->starty, g->endx, g->endy, g->total, g->timestamp);
         for(i = 0; i < g->total; i++) {
             printf("\ttotal = %d select = %d camera ID = %d\n ", i, g->cinfo[i].pos, g->cinfo[i].ca.id);
         }
