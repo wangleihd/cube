@@ -1,7 +1,7 @@
 #include "camera.h"
 
 const int max_side = 100;
-const float min_side = 0.5;
+const float min_side = 5;
 
 struct point pitem[100];
 int p_total = 0;
@@ -13,6 +13,13 @@ void cube_link(struct cube *head, struct cube *cube);
 void result_out(struct cube *head);
 void cube_search(struct cube *, float *, int, int, struct dot_in_cube *);
 struct cube *search(struct cube *head, int row, int column);
+void point_create(struct point *);
+void point_init(struct point *);
+void point_out(struct point *);
+void line_init(struct line *);
+void line_create(struct line *lh, struct point *ph);
+void line_out(struct line *lh);
+float distance(struct point *p, struct point *q);
 // void curve_x(double *result, int step);
 // void curve_y(double *res, int step);
 // void fpWriteCoord(double x, int height); //Writes the intersection of the
@@ -38,23 +45,22 @@ void grid_init(struct point *t);
 
 int main(void) {
   struct cube head;
+  struct point ph;
+  struct line lh;
+
   struct dot_in_cube result;
-  // struct point phead, grid_point;
-  // struct camera chead;
-  // struct camera *p;
-  // struct line lhead, plhead;
-  // float x[] = {10, 20, 30, 40, 55, 65, 75, 89, 95, 100};
-  // float y[] = {20, 40, 60, 80, 80, 70, 60, 50, 40, 40};
-  //    float x = 0.0;
-  //    float y = 0.0;
   int i;
   int id = 1;
   int len = 10;
-  int flag = 1 x, flag = 2 y;
   cube_create(&head);
   result_out(&head);
-  cube_search(&head, dot_x, len, 1, &result);
-  cube_search(&head, dot_y, len, 2, &result);
+
+  point_create(&ph);
+  point_out(&ph);
+
+  line_create(&lh, &ph);
+  line_out(&lh);
+
   // circleANDLineIntersectionPoint(20,40,5,2,1);
   // LeftOvalANDLineIntersectionPoint( 20, 50, 3, 2,  1);
   //     chead.next = NULL;
@@ -81,6 +87,119 @@ int main(void) {
   return 0;
 }
 
+float distance(struct point *p, struct point *q) {
+  return sqrt((p->x - q->x) * (p->x - q->x) + (p->y - q->y) * (p->y - q->y));
+}
+
+void point_init(struct point *tmp) {
+  tmp->x = 0;
+  tmp->y = 0;
+  tmp->total = 0;
+  tmp->next = NULL;
+}
+
+void point_create(struct point *ph) {
+  struct point *tmp;
+  int limit_x = 45;
+  int limit_y = 51;
+  int x = 0, y;
+  int num = 1;
+  int temp;
+  point_init(ph);
+  while (x <= limit_x) {
+    tmp = malloc(sizeof(struct point));
+    point_init(tmp);
+    y = 2 * x + 1;
+    tmp->x = x;
+    tmp->y = y;
+    tmp->total = num;
+    while (ph->next) {
+      ph = ph->next;
+    }
+    ph->next = tmp;
+    x += 5;
+    num += 1;
+  }
+
+  while (0 <= y && 100 > x) {
+    x = -y + 136;
+
+    if (100 > x) {
+      tmp = malloc(sizeof(struct point));
+      point_init(tmp);
+      tmp->x = x;
+      tmp->y = y;
+      tmp->total = num;
+      while (ph->next) {
+        ph = ph->next;
+      }
+      ph->next = tmp;
+    }
+
+    temp = y % 10;
+    if (temp) {
+      y -= temp;
+    } else {
+      y -= 5;
+    }
+    num += 1;
+  }
+}
+
+void point_out(struct point *ph) {
+  struct point *p;
+  p = ph->next;
+  while (p->next) {
+    printf("(x,y) = (%f, %f) total = %d \n", p->x, p->y, p->total);
+    p = p->next;
+  }
+}
+
+void line_init(struct line *l) {
+  l->startx = 0;
+  l->starty = 0;
+  l->endx = 0;
+  l->endy = 0;
+  l->timestamp = 0;
+  l->total = 0;
+  l->next = NULL;
+}
+void line_create(struct line *lh, struct point *ph) {
+  struct point *p;
+  struct line *tmp;
+  p = ph->next;
+  line_init(lh);
+  while (p->next) {
+    tmp = malloc(sizeof(struct point));
+    line_init(tmp);
+    tmp->startx = p->x;
+    tmp->starty = p->y;
+    tmp->endx = p->next->x;
+    tmp->endy = p->next->y;
+    tmp->total = p->total;
+    tmp->timestamp = distance(p->next, p);
+
+    while (lh->next) {
+      lh = lh->next;
+    }
+    lh->next = tmp;
+    printf("(x,y) = (%f, %f) total = %d \n", p->x, p->y, p->total);
+    p = p->next;
+  }
+}
+
+void line_out(struct line *lh) {
+  struct line *p = lh->next;
+  while (p->next) {
+    printf(
+        "start(x,y) = (%f, %f) end(x,y) = (%f, %f)\n total = %d time = %f\n\n",
+        p->startx, p->starty, p->endx, p->endy, p->total, p->timestamp);
+
+    p = p->next;
+    /* code */
+  }
+}
+
 void cube_create(struct cube *head) {
   int i, k, f;
   struct cube *p;
@@ -89,21 +208,19 @@ void cube_create(struct cube *head) {
 
   cube_init(head);
   // printf("head.id=%d\n", head.id);
-  for (f = 0; f < max_side / min_side; f++) {
-    for (i = 0; i < max_side / min_side; i++) {
-      for (k = 0; k < max_side / min_side; k++) {
-        num += 1;
-        p = malloc(sizeof(struct cube));
-        cube_init(p);
-        // head->left = p;
-        p->id = num;
-        p->floor = f + 1;
-        p->row = i + 1;
-        p->column = k + 1;
-        p->width = min_side;
-        cube_dot(p);
-        cube_link(head, p);
-      }
+  for (i = 0; i < max_side / min_side; i++) {
+    for (k = 0; k < max_side / min_side; k++) {
+      num += 1;
+      p = malloc(sizeof(struct cube));
+      cube_init(p);
+      // head->left = p;
+      p->id = num;
+      p->floor = 0;
+      p->row = i + 1;
+      p->column = k + 1;
+      p->width = min_side;
+      cube_dot(p);
+      cube_link(head, p);
     }
   }
 }
@@ -475,500 +592,4 @@ int fpReadCoord() {
   fclose(fp1);
 
   return 1;
-}
-
-int circleANDLineIntersectionPoint(float X0, float Y0, int h, int f,
-                                   struct camera *c, struct point *gp) {
-  double x1, y1, x2, y2;
-  struct point *tmp;
-  int r = h / sqrt(3);
-  double tem[4];
-  int k, b;
-  int flag = 0; // if or not has a IntersectionPoint
-  if (f) {
-    k = -1;
-    b = 136;
-  } else {
-    k = 2;
-    b = 1;
-  }
-  if (X0 <= 100) {
-    x1 = (2 * X0 + 2 * k * Y0 - 2 * k * b +
-          sqrt((2 * k * b - 2 * X0 - 2 * k * Y0) *
-                   (2 * k * b - 2 * X0 - 2 * k * Y0) -
-               4 * (k * k + 1) *
-                   (X0 * X0 + Y0 * Y0 + b * b - 2 * b * Y0 - r * r))) /
-         (2 * (k * k + 1));
-    y1 = k * x1 + b;
-    x2 = (2 * X0 + 2 * k * Y0 - 2 * k * b -
-          sqrt((2 * k * b - 2 * X0 - 2 * k * Y0) *
-                   (2 * k * b - 2 * X0 - 2 * k * Y0) -
-               4 * (k * k + 1) *
-                   (X0 * X0 + Y0 * Y0 + b * b - 2 * b * Y0 - r * r))) /
-         (2 * (k * k + 1));
-    y2 = k * x2 + b;
-    tem[0] = x1;
-    tem[1] = y1;
-    tem[2] = x2;
-    tem[3] = y2;
-    if (x1 >= 0 && x1 <= 100) {
-      flag = 1;
-      // printf("x1=%lf,y1=%gcc mlf,x2=%lf,y2=%lf\n", x1, y1, x2, y2);
-
-      c->select[1] = 1;
-      c->point[1][0] = x1;
-      c->point[1][1] = y1;
-      c->point[1][2] = x2;
-      c->point[1][3] = y2;
-
-      gp->x = x1;
-      gp->y = y1;
-      gp->total += 1;
-      gp->cinfo[gp->total - 1].pos = 0;
-      gp->cinfo[gp->total - 1].ca = *c;
-
-      tmp = malloc(sizeof(struct point));
-      tmp->next = NULL;
-      gp->next = tmp;
-      gp = gp->next;
-
-      gp->x = x2;
-      gp->y = y2;
-      gp->total += 1;
-      gp->cinfo[gp->total - 1].pos = 0;
-      gp->cinfo[gp->total - 1].ca = *c;
-      flag = 1;
-    }
-  }
-  if (flag == 0) {
-    // printf("NO IntersectionPoint\n");
-  }
-
-  return flag;
-}
-
-int LeftOvalANDLineIntersectionPoint(
-    float X0, float Y0, int h, int f, struct camera *c,
-    struct point
-        *gp) // Coordinates of the intersection of an ellipse and a line
-{
-  double x1, y1, x2, y2;
-  struct point *tmp;
-
-  float tem[4];
-  int k, b;
-  int flag = 0; // if or not has a IntersectionPoint
-  if (f) {
-    k = -1;
-    b = 136;
-  } else {
-    k = 2;
-    b = 1;
-  }
-  if (X0 <= 100) {
-    if ((2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) *
-                (2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) -
-            4 * (12 * k * k + 3) *
-                (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 -
-                 2 * sqrt(3) * X0 * h - 3 * h * h) >=
-        0) {
-      x1 = (6 * X0 + 24 * k * Y0 - 2 * sqrt(3) * h - 24 * k * b +
-            sqrt((2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) *
-                     (2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) -
-                 4 * (12 * k * k + 3) *
-                     (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 -
-                      2 * sqrt(3) * X0 * h - 3 * h * h))) /
-           (24 * k * k + 6);
-      y1 = k * x1 + b;
-      x2 = (6 * X0 + 24 * k * Y0 - 2 * sqrt(3) * h - 24 * k * b -
-            sqrt((2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) *
-                     (2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) -
-                 4 * (12 * k * k + 3) *
-                     (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 -
-                      2 * sqrt(3) * X0 * h - 3 * h * h))) /
-           (24 * k * k + 6);
-      y2 = k * x2 + b;
-
-      tem[0] = x1;
-      tem[1] = y1;
-      tem[2] = x2;
-      tem[3] = y2;
-      {
-        c->select[0] = 1;
-        c->point[0][0] = x1;
-        c->point[0][1] = y1;
-        c->point[0][2] = x2;
-        c->point[0][3] = y2;
-
-        gp->x = x2;
-        gp->y = y2;
-        gp->total += 1;
-        gp->cinfo[gp->total - 1].pos = 0;
-        gp->cinfo[gp->total - 1].ca = *c;
-
-        tmp = malloc(sizeof(struct point));
-        tmp->next = NULL;
-        gp->next = tmp;
-        gp = gp->next;
-
-        gp->x = x1;
-        gp->y = y1;
-        gp->total += 1;
-        gp->cinfo[gp->total - 1].pos = 0;
-        gp->cinfo[gp->total - 1].ca = *c;
-
-        flag = 1;
-      }
-    }
-  }
-
-  if (flag == 0) {
-    // printf("NO IntersectionPoint! \n");
-    // printf("LeftOvalANDLineIntersectionPoint: NO IntersectionPoint! \n");
-  }
-  return flag;
-}
-
-int RigthOvalANDLineIntersectionPoint(
-    float X0, float Y0, int h, int f, struct camera *c,
-    struct point
-        *gp) // Coordinates of the intersection of an ellipse and a line
-{
-  double x1, y1, x2, y2;
-  double tem[4];
-  struct point *tmp;
-  int k, b;
-  int flag = 0; // if or not has a IntersectionPoint
-  if (f) {
-    k = -1;
-    b = 136;
-  } else {
-    k = 2;
-    b = 1;
-  }
-  if (X0 <= 100) {
-    if ((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) *
-                (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) -
-            4 * (12 * k * k + 3) *
-                (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 +
-                 2 * sqrt(3) * X0 * h - 3 * h * h) >=
-        0) {
-      x1 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b +
-            sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) *
-                     (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) -
-                 4 * (12 * k * k + 3) *
-                     (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 +
-                      2 * sqrt(3) * X0 * h - 3 * h * h))) /
-           (24 * k * k + 6);
-      y1 = k * x1 + b;
-      x2 = (6 * X0 + 24 * k * Y0 + 2 * sqrt(3) * h - 24 * k * b -
-            sqrt((-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) *
-                     (-2 * sqrt(3) * h - 6 * X0 + 24 * k * b - 24 * k * Y0) -
-                 4 * (12 * k * k + 3) *
-                     (3 * X0 * X0 + 12 * Y0 * Y0 + 12 * b * b - 24 * b * Y0 +
-                      2 * sqrt(3) * X0 * h - 3 * h * h))) /
-           (24 * k * k + 6);
-      y2 = k * x2 + b;
-      tem[0] = x1;
-      tem[1] = y1;
-      tem[2] = x2;
-      tem[3] = y2;
-      if (x1 <= 100 && x1 >= 0) {
-        // printf("x1=%lf,y1=%lf,x2=%lf,y2=%lf\n", x1, y1, x2, y2);
-        c->select[2] = 1;
-        c->point[2][0] = x1;
-        c->point[2][1] = y1;
-        c->point[2][2] = x2;
-        c->point[2][3] = y2;
-
-        gp->x = x2;
-        gp->y = y2;
-        gp->total += 1;
-        gp->cinfo[gp->total - 1].pos = 2;
-        gp->cinfo[gp->total - 1].ca = *c;
-
-        tmp = malloc(sizeof(struct point));
-        tmp->next = NULL;
-        gp->next = tmp;
-        gp = gp->next;
-
-        gp->x = x1;
-        gp->y = y1;
-        gp->total += 1;
-        gp->cinfo[gp->total - 1].pos = 2;
-        gp->cinfo[gp->total - 1].ca = *c;
-
-        flag = 1;
-      }
-    }
-  }
-  if (flag == 0) {
-    // printf("LeftOvalANDLineIntersectionPoint: NO IntersectionPoint! \n");
-  }
-  return flag;
-}
-
-void init_camera(struct camera *c) {
-  int i, j;
-  int pos = 3;
-  int coord = 4;
-  for (i = 0; i < pos; i++) {
-    for (j = 0; j < coord; j++) {
-      if (i == 0 && j < pos) {
-        c->select[i] = 0;
-      }
-      c->point[i][j] = 0;
-    }
-  }
-  c->next = NULL;
-}
-
-void camera_link(struct camera *c, float x, float y, int id) {
-  struct camera *tmp;
-  tmp = malloc(sizeof(struct camera));
-  init_camera(tmp);
-  while (c->next) {
-    c = c->next;
-  }
-  c->next = tmp;
-  tmp->x = x;
-  tmp->y = y;
-  tmp->id = id;
-}
-
-void search_point_in_camera(struct point *gp, struct camera *e) {
-  struct camera *c = e->next;
-  struct point *gtmp;
-  struct point *htmp = gp;
-
-  int x = c->x;
-  int y = c->y;
-  int i, j;
-  int ret;
-
-  while (c) {
-    gtmp = malloc(sizeof(struct point));
-    grid_init(gtmp);
-    x = c->x;
-    y = c->y;
-    ret = LeftOvalANDLineIntersectionPoint(x, y, 3, 0, c, gtmp);
-    if (ret) {
-      while (gp->next) {
-        gp = gp->next;
-      }
-      gp->next = gtmp;
-      gtmp = malloc(sizeof(struct point));
-      grid_init(gtmp);
-    }
-
-    ret = RigthOvalANDLineIntersectionPoint(x, y, 3, 0, c, gtmp);
-    if (ret) {
-      while (gp->next) {
-        gp = gp->next;
-      }
-      gp->next = gtmp;
-      gtmp = malloc(sizeof(struct point));
-      grid_init(gtmp);
-    }
-    ret = circleANDLineIntersectionPoint(x, y, 3, 0, c, gtmp);
-    if (ret) {
-      while (gp->next) {
-        gp = gp->next;
-      }
-      gp->next = gtmp;
-      gtmp = malloc(sizeof(struct point));
-      grid_init(gtmp);
-    }
-
-    ret = LeftOvalANDLineIntersectionPoint(x, y, 3, 1, c, gtmp);
-    if (ret) {
-      while (gp->next) {
-        gp = gp->next;
-      }
-      gp->next = gtmp;
-      gtmp = malloc(sizeof(struct point));
-      grid_init(gtmp);
-    }
-    ret = RigthOvalANDLineIntersectionPoint(x, y, 3, 1, c, gtmp);
-    if (ret) {
-      while (gp->next) {
-        gp = gp->next;
-      }
-      gp->next = gtmp;
-      gtmp = malloc(sizeof(struct point));
-      grid_init(gtmp);
-    }
-    ret = circleANDLineIntersectionPoint(x, y, 3, 1, c, gtmp);
-    if (ret) {
-      while (gp->next) {
-        gp = gp->next;
-      }
-      gp->next = gtmp;
-      gtmp = malloc(sizeof(struct point));
-      grid_init(gtmp);
-    }
-    c = c->next;
-  }
-}
-
-int judgement(int X0, int Y0, int h, struct camera *c, struct point *gp) {
-  int r = h / sqrt(3);
-  struct point *tmp;
-  int ret = 0;
-  float x[2][25] = {4.500000,  9.500000,  14.500000, 19.500000, 24.500000,
-                    29.500000, 34.500000, 39.500000, 44.500000, 96.000000,
-                    86.000000, 76.000000, 66.000000, 56.000000, 46.000000,
-                    10.000000, 20.000000, 30.000000, 40.000000, 50.000000,
-                    60.000000, 70.000000, 80.000000, 90.000000, 100.000000,
-                    10.000000, 20.000000, 30.000000, 40.000000, 50.000000,
-                    60.000000, 70.000000, 80.000000, 90.000000, 40.000000,
-                    50.000000, 60.000000, 70.000000, 80.000000, 90.000000,
-                    21.000000, 41.000000, 61.000000, 81.000000, 86.000000,
-                    76.000000, 66.000000, 56.000000, 46.000000, 36.000000};
-  int i;
-
-  for (i = 0; i < 25; i++) {
-    if (x[0][i] <= X0 + r && x[0][i] >= X0 - r && x[1][i] <= Y0 + r &&
-        x[1][i] >= Y0 - r) {
-      // printf("the (%f, %f) is in the circle\n", x[0][i], x[1][i]);
-
-      if (gp->total == 3) {
-        tmp = malloc(sizeof(struct point));
-        gp->next = tmp;
-        gp = gp->next;
-      }
-      gp->x = x[0][i];
-      gp->y = x[1][i];
-      gp->total += 1;
-      gp->cinfo[gp->total - 1].pos = 1;
-      gp->cinfo[gp->total - 1].ca = *c;
-      ret = 1;
-    }
-
-    if ((3 * (x[0][i] - X0 + h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) /
-                (4 * h * h) +
-            (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <=
-        1) {
-      // printf("the (%f, %f) is in the leftOval\n", x[0][i], x[1][i]);
-      gp->x = x[0][i];
-      gp->y = x[1][i];
-      gp->total += 1;
-      gp->cinfo[gp->total - 1].pos = 0;
-      gp->cinfo[gp->total - 1].ca = *c;
-      ret = 1;
-    }
-
-    if ((3 * (x[0][i] - X0 - h / sqrt(3)) * (x[0][i] - X0 + h / sqrt(3))) /
-                (4 * h * h) +
-            (3 * (x[1][i] - Y0) * (x[1][i] - Y0)) / (h * h) <=
-        1) {
-      // printf("the (%f, %f) is in the rightOval\n", x[0][i], x[1][i]);
-      gp->x = x[0][i];
-      gp->y = x[1][i];
-      gp->total += 1;
-      gp->cinfo[gp->total - 1].pos = 2;
-      gp->cinfo[gp->total - 1].ca = *c;
-      ret = 1;
-    }
-  }
-  return ret;
-}
-
-void grid_init(struct point *t) {
-  t->total = 0;
-  t->x = -1.0;
-  t->y = -1.0;
-}
-
-void output_gridpoint(struct point *head) {
-  struct point *g = head->next;
-  int i;
-  while (g) {
-    printf("grid x = %f, y = %f, total = %d\n", g->x, g->y, g->total);
-    for (i = 0; i < g->total; i++) {
-      printf("\ttotal = %d select = %d camera ID = %d\n ", i, g->cinfo[i].pos,
-             g->cinfo[i].ca.id);
-    }
-    printf("\n");
-    g = g->next;
-  }
-}
-
-void search_gridpoint_in_camera(struct point *gp, struct camera *cp) {
-  struct camera *c = cp->next;
-  struct point *gtmp;
-  struct point *htmp = gp;
-  int x = c->x;
-  int y = c->y;
-  int ret;
-  while (c) {
-    gtmp = malloc(sizeof(struct point));
-    grid_init(gtmp);
-    x = c->x;
-    y = c->y;
-    ret = judgement(x, y, 3, c, gtmp);
-    if (ret) {
-      while (gp->next) {
-        gp = gp->next;
-      }
-      gp->next = gtmp;
-    } else {
-      free(gtmp);
-    }
-    c = c->next;
-  }
-}
-
-float distance(struct point *p, struct point *q) {
-  return sqrt((p->x - q->x) * (p->x - q->x) + (p->y - q->y) * (p->y - q->y));
-}
-void link_point(struct point *p, struct line *lp) {
-  struct line *tmp;
-  struct point *ptmp = p->next;
-  struct point *a, *b;
-  int i, j, ret;
-  while (ptmp->next) {
-    a = ptmp;
-    b = ptmp->next;
-    ret = 0;
-    if (a->total == b->total) {
-      for (i = 0; i < a->total; i++) {
-        if (a->cinfo[i].ca.id == b->cinfo[i].ca.id) {
-          ret += 1;
-        }
-      }
-      if (ret == a->total) {
-        tmp = malloc(sizeof(struct line));
-        tmp->startx = a->x;
-        tmp->starty = a->y;
-        tmp->endx = b->x;
-        tmp->endy = b->y;
-        tmp->total = a->total;
-        for (j = 0; j < a->total; j++) {
-          tmp->cinfo[j] = a->cinfo[j];
-        }
-        tmp->timestamp = distance(a, b);
-        while (lp->next) {
-          lp = lp->next;
-        }
-        lp->next = tmp;
-      }
-    }
-    ptmp = ptmp->next;
-  }
-}
-void out_line(struct line *lp) {
-  struct line *g = lp->next;
-  int i;
-  while (g) {
-    printf("grid start x = %f, start y = %f, end x = %f, end y = %f total = "
-           "%d, length = %f\n",
-           g->startx, g->starty, g->endx, g->endy, g->total, g->timestamp);
-    for (i = 0; i < g->total; i++) {
-      printf("\ttotal = %d select = %d camera ID = %d\n ", i, g->cinfo[i].pos,
-             g->cinfo[i].ca.id);
-    }
-    printf("\n");
-    g = g->next;
-  }
 }
