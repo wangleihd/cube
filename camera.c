@@ -94,7 +94,7 @@ float distance(struct point *p, struct point *q) {
 void point_init(struct point *tmp) {
   tmp->x = 0;
   tmp->y = 0;
-  tmp->total = 0;
+  tmp->id = 0;
   tmp->next = NULL;
 }
 
@@ -112,7 +112,7 @@ void point_create(struct point *ph) {
     y = 2 * x + 1;
     tmp->x = x;
     tmp->y = y;
-    tmp->total = num;
+    tmp->id = num;
     while (ph->next) {
       ph = ph->next;
     }
@@ -129,7 +129,7 @@ void point_create(struct point *ph) {
       point_init(tmp);
       tmp->x = x;
       tmp->y = y;
-      tmp->total = num;
+      tmp->id = num;
       while (ph->next) {
         ph = ph->next;
       }
@@ -150,7 +150,7 @@ void point_out(struct point *ph) {
   struct point *p;
   p = ph->next;
   while (p->next) {
-    printf("(x,y) = (%f, %f) total = %d \n", p->x, p->y, p->total);
+    printf("(x,y) = (%f, %f) id = %d \n", p->x, p->y, p->id);
     p = p->next;
   }
 }
@@ -161,7 +161,7 @@ void line_init(struct line *l) {
   l->endx = 0;
   l->endy = 0;
   l->timestamp = 0;
-  l->total = 0;
+  l->id = 0;
   l->next = NULL;
 }
 void line_create(struct line *lh, struct point *ph) {
@@ -176,14 +176,14 @@ void line_create(struct line *lh, struct point *ph) {
     tmp->starty = p->y;
     tmp->endx = p->next->x;
     tmp->endy = p->next->y;
-    tmp->total = p->total;
+    tmp->id = p->id;
     tmp->timestamp = distance(p->next, p);
 
     while (lh->next) {
       lh = lh->next;
     }
     lh->next = tmp;
-    printf("(x,y) = (%f, %f) total = %d \n", p->x, p->y, p->total);
+    printf("(x,y) = (%f, %f) id = %d \n", p->x, p->y, p->id);
     p = p->next;
   }
 }
@@ -192,8 +192,8 @@ void line_out(struct line *lh) {
   struct line *p = lh->next;
   while (p->next) {
     printf(
-        "start(x,y) = (%f, %f) end(x,y) = (%f, %f)\n total = %d time = %f\n\n",
-        p->startx, p->starty, p->endx, p->endy, p->total, p->timestamp);
+        "start(x,y) = (%f, %f) end(x,y) = (%f, %f)\n id = %d time = %f\n\n",
+        p->startx, p->starty, p->endx, p->endy, p->id, p->timestamp);
 
     p = p->next;
     /* code */

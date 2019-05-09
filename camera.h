@@ -69,7 +69,7 @@ typedef struct camerainfo {
 typedef struct point {
   float x;
   float y;
-  int total;
+  int id;
   struct point *next;
 } poi;
 
@@ -77,7 +77,7 @@ typedef struct line {
   float startx, starty;
   float endx, endy;
   float timestamp;
-  int total;
+  int id;
   struct line *next;
 } l;
 
