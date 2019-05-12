@@ -1,5 +1,5 @@
-#include "camera.h"
 
+#include "camera.h"
 const int max_side = 100;
 const float min_side = 5;
 const float max = 20;
@@ -35,15 +35,23 @@ void save(struct npoint *head, struct line *lp, struct camerainfo *ci,
           struct lineinfo *li, int pos);
 void save_out(struct camerainfo * ch);
 
+void algorithm_one(struct camerainfo * ch, struct retcam *reh, struct line * l);
+void one_init(struct retcam *);
+void one_out(struct retcam * reh);
+void two_out(struct retcam * reh);
+
+void algorithm_two(struct camerainfo * ch, struct retcam *reh, struct line * l);
+
 void grid_init(struct point *t);
 
 int main(void) {
   struct cube head;
   struct point ph;
   struct line lh;
-  struct camerainfo ch;
+  struct camerainfo ch, tch;
   struct lineinfo lih;
   struct npoint nh;
+  struct retcam one, two;
 
   int i;
   int id = 1;
@@ -63,7 +71,16 @@ int main(void) {
   save_init(&ch);
   save_init_line(&lih);
   line(&nh, &lh, &ch, &lih);
-  save_out(&ch);
+  line(&nh, &lh, &tch, &lih);
+  // save_out(&ch);
+  one_init(&one);
+  algorithm_one(&ch, &one, &lh);
+  one_out(&one);
+
+  one_init(&two);
+  algorithm_two(&tch, &two, &lh);
+  printf("\n\n");
+  two_out(&two);
 
   return 0;
 }
@@ -381,9 +398,9 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
       int er = lineinOval(a, br, plh->endx, plh->endy);
 
       if (startret && endret) {
-        printf("### Circle cameraId= %d \t in circle (x, y) = %f, %f   "
-               "s=%d, e=%d line = %d\n",
-               ph->cameraId, ph->x, ph->y, startret, endret, plh->id);
+        // printf("### Circle cameraId= %d \t in circle (x, y) = %f, %f   "
+        //        "s=%d, e=%d line = %d\n",
+        //        ph->cameraId, ph->x, ph->y, startret, endret, plh->id);
         save(ph, plh, ci, li, 1);
       }
       if (sl && el) {
@@ -448,6 +465,7 @@ void save_init(struct camerainfo *ctmp) {
   ctmp->pos = 0;
   ctmp->cameraId = 0;
   ctmp->sum = 0;
+  ctmp->isdelete = 0;
   ctmp->line = NULL;
   ctmp->camera = NULL;
   ctmp->next = NULL;
@@ -484,6 +502,7 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
 
   if(flag) {
     tcp->sum += 1;
+    tcp->lines[l->id] = 1;
     // cnext = tcp->camera;
     // while(cnext->next) {
     //   cnext = cnext->next;
@@ -498,6 +517,7 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
   ctmp->sum += 1;
   ctmp->line = l;
   ctmp->camera = head;
+  ctmp->lines[l->id] = 1;
   while (cp->next) {
     cp = cp->next;
   }
@@ -603,4 +623,149 @@ void newpoint_out(struct npoint *nh) {
     printf("x =%f, y=%f, cameraId=%d\n", p->x, p->y, p->cameraId);
     p = p->next;
   }
+}
+
+void one_init(struct retcam *tmp) {
+  tmp->pos = 0;
+  tmp->cameraId = 0;
+  tmp->sum = 0;
+  tmp->next = NULL;
+}
+
+void one_out(struct retcam * reh) {
+  struct retcam * tmp = reh->next;
+
+  while(tmp) {
+    printf("# one\t id= %d, pos = %d, sum = %d\n", tmp->cameraId, tmp->pos, tmp->sum);
+    tmp = tmp->next;
+  }
+}
+
+void algorithm_one(struct camerainfo * ch, struct retcam *reh, struct line * l){
+  struct camerainfo * min;
+  struct camerainfo * tmp = ch->next;
+  struct retcam * pret = reh;
+  struct retcam * ret;
+  struct retcam * comp;
+  struct line * line = l->next;
+  int max = 999;
+  int num = 1;
+  int flag = 0;
+
+  while(num) {
+    num = 0;
+    while (tmp) {
+      if(tmp->isdelete == 0) {
+      num += 1;
+        if(max >= tmp->sum) {
+          max = tmp->sum;
+          min = tmp;
+        }
+      }
+      tmp = tmp->next;
+    }
+    ret = malloc(sizeof(struct retcam));
+    one_init(ret);
+    ret->pos = min->pos;
+    ret->cameraId = min->cameraId;
+    ret->sum = min->sum;
+    memcpy(ret->lines, min->lines, 100 * sizeof(int));
+    while(pret->next) {
+      pret = pret->next;
+    }
+    pret->next = ret;
+
+  // delete camera and pos
+    tmp = ch->next;
+    while(tmp) {
+      if(tmp->cameraId == min->cameraId) {
+        tmp->isdelete = 1;
+      }
+      tmp = tmp->next;
+    }
+    // printf("tmp: %d, %d, %d num = %d\n", min->cameraId, min->sum, min->pos, num);
+
+    max = 999;
+    tmp = ch->next;
+
+    while(line) {
+      flag = 0;
+      comp = reh->next;
+      while(comp) {
+        if(comp->lines[line->id] != 1) {
+          flag = 1;
+          break;
+        }
+        comp = comp->next;
+      }
+      if(flag) {
+        break;
+      }
+      line = line->next;
+    }
+
+    if(!line) {
+      return;
+    }
+
+    line = l->next;
+
+  }
+}
+
+void two_out(struct retcam * reh) {
+  struct retcam * tmp = reh->next;
+
+  while(tmp) {
+    printf("# tow\t id= %d, pos = %d, sum = %d\n", tmp->cameraId, tmp->pos, tmp->sum);
+    tmp = tmp->next;
+  }
+}
+
+void algorithm_two(struct camerainfo * ch, struct retcam *reh, struct line * l){
+  // find line sum min
+  struct line * line = l->next;
+  struct camerainfo * tmp = ch->next;
+  struct camerainfo * min;
+  struct retcam * pret = reh;
+  struct retcam * ret;
+  int max = 999;
+
+  while(line) {
+
+    while(tmp) {
+      // printf("cameraId = %d\n", line->id);
+      if(tmp->isdelete == 0) {
+        if(tmp->lines[line->id] == 1) {
+          if(max >= tmp->sum) {
+            max = tmp->sum;
+            min = tmp;
+          }
+        }
+      }
+      tmp = tmp->next;
+    }
+
+    if(min) {
+      min->isdelete = 1;
+      ret = malloc(sizeof(struct retcam));
+      one_init(ret);
+      ret->pos = min->pos;
+      ret->cameraId = min->cameraId;
+      ret->sum = min->sum;
+      memcpy(ret->lines, min->lines, 100 * sizeof(int));
+      while(pret->next) {
+        pret = pret->next;
+      }
+      pret->next = ret;
+    } else {
+      printf("min is error \n");
+    }
+
+    min = NULL;
+    line = line->next;
+    tmp = ch->next;
+    max = 999;
+  }
+
 }

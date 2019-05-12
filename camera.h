@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 // #include <conio.h>    //window lib
 
 const double pi = 3.1415926;
@@ -79,6 +80,8 @@ typedef struct camerainfo {
   int pos;
   int cameraId;
   int sum;
+  int isdelete;
+  int lines[100];
   struct line *line;
   struct npoint *camera;
   struct camerainfo * next;
@@ -90,5 +93,16 @@ typedef struct lineinfo {
   struct npoint *camera;
   struct lineinfo * next;
 } liii;
+
+struct retcam {
+  int pos;
+  int cameraId;
+  int sum;
+  int lines[100];
+  struct retcam * next;
+};
+
+
+
 
 #endif
