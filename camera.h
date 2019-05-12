@@ -52,7 +52,6 @@ typedef struct camera {
   struct camera *next;
 } ca;
 
-
 typedef struct point {
   float x;
   float y;
@@ -65,8 +64,8 @@ typedef struct npoint {
   float y;
   int height;
   int cameraId;
-  struct npoint * next;
-}n;
+  struct npoint *next;
+} n;
 
 typedef struct line {
   float startx, starty;
@@ -77,18 +76,19 @@ typedef struct line {
 } l;
 
 typedef struct camerainfo {
-  struct cube * camera;
   int pos;
   int cameraId;
-  struct line * line;
   int sum;
+  struct line *line;
+  struct npoint *camera;
+  struct camerainfo * next;
 } cii;
 
-
 typedef struct lineinfo {
-  struct cube * camera;
   int lineId;
-  struct line * line;
-}liii;
+  struct line *line;
+  struct npoint *camera;
+  struct lineinfo * next;
+} liii;
 
 #endif
