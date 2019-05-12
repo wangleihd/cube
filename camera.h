@@ -44,27 +44,14 @@ typedef struct cube {
   struct cube *right;
 } cubes, *cu;
 
-typedef struct dot_in_cube {
-  float x;
-  float y;
-  struct cube *top;
-  struct cube *bottom;
-  struct cube *left;
-  struct cube *right;
-} dots, *dot;
-
 typedef struct camera {
   float x, y;
   int id;
   int select[3];
-  int point[3][4];
+  struct cube cube;
   struct camera *next;
 } ca;
 
-typedef struct camerainfo {
-  struct camera ca;
-  int pos;
-} ci;
 
 typedef struct point {
   float x;
@@ -73,6 +60,14 @@ typedef struct point {
   struct point *next;
 } poi;
 
+typedef struct npoint {
+  float x;
+  float y;
+  int height;
+  int cameraId;
+  struct npoint * next;
+}n;
+
 typedef struct line {
   float startx, starty;
   float endx, endy;
@@ -80,5 +75,20 @@ typedef struct line {
   int id;
   struct line *next;
 } l;
+
+typedef struct camerainfo {
+  struct cube * camera;
+  int pos;
+  int cameraId;
+  struct line * line;
+  int sum;
+} cii;
+
+
+typedef struct lineinfo {
+  struct cube * camera;
+  int lineId;
+  struct line * line;
+}liii;
 
 #endif

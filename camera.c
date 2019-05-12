@@ -2,6 +2,8 @@
 
 const int max_side = 100;
 const float min_side = 5;
+const float max = 20;
+const float h = 5;
 
 struct point pitem[100];
 int p_total = 0;
@@ -11,8 +13,8 @@ void cube_init(struct cube *cube);
 void cube_dot(struct cube *cube);
 void cube_link(struct cube *head, struct cube *cube);
 void result_out(struct cube *head);
-void cube_search(struct cube *, float *, int, int, struct dot_in_cube *);
-struct cube *search(struct cube *head, int row, int column);
+int newpoint(struct cube * head, struct npoint * nh);
+void newpoint_out(struct npoint * nh);
 void point_create(struct point *);
 void point_init(struct point *);
 void point_out(struct point *);
@@ -20,70 +22,44 @@ void line_init(struct line *);
 void line_create(struct line *lh, struct point *ph);
 void line_out(struct line *lh);
 float distance(struct point *p, struct point *q);
-// void curve_x(double *result, int step);
-// void curve_y(double *res, int step);
-// void fpWriteCoord(double x, int height); //Writes the intersection of the
-// curve and the grid to a file int fpReadCoord();                       //Reads
-// the intersection of the curves in the file with the grid void
-// camera_link(struct camera *c, float x, float y, int id);
+int line(struct npoint * head, struct line * lp, struct camerainfo * ci, struct lineinfo * li);
+void save_init(struct camerainfo * , struct lineinfo *); 
+int lineincircle(float x, float y, float x0, float y0, float h);
 
-// void search_point_in_camera(struct point *, struct camera *);
-// void init_camera(struct camera *);
-// void camera_link(struct camera *c, float x, float y, int id);
+int lineinOval(float a, float b, float x0, float y0);
+float af(float h);
+float bf(float h, float x, float y, int flag);
 
-// int circleANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct
-// camera *c, struct point * gp); int LeftOvalANDLineIntersectionPoint(float X0,
-// float Y0, int h, int f, struct camera *c, struct point *gp); int
-// RigthOvalANDLineIntersectionPoint(float X0, float Y0, int h, int f, struct
-// camera *c, struct point * gp); int judgement(int X0, int Y0, int h, struct
-// camera * c, struct point * gp); void search_gridpoint_in_camera(struct point
-// *, struct camera *); void output_gridpoint(struct point * head); void
-// grid_init(struct point * t); void link_point(struct point * p, struct line *
-// lp); float distance(struct point * p, struct point * q); void out_line(struct
-// line * lp);
+
 void grid_init(struct point *t);
 
 int main(void) {
   struct cube head;
   struct point ph;
   struct line lh;
+  struct camerainfo ch;
+  struct lineinfo lih;
+  struct npoint nh;
 
-  struct dot_in_cube result;
   int i;
   int id = 1;
   int len = 10;
   cube_create(&head);
-  result_out(&head);
+  // result_out(&head);
+
+  newpoint(&head, &nh);
+  // newpoint_out(&nh);
+
 
   point_create(&ph);
-  point_out(&ph);
+  // point_out(&ph);
 
   line_create(&lh, &ph);
-  line_out(&lh);
+  // line_out(&lh);
 
-  // circleANDLineIntersectionPoint(20,40,5,2,1);
-  // LeftOvalANDLineIntersectionPoint( 20, 50, 3, 2,  1);
-  //     chead.next = NULL;
-  //     grid_point.next = NULL;
-  //     phead.next = NULL;
-  //     lhead.next = NULL;
-  //     plhead.next = NULL;
-  //     chead.id = 0;
+  line(&nh, &lh, &ch, &lih);
 
-  //   for (i = 0; i < 10; i++)
-  //     {
-  //         camera_link(&chead, x[i], y[i], i + 1);
-  //     }
 
-  //     search_gridpoint_in_camera(&grid_point, &chead);
-  //     output_gridpoint(&grid_point);
-  //     link_point(&grid_point, &lhead);
-  //     out_line(&lhead);
-
-  //     search_point_in_camera(&phead, &chead);
-  //     output_gridpoint(&phead);
-  //     link_point(&phead, &plhead);
-  //     out_line(&plhead);
   return 0;
 }
 
@@ -183,7 +159,6 @@ void line_create(struct line *lh, struct point *ph) {
       lh = lh->next;
     }
     lh->next = tmp;
-    printf("(x,y) = (%f, %f) id = %d \n", p->x, p->y, p->id);
     p = p->next;
   }
 }
@@ -297,7 +272,7 @@ void cube_link(struct cube *h, struct cube *p) {
   int dot = 0;
   while (tmpright->right) {
     tmpright = tmpright->right;
-    if (0 == (tmpright->column % (int)min_side)) {
+    if (0 == (tmpright->column % (int)max)) {
       if (tmptop->top) {
         tmpright = tmptop->top;
         tmptop = tmptop->top;
@@ -377,219 +352,153 @@ void result_out(struct cube *m) {
   fclose(fp); //关闭文件
 }
 
-void cube_search(struct cube *head, float *coordinate, int len, int flag,
-                 struct dot_in_cube *res) {
-  int i = 1;
-  int step_x = 0;
-  int step_y = 0;
-  struct cube *p;
-  struct cube *h = head;
-
-  printf("flag: %d\n", flag);
-  for (; i <= len; i++) {
-    if (*coordinate > max_side) {
-      coordinate++;
-      continue;
-    } else {
-      if (1 == flag) {
-        step_x = i;
-        if (step_x <= 1) {
-          step_x = 1;
-        }
-        step_y = (int)*coordinate / min_side + 1;
-        p = search(head, step_x, step_y);
-      } else {
-        step_y = i;
-        if (step_y <= 1) {
-          step_y = 1;
-        }
-        step_x = (int)*coordinate / min_side + 1;
-        p = search(head, step_x, step_y);
-      }
-    }
-    // if(flag == 1) {
-    //     printf("(x, y) = P(%d, %f)  [%d, %d], id = %d row = %d, column =
-    //     %d,", i* min_side, *coordinate, step_x, step_y, p->id, p->row,
-    //     p->column); if(p->right) printf("\tnext.id = %d, next.row = %d
-    //     next.column = %d\n",p->right->id, p->right->row, p->right->column);
-
-    // } else {
-    //     printf("(x, y) = P(%f, %d)  [%d, %d], id = %d row = %d, column =
-    //     %d,", *coordinate, i * min_side, step_x, step_y, p->id, p->row,
-    //     p->column); if(p->top) printf("\tnext.id = %d, next.row = %d
-    //     next.column = %d\n", p->top->id, p->top->row, p->top->column);
-
-    // }
-    coordinate++;
-  }
-}
-
-struct cube *search(struct cube *head, int column, int row) {
-  struct cube *tmp = head->right;
-  while (tmp->row != row) {
-    tmp = tmp->top;
-  }
-  while (tmp->column != column) {
-    tmp = tmp->right;
-  }
-  return tmp;
-}
-
-void fpWriteCoord(double x, int height) {
-  double y;
-  int i, j;
-
-  // x1=x;
-  FILE *fp, *fp1, *fp2, *fp3;
-  fp = fopen("CoordinatesY.txt",
-             "w"); //打开文件 //x是固定的边长，所以不写，只写了Y
-  if ((fp = fopen("CoordinatesY.txt", "w")) == NULL) //判断文件是否能打开
-  {
-    printf("fail to open the file!\n");
-    exit(0);
-  }
-
-  while (x <= 45 && y <= 91) {
-    for (i = 0; i <= 100; i += height) {
-      for (j = 0; j <= 100; j += height) {
-        //  y = 10*sin(x*3.14/180);
-        y = 2 * x + 1;
-        // if ((y == j || y == i|| x == i|| x == j )&& x!=0)
-        if ((x == i || x == j) && x != 0 && x <= 45 && y <= 91)
-        // if (y == j || y == i|| x == i|| x == j )
-        {
-          printf("The intersection point is :x= %lf ,y= %lf\n", x, y);
-          // dot_x[j]=y;
-          // fprintf(fp,"%lf %lf\n",x, y);
-          fprintf(fp, "%lf %lf\n", x, y);
-          break;
-        }
-      }
-      x = x + 1;
-    }
-  }
-  fclose(fp); //关闭文件
-
-  x = 1;
-  y = 0;
-  fp1 = fopen("CoordinatesX.txt", "w");               //打开文件
-  if ((fp1 = fopen("CoordinatesX.txt", "w")) == NULL) //判断文件是否能打开
-  {
-    printf("fail to open the file!\n");
-    exit(0);
-  }
-
-  while (x <= 91 && y <= 45) {
-    for (i = 0; i <= 100; i += height) {
-      for (j = 0; j <= 100; j += height) {
-        //  y = 10*sin(x*3.14/180);
-        y = (x - 1) / 2; //反函数
-        // if ((y == j || y == i|| x == i|| x == j )&& x!=0)
-        if ((x == i) || (x == j && x != 0 && x <= 91 && y <= 45))
-        // if (y == j || y == i|| x == i|| x == j )
-        {
-          printf("The intersection point is :x= %lf ,y= %lf\n", y,
-                 x); //横纵坐标换一下输出
-                     // dot_y[j]=x;
-                     // fprintf(fp,"%lf %lf\n",y,x);
-          fprintf(fp1, "%lf %lf\n", y, x);
-          break;
-        }
-      }
-      x = x + 1;
-    }
-  }
-  fclose(fp1); //关闭文件
-
-  fp2 = fopen("CoordinatesY.txt", "a");               //打开文件
-  if ((fp2 = fopen("CoordinatesY.txt", "a")) == NULL) //判断文件是否能打开
-  {
-    printf("fail to open the file!\n");
-    exit(0);
-  }
-
-  x = 45; //设计折线
-  while (x <= 100 && y <= 91) {
-    for (i = 0; i <= 100; i += height) {
-      for (j = 0; j <= 100; j += height) {
-        //  y = 10*sin(x*3.14/180);
-        y = -1 * x + 136;
-        // if ((y == j || y == i|| x == i|| x == j )&& x!=0)
-        if ((x == i) || (x == j && x != 0 && x <= 100 && y <= 91))
-        // if (y == j || y == i|| x == i|| x == j )
-        {
-          printf("The intersection point is :x= %lf ,y= %lf\n", x, y);
-          // dot_x[j]=y;
-          // fprintf(fp,"%lf %lf\n",x, y);
-          fprintf(fp2, "%lf %lf\n", x, y);
-          break;
-        }
-      }
-      x = x + 1;
-    }
-  }
-  fclose(fp2);                                        //关闭文件
-  fp3 = fopen("CoordinatesX.txt", "a");               //打开文件
-  if ((fp3 = fopen("CoordinatesX.txt", "a")) == NULL) //判断文件是否能打开
-  {
-    printf("fail to open the file!\n");
-    exit(0);
-  }
-
-  x = 36;
-  while (x <= 91 && y <= 100) {
-    for (i = 0; i <= 100; i += height) {
-      for (j = 0; j <= 100; j += height) {
-        //  y = 10*sin(x*3.14/180);
-        y = -x + 136;
-        // if ((y == j || y == i|| x == i|| x == j )&& x!=0)
-        if ((x == i || x == j) && (x != 0 && x <= 91 && y <= 100)) {
-          printf("The intersection point is :x= %lf ,y= %lf\n", y, x);
-          // dot_x[j]=y;
-          // fprintf(fp,"%lf %lf\n",x, y);
-          fprintf(fp2, "%lf %lf\n", y, x);
-          break;
-        }
-      }
-      x = x + 1;
-    }
-  }
-  fclose(fp3); //关闭文件
-}
-int fpReadCoord() {
+int line(struct npoint * head, struct line * lp, struct camerainfo * ci, struct lineinfo * li) {
+  struct npoint * ph = head->next;
+  struct line * plh;
   int i = 0;
-  FILE *fp, *fp1;
+  plh = lp->next;
+  while (ph) {
+      printf("camerid = %d, (x,y) = %f, %f\n", ph->cameraId,  ph->x, ph->y);
+    while (plh) {
 
-  fp = fopen("CoordinatesY.txt", "r");
-  if (!fp) {
-    printf("open file error\n");
-    return -1;
-  }
+      int startret = lineincircle(ph->x, ph->y, plh->startx, plh->starty, h);
+      int endret = lineincircle(ph->x, ph->y, plh->endx, plh->endy, h);
 
-  while (!feof(fp)) {
-    if (fscanf(fp, "%f", &dot_x[i]) != 1.0)
-      break;
-    //  fscanf( fp , "%lf" ,&dot_x[i]);
-    printf("%f\n", dot_x[i]);
-    i++;
-    // getchar() ;//过滤掉分隔符
-  }
-  fclose(fp);
-  printf("aaa");
+      int a = af(h);
+      int bl = bf(h, ph->x, ph->y, 0);
+      int br= bf(h, ph->x, ph->y, 1);
 
-  fp1 = fopen("CoordinatesX.txt", "r");
-  if (!fp1) {
-    printf("open file error\n");
-    return -1;
-  }
-  while (!feof(fp1)) {
-    if (fscanf(fp1, "%f", &dot_y[i]) != 1.0)
-      break;
-    printf("%f\n", dot_y[i]);
-    i++;
-    // fgetc(fp) ;//过滤掉分隔符
-  }
-  fclose(fp1);
+      int sl = lineinOval(a, bl, plh->startx, plh->starty);
+      int el = lineinOval(a, bl, plh->endx, plh->endy);
 
-  return 1;
+      int sr = lineinOval(a, br, plh->startx, plh->starty);
+      int er = lineinOval(a, br, plh->endx, plh->endy);
+
+
+
+      if(startret && endret) {
+        printf("### Circle cameraId= %d i = %d \t in circle (x, y) = %f, %f   s=%d, e=%d line = %d\n", ph->cameraId, i, ph->x, ph->y, startret, endret, plh->id);
+      }
+      if(sl && el) {
+        printf("### Oval left camerid =%d i = %d \t in circle (x, y) = %f, %f   s=%d, e=%d line = %d\n", ph->cameraId, i, ph->x, ph->y, sl, el, plh->id);
+        // saveret(struct camerainfo *ci, struct lineinfo * li);
+      }
+
+      if(sr && er) {
+        printf("### Oval right camerid =%d i = %d \t in circle (x, y) = %f, %f   s=%d, e=%d line = %d\n", ph->cameraId, i, ph->x, ph->y, sl, el, plh->id);
+        // saveret(struct camerainfo *ci, struct lineinfo * li);
+      }
+
+
+      plh = plh->next;
+    }
+    ph = ph->next;
+  }
+  return 0;
 }
+
+int lineincircle(float x, float y, float x0, float y0, float h){
+  float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
+  int ret = 0;
+  float r2 = sqrt(3)/3 * h;
+  float l = r2 * r2;
+  if( l >= r) {
+    ret = 1;
+  }
+  return ret;
+}
+
+int lineinOval(float a, float b, float x0, float y0){
+  int fun = (x0 * x0) / a + (y0 * y0) / b;
+  int ret = 0;
+  if( 1 >= fun ) {
+    ret = 1;
+  }
+  return ret;
+}
+
+float af(float h){ 
+  return (4 * h * h) / 3;
+}
+
+float bf(float h, float x, float y, int flag) {
+  int ret =  (4 * h * h * (y - sqrt(3) * h) * (y - sqrt(3) * h)) / (4 * h * h - 3 * x * x);
+  if(flag) {
+    ret = (4 * h * h * (y + sqrt(3) * h) * (y + sqrt(3) * h)) / (4 * h * h - 3 * x * x);
+  }
+  return ret;
+}  
+
+
+// void saveret(struct camerainfo *ci, struct lineinfo * li) {
+
+
+// }
+
+// void save_init(ctmp, ltmp) {
+//   ctmp->camera = NULL;
+//   ctmp->pos = 0;
+//   ctmp->cameraId = 0;
+//   ctmp->line = NULL;
+//   ctmp->sum = 0;
+
+//   ltmp->camera = NULL;
+//   ltmp->lineId = 0;
+//   ltmp->line = NULL;
+// }
+void newpoint_init(struct npoint * tmp){
+  tmp->x = 0;
+  tmp->y = 0;
+  tmp->height = 0;
+  tmp->cameraId = 0;
+  tmp->next = NULL;
+}
+
+int newpoint(struct cube * head, struct npoint * nh){
+  struct cube * ph = head->right;
+  struct cube * ptop = ph->top;
+  struct npoint * tmp;
+  newpoint_init(nh);
+  while (ph) {
+    tmp = malloc(sizeof(struct npoint));
+    newpoint_init(tmp);
+    tmp->x = ph->dot[0].x;
+    tmp->y = ph->dot[0].y;
+    tmp->height = ph->height;
+    tmp->cameraId = ph->id;
+    while(nh->next) {
+      nh = nh->next;
+    }
+    nh->next = tmp;
+
+    if (!(ph->column % (int)max)) {
+      tmp = malloc(sizeof(struct npoint));
+      newpoint_init(tmp);
+      tmp->x = ph->dot[1].x;
+      tmp->y = ph->dot[1].y;
+      tmp->height = ph->height;
+      tmp->cameraId = ph->id;
+      while(nh->next) {
+        nh = nh->next;
+      }
+      nh->next = tmp;
+
+      if (!ptop) {
+        return 0;
+      } else {
+        ph = ptop;
+        ptop = ptop->top;
+      }
+    }
+    ph = ph->right;
+  }
+  return 0;
+}
+void newpoint_out(struct npoint * nh){
+  struct npoint *p = nh->next;
+  while(p){
+    printf("x =%f, y=%f, cameraId=%d\n", p->x, p->y, p->cameraId);
+    p = p->next;
+  }
+}
+
