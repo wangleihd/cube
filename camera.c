@@ -24,7 +24,6 @@ void line_out(struct line *lh);
 float distance(struct point *p, struct point *q);
 int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
          struct lineinfo *li);
-void save_init(struct camerainfo *, struct lineinfo *);
 int lineincircle(float x, float y, float x0, float y0, float h);
 
 int lineinOval(float a, float b, float x0, float y0);
@@ -465,7 +464,7 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
           struct lineinfo *li, int pos) {
   struct camerainfo *cp, *tcp;
   struct camerainfo *ctmp;
-  struct lineinfo *lip;
+  struct lineinfo *lip, *tlp;
   struct lineinfo *ltmp;
   struct npoint *cnext;
   struct line *lnext;
@@ -474,6 +473,7 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
   cp = ci;
   tcp = cp->next;
   lip = li;
+  tlp = li->next;
   while(tcp) {
     if(tcp->cameraId == head->cameraId && tcp->pos == pos) {
       flag = 1;
@@ -484,11 +484,11 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
 
   if(flag) {
     tcp->sum += 1;
-    cnext = tcp->camera;
-    while(cnext->next) {
-      cnext = cnext->next;
-    }
-    cnext->next = head;
+    // cnext = tcp->camera;
+    // while(cnext->next) {
+    //   cnext = cnext->next;
+    // }
+    // cnext->next = head;
 
   } else {
   ctmp = malloc(sizeof(struct camerainfo));
@@ -503,13 +503,18 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
   }
   cp->next = ctmp;
   }
-  flag = 0;9
+  flag = 0;
 
-  while (/* condition */)
-  {
-    /* code */
+  while ( tlp ){
+    if (l->id == tlp->lineId)
+    {
+      flag = 1;
+      break;
+    }
+    tlp=tlp->next;
   }
   if(flag) {
+    // tlp->sum += 1;
 
   } else {
     ltmp = malloc(sizeof(struct lineinfo));
