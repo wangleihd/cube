@@ -69,6 +69,7 @@ int main(void) {
   // line_out(&lh);
 
   save_init(&ch);
+  save_init(&tch);
   save_init_line(&lih);
   line(&nh, &lh, &ch, &lih);
   line(&nh, &lh, &tch, &lih);
@@ -384,8 +385,8 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
     // printf("camerid = %d, (x,y) = %f, %f\n", ph->cameraId, ph->x, ph->y);
     while (plh) {
 
-      int startret = lineincircle(ph->x, ph->y, plh->startx, plh->starty, h);
-      int endret = lineincircle(ph->x, ph->y, plh->endx, plh->endy, h);
+      int startret = lineincircle(plh->startx, plh->starty, ph->x, ph->y, h);
+      int endret = lineincircle(plh->endx, plh->endy, ph->x, ph->y, h);
 
       int a = af(h);
       int bl = bf(h, ph->x, ph->y, 0);
