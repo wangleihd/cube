@@ -87,18 +87,19 @@ typedef struct camerainfo {
   struct camerainfo * next;
 } cii;
 
-typedef struct lineinfo {
+struct lineinfo {
   int lineId;
   struct line *line;
   struct npoint *camera;
   struct lineinfo * next;
-} liii;
+};
 
 struct retcam {
   int pos;
   int cameraId;
   int sum;
   int lines[100];
+  int lineId;
   struct retcam * next;
 };
 

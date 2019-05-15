@@ -66,7 +66,7 @@ int main(void) {
   // point_out(&ph);
 
   line_create(&lh, &ph);
-  // line_out(&lh);
+  line_out(&lh);
 
   save_init(&ch);
   save_init(&tch);
@@ -637,7 +637,7 @@ void one_out(struct retcam * reh) {
   struct retcam * tmp = reh->next;
 
   while(tmp) {
-    printf("# one\t id= %d, pos = %d, sum = %d\n", tmp->cameraId, tmp->pos, tmp->sum);
+    printf("# one\t id= %3d, pos = %d, sum = %2d\n", tmp->cameraId, tmp->pos, tmp->sum);
     tmp = tmp->next;
   }
 }
@@ -718,7 +718,7 @@ void two_out(struct retcam * reh) {
   struct retcam * tmp = reh->next;
 
   while(tmp) {
-    printf("# tow\t id= %d, pos = %d, sum = %d\n", tmp->cameraId, tmp->pos, tmp->sum);
+    printf("# tow\t id= %2d, cameraId = %3d, pos = %d, sum = %2d\n", tmp->lineId, tmp->cameraId, tmp->pos, tmp->sum);
     tmp = tmp->next;
   }
 }
@@ -754,6 +754,7 @@ void algorithm_two(struct camerainfo * ch, struct retcam *reh, struct line * l){
       ret->pos = min->pos;
       ret->cameraId = min->cameraId;
       ret->sum = min->sum;
+      ret->lineId = line->id;
       memcpy(ret->lines, min->lines, 100 * sizeof(int));
       while(pret->next) {
         pret = pret->next;
