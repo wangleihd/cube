@@ -26,12 +26,13 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
          struct lineinfo *li);
 int lineincircle(float x, float y, float x0, float y0, float h);
 
-int lineinOval(float x, float y, float x0, float y0, int h, int flag);
+int lineinOval(float x, float y, float x0, float y0, float h, int flag);
 
 void save_init(struct camerainfo *ctmp);
 void save_init_line(struct lineinfo *ltmp);
 void save(struct npoint *head, struct line *lp, struct camerainfo *ci,
           struct lineinfo *li, int pos);
+void resum(struct camerainfo *ch, struct camerainfo *newch);
 void save_out(struct camerainfo *ch);
 
 void algorithm_one(struct camerainfo *ch, struct retcam *reh, struct line *l);
@@ -47,7 +48,7 @@ int main(void) {
     struct cube head;
     struct point ph;
     struct line lh;
-    struct camerainfo ch, tch;
+    struct camerainfo ch, tch, newch;
     struct lineinfo lih;
     struct npoint nh;
     struct retcam one, two;
@@ -62,7 +63,7 @@ int main(void) {
     // newpoint_out(&nh);
 
     point_create(&ph);
-    point_out(&ph);
+    // point_out(&ph);
 
     line_create(&lh, &ph);
     // line_out(&lh);
@@ -72,7 +73,10 @@ int main(void) {
     save_init_line(&lih);
     line(&nh, &lh, &ch, &lih);
     line(&nh, &lh, &tch, &lih);
-    // save_out(&ch);
+
+    resum(&ch, &newch);
+    save_out(&ch);
+
     one_init(&one);
     algorithm_one(&ch, &one, &lh);
     // one_out(&one);
@@ -104,6 +108,22 @@ void point_create(struct point *ph) {
     int num = 1;
     int temp;
     point_init(ph);
+    y = 5;
+    while (y <= limit_y) {
+        tmp = malloc(sizeof(struct point));
+        point_init(tmp);
+        x = (y + 1) / 2;
+        tmp->x = x;
+        tmp->y = y;
+        tmp->id = num;
+        while (ph->next) {
+            ph = ph->next;
+        }
+        ph->next = tmp;
+        y += 5;
+        num += 1;
+    }
+    x = 0;
     while (x <= limit_x) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
@@ -142,6 +162,31 @@ void point_create(struct point *ph) {
         }
         num += 1;
     }
+    // x = 45;
+    // y = 91;
+    // while (0 <= y && 100 > x) {
+    //     x = -y + 136;
+
+    //     if (100 > x) {
+    //         tmp = malloc(sizeof(struct point));
+    //         point_init(tmp);
+    //         tmp->x = x;
+    //         tmp->y = y;
+    //         tmp->id = num;
+    //         while (ph->next) {
+    //             ph = ph->next;
+    //         }
+    //         ph->next = tmp;
+    //     }
+
+    //     temp = y % 10;
+    //     if (temp) {
+    //         y -= temp;
+    //     } else {
+    //         y -= 5;
+    //     }
+    //     num += 1;
+    // }
 }
 
 void point_out(struct point *ph) {
@@ -442,7 +487,7 @@ int lineincircle(float x, float y, float x0, float y0, float h) {
     return ret;
 }
 
-int lineinOval(float x, float y, float x0, float y0, int h, int flag) {
+int lineinOval(float x, float y, float x0, float y0, float h, int flag) {
     int ret = 0;
     float fun, tma;
     if (flag) {
@@ -464,6 +509,7 @@ void save_init(struct camerainfo *ctmp) {
     ctmp->pos = 0;
     ctmp->cameraId = 0;
     ctmp->sum = 0;
+    ctmp->resum = 0;
     ctmp->isdelete = 0;
     ctmp->line = NULL;
     ctmp->camera = NULL;
@@ -549,12 +595,37 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
     }
 }
 
+void resum(struct camerainfo *ch, struct camerainfo *newch) {
+    struct camerainfo *cp, *tcp, *newp, *tmp;
+    int i;
+    cp = ch->next;
+    save_init(newch);
+    newp = newch->next;
+
+    while (cp->next) {
+        tcp = cp->next;
+        for (i = 0; i < 100; i++) {
+            if (cp->lines[i] == 1 && tcp->lines[i] == 1) {
+                cp->reline[i] = 1;
+                cp->resum += 1;
+                tcp->reline[i] = 1;
+                tcp->resum += 1;
+
+                // tmp = malloc(sizeof(struct camerainfo));
+            }
+        }
+        cp = cp->next;
+    }
+}
+
 void save_out(struct camerainfo *ch) {
     struct npoint *n;
     ch = ch->next;
     while (ch) {
-        printf("id = %d sum=%d pos=%d\n", ch->cameraId, ch->sum, ch->pos);
+        printf("id = %d sum=%d pos=%d resum=%d\n", ch->cameraId, ch->sum,
+               ch->pos, ch->resum);
         n = ch->camera;
+
         // while(n) {
         //   printf("aaaaaaa\t cid=%d, (x,y) = (%f, %f) \n\n", n->cameraId,
         //   n->x, n->y); n = n->next;
