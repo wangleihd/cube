@@ -58,6 +58,7 @@ typedef struct point {
     float y;
     int id;
     struct point *next;
+    struct point *pre;
 } poi;
 
 typedef struct npoint {

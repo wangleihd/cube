@@ -17,6 +17,7 @@ int newpoint(struct cube *head, struct npoint *nh);
 void newpoint_out(struct npoint *nh);
 void point_create(struct point *);
 void point_init(struct point *);
+void point_sort(struct point *ph);
 void point_out(struct point *);
 void line_init(struct line *);
 void line_create(struct line *lh, struct point *ph);
@@ -63,7 +64,8 @@ int main(void) {
     // newpoint_out(&nh);
 
     point_create(&ph);
-    // point_out(&ph);
+    point_sort(&ph);
+    point_out(&ph);
 
     line_create(&lh, &ph);
     // line_out(&lh);
@@ -75,7 +77,8 @@ int main(void) {
     line(&nh, &lh, &tch, &lih);
 
     resum(&ch, &newch);
-    save_out(&ch);
+    // save_out(&newch);
+    // save_out(&ch);
 
     one_init(&one);
     algorithm_one(&ch, &one, &lh);
@@ -98,6 +101,40 @@ void point_init(struct point *tmp) {
     tmp->y = 0;
     tmp->id = 0;
     tmp->next = NULL;
+    tmp->pre = NULL;
+}
+
+void point_sort(struct point *ph) {
+    struct point *one = ph->next;
+    struct point *two = ph->next;
+    struct point *tmp, *onep;
+    struct point *p;
+    while (one) {
+        p = one;
+        onep = one;
+        while (two) {
+            if ((p->x - two->x) >= 0 && (p->y - two->y) >= 0) {
+                p = two;
+            }
+            two = two->next;
+        }
+        if (p != onep) {
+            tmp = malloc(sizeof(struct point));
+            memcpy(tmp, p, sizeof(struct point));
+
+            printf("p = %p id=%d (%f, %f) \t  onep=%p id=%d (%f, %f)\n", p,
+                   p->id, p->x, p->y, tmp, tmp->id, tmp->x, tmp->y);
+
+            // p->next = onep->next;
+            // p->pre = onep->pre;
+
+            // onep->pre = tmp->pre;
+            // onep->next = tmp->next;
+
+            free(tmp);
+        }
+        one = one->next;
+    }
 }
 
 void point_create(struct point *ph) {
@@ -120,6 +157,7 @@ void point_create(struct point *ph) {
             ph = ph->next;
         }
         ph->next = tmp;
+        tmp->pre = ph;
         y += 5;
         num += 1;
     }
@@ -135,6 +173,7 @@ void point_create(struct point *ph) {
             ph = ph->next;
         }
         ph->next = tmp;
+        tmp->pre = ph;
         x += 5;
         num += 1;
     }
@@ -152,6 +191,7 @@ void point_create(struct point *ph) {
                 ph = ph->next;
             }
             ph->next = tmp;
+            tmp->pre = ph;
         }
 
         temp = y % 10;
@@ -194,6 +234,8 @@ void point_out(struct point *ph) {
     p = ph->next;
     while (p->next) {
         printf("(x,y) = (%f, %f) id = %d \n", p->x, p->y, p->id);
+        // printf("pre (x,y) = (%f, %f) id = %d \n", p->pre->x, p->pre->y,
+        //  p->pre->id);
         p = p->next;
     }
 }
@@ -596,11 +638,11 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
 }
 
 void resum(struct camerainfo *ch, struct camerainfo *newch) {
-    struct camerainfo *cp, *tcp, *newp, *tmp;
+    struct camerainfo *cp, *tcp, *newp, *tmp, *tmp2;
     int i;
     cp = ch->next;
     save_init(newch);
-    newp = newch->next;
+    newp = newch;
 
     while (cp->next) {
         tcp = cp->next;
@@ -611,7 +653,18 @@ void resum(struct camerainfo *ch, struct camerainfo *newch) {
                 tcp->reline[i] = 1;
                 tcp->resum += 1;
 
-                // tmp = malloc(sizeof(struct camerainfo));
+                tmp = malloc(sizeof(struct camerainfo));
+                tmp2 = malloc(sizeof(struct camerainfo));
+                save_init(tmp);
+                save_init(tmp2);
+                memcpy(tmp, cp, sizeof(struct camerainfo));
+                memcpy(tmp2, tcp, sizeof(struct camerainfo));
+                tmp->next = tmp2;
+                tmp2->next = NULL;
+                while (newp->next) {
+                    newp = newp->next;
+                }
+                newp->next = tmp;
             }
         }
         cp = cp->next;
@@ -835,3 +888,5 @@ void algorithm_two(struct camerainfo *ch, struct retcam *reh, struct line *l) {
         max = 999;
     }
 }
+
+void sort() {}
