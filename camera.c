@@ -76,7 +76,7 @@ int main(void) {
     line(&nh, &lh, &ch, &lih);
     line(&nh, &lh, &tch, &lih);
 
-    resum(&ch, &newch);
+    // resum(&ch, &newch);
     // save_out(&newch);
     // save_out(&ch);
 
@@ -112,8 +112,10 @@ void point_sort(struct point *ph) {
     while (one) {
         p = one;
         onep = one;
+        two = one->next;
         while (two) {
             if ((p->x - two->x) >= 0 && (p->y - two->y) >= 0) {
+            printf("p = %p id=%d (%f, %f) n = %p, p=%p \ntmp = %p id=%d (%f, %f) n->%p, p=%p\nn = %p, p=%p\n", p, p->id, p->x, p->y, p->next, p->pre, two, two->id, two->x, two->y, two->next, two->pre, onep->next, onep->pre);
                 p = two;
             }
             two = two->next;
@@ -121,17 +123,17 @@ void point_sort(struct point *ph) {
         if (p != onep) {
             tmp = malloc(sizeof(struct point));
             memcpy(tmp, p, sizeof(struct point));
+            p->next = onep->next;
+            p->pre = onep->pre;
+            onep->next->pre = p;
+            onep->pre->next = p;
 
-            printf("p = %p id=%d (%f, %f) \t  onep=%p id=%d (%f, %f)\n", p,
-                   p->id, p->x, p->y, tmp, tmp->id, tmp->x, tmp->y);
-
-            // p->next = onep->next;
-            // p->pre = onep->pre;
-
-            // onep->pre = tmp->pre;
-            // onep->next = tmp->next;
-
-            free(tmp);
+            tmp->pre->next = onep;
+            tmp->next->pre = onep;
+            onep->pre = tmp->pre;
+            onep->next = tmp->next;
+            one = p;
+           free(tmp);
         }
         one = one->next;
     }
@@ -889,4 +891,3 @@ void algorithm_two(struct camerainfo *ch, struct retcam *reh, struct line *l) {
     }
 }
 
-void sort() {}
