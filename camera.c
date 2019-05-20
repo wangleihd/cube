@@ -18,7 +18,7 @@ void newpoint_out(struct npoint *nh);
 void point_create(struct point *);
 void point_init(struct point *);
 void point_sort(struct point *ph);
-struct point *insert_sort(struct point *ph);
+void insert_sort(struct point *ph);
 void point_out(struct point *);
 void line_init(struct line *);
 void line_create(struct line *lh, struct point *ph);
@@ -65,7 +65,7 @@ int main(void) {
     // newpoint_out(&nh);
 
     point_create(&ph);
-    point_out(&ph);
+    // point_out(&ph);
     // point_sort(&ph);
     insert_sort(&ph);
     point_out(&ph);
@@ -107,50 +107,43 @@ void point_init(struct point *tmp) {
     tmp->pre = NULL;
 }
 
-struct point *insert_sort(struct point *ph) {
-    // if(NULL == ph)
-    //  return ph;
-    
-    struct point *tmp;  //��ʼ�㐑待排序节点，用于节点插入
+void insert_sort(struct point *ph) {
+    struct point *tmp;
     struct point *q;
     struct point *t; 
-     point_init(tmp);
-    point_init(q);
-    point_init(t);
-    q= ph;
-    t= q->next;  // q指向待排序节点的前一个节点，t指向待排序节点
-    // while (t) {
-    //     if (q->x < t->x) {
-    //         tmp = t;
-    //         t = t->next;
-    //         if (t) {
-    //             t->pre = q;
-    //         }
-    //         q->next = t;
-    //         while (q && (q->x < tmp->x)) {
-    //             q = q->pre;
-    //         }
-    //         if (q) {
-    //             tmp->next = q->next;
-    //             q->next->pre = tmp;
-    //             q->next = tmp;
-    //             tmp->pre = q;
-    //         } else {
-    //             tmp->next = ph;
-    //             tmp->pre = NULL;
-    //             ph->pre = tmp;
-    //             ph = tmp;
-    //         }
-    //         if (t) {
-    //             q = t->pre;
-    //         }
-    //     } else {
-    //         t = t->next;
-    //         q = q->next;
-    //     }
-    // }
-
-    return ph;
+    point_init(tmp);
+    q = ph;
+    t = q->next;  // q指向待排序节点的前一个节点，t指向待排序节点
+    while (t) {
+        if (q->x < t->x) {
+            tmp = t;
+            t = t->next;
+            if (t) {
+                t->pre = q;
+            }
+            q->next = t;
+            while (q && (q->x < tmp->x)) {
+                q = q->pre;
+            }
+            if (q) {
+                tmp->next = q->next;
+                q->next->pre = tmp;
+                q->next = tmp;
+                tmp->pre = q;
+            } else {
+                tmp->next = ph;
+                tmp->pre = NULL;
+                ph->pre = tmp;
+                ph = tmp;
+            }
+            if (t) {
+                q = t->pre;
+            }
+        } else {
+            t = t->next;
+            q = q->next;
+        }
+    }
 }
 
 void point_sort(struct point *ph) {
