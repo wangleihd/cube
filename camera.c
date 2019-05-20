@@ -18,6 +18,7 @@ void newpoint_out(struct npoint *nh);
 void point_create(struct point *);
 void point_init(struct point *);
 void point_sort(struct point *ph);
+struct point *insert_sort(struct point *ph);
 void point_out(struct point *);
 void line_init(struct line *);
 void line_create(struct line *lh, struct point *ph);
@@ -64,7 +65,9 @@ int main(void) {
     // newpoint_out(&nh);
 
     point_create(&ph);
-    point_sort(&ph);
+    point_out(&ph);
+    // point_sort(&ph);
+    insert_sort(&ph);
     point_out(&ph);
 
     line_create(&lh, &ph);
@@ -104,6 +107,52 @@ void point_init(struct point *tmp) {
     tmp->pre = NULL;
 }
 
+struct point *insert_sort(struct point *ph) {
+    // if(NULL == ph)
+    //  return ph;
+    
+    struct point *tmp;  //��ʼ�㐑待排序节点，用于节点插入
+    struct point *q;
+    struct point *t; 
+     point_init(tmp);
+    point_init(q);
+    point_init(t);
+    q= ph;
+    t= q->next;  // q指向待排序节点的前一个节点，t指向待排序节点
+    // while (t) {
+    //     if (q->x < t->x) {
+    //         tmp = t;
+    //         t = t->next;
+    //         if (t) {
+    //             t->pre = q;
+    //         }
+    //         q->next = t;
+    //         while (q && (q->x < tmp->x)) {
+    //             q = q->pre;
+    //         }
+    //         if (q) {
+    //             tmp->next = q->next;
+    //             q->next->pre = tmp;
+    //             q->next = tmp;
+    //             tmp->pre = q;
+    //         } else {
+    //             tmp->next = ph;
+    //             tmp->pre = NULL;
+    //             ph->pre = tmp;
+    //             ph = tmp;
+    //         }
+    //         if (t) {
+    //             q = t->pre;
+    //         }
+    //     } else {
+    //         t = t->next;
+    //         q = q->next;
+    //     }
+    // }
+
+    return ph;
+}
+
 void point_sort(struct point *ph) {
     struct point *one = ph->next;
     struct point *two = ph->next;
@@ -115,7 +164,11 @@ void point_sort(struct point *ph) {
         two = one->next;
         while (two) {
             if ((p->x - two->x) >= 0 && (p->y - two->y) >= 0) {
-            printf("p = %p id=%d (%f, %f) n = %p, p=%p \ntmp = %p id=%d (%f, %f) n->%p, p=%p\nn = %p, p=%p\n", p, p->id, p->x, p->y, p->next, p->pre, two, two->id, two->x, two->y, two->next, two->pre, onep->next, onep->pre);
+                printf(
+                    "p = %p id=%d (%f, %f) n = %p, p=%p \ntmp = %p id=%d (%f, "
+                    "%f) n->%p, p=%p\nn = %p, p=%p\n",
+                    p, p->id, p->x, p->y, p->next, p->pre, two, two->id, two->x,
+                    two->y, two->next, two->pre, onep->next, onep->pre);
                 p = two;
             }
             two = two->next;
@@ -133,7 +186,7 @@ void point_sort(struct point *ph) {
             onep->pre = tmp->pre;
             onep->next = tmp->next;
             one = p;
-           free(tmp);
+            free(tmp);
         }
         one = one->next;
     }
@@ -142,28 +195,12 @@ void point_sort(struct point *ph) {
 void point_create(struct point *ph) {
     struct point *tmp;
     int limit_x = 45;
-    int limit_y = 51;
+    int limit_y = 91;
     int x = 0, y;
     int num = 1;
     int temp;
     point_init(ph);
-    y = 5;
-    while (y <= limit_y) {
-        tmp = malloc(sizeof(struct point));
-        point_init(tmp);
-        x = (y + 1) / 2;
-        tmp->x = x;
-        tmp->y = y;
-        tmp->id = num;
-        while (ph->next) {
-            ph = ph->next;
-        }
-        ph->next = tmp;
-        tmp->pre = ph;
-        y += 5;
-        num += 1;
-    }
-    x = 0;
+   
     while (x <= limit_x) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
@@ -179,31 +216,80 @@ void point_create(struct point *ph) {
         x += 5;
         num += 1;
     }
-
-    while (0 <= y && 100 > x) {
-        x = -y + 136;
-
-        if (100 > x) {
-            tmp = malloc(sizeof(struct point));
-            point_init(tmp);
-            tmp->x = x;
-            tmp->y = y;
-            tmp->id = num;
-            while (ph->next) {
-                ph = ph->next;
-            }
-            ph->next = tmp;
-            tmp->pre = ph;
+     y = 0;
+        while (y <= limit_y) {
+        tmp = malloc(sizeof(struct point));
+        point_init(tmp);
+        x = (y + 1) / 2;
+        tmp->x = x;
+        tmp->y = y;
+        tmp->id = num;
+        while (ph->next) {
+            ph = ph->next;
         }
-
-        temp = y % 10;
-        if (temp) {
-            y -= temp;
-        } else {
-            y -= 5;
-        }
+        ph->next = tmp;
+        tmp->pre = ph;
+        y += 5;
         num += 1;
     }
+    x = limit_x;
+     while (x <= 100) {
+        tmp = malloc(sizeof(struct point));
+        point_init(tmp);
+        y = - x + 136;
+        tmp->x = x;
+        tmp->y = y;
+        tmp->id = num;
+        while (ph->next) {
+            ph = ph->next;
+        }
+        ph->next = tmp;
+        tmp->pre = ph;
+        x += 5;
+        num += 1;
+    }
+     y = limit_x;
+        while (y <= 100) {
+        tmp = malloc(sizeof(struct point));
+        point_init(tmp);
+        x = -y + 136;
+        tmp->x = x;
+        tmp->y = y;
+        tmp->id = num;
+        while (ph->next) {
+            ph = ph->next;
+        }
+        ph->next = tmp;
+        tmp->pre = ph;
+        y += 5;
+        num += 1;
+    }
+    // while (x <= limit_x) {
+    //     y = -x + 136;
+
+    //     if (100 > x) {
+    //         tmp = malloc(sizeof(struct point));
+    //         point_init(tmp);
+    //         tmp->x = x;
+    //         tmp->y = y;
+    //         tmp->id = num;
+    //         while (ph->next) {
+    //             ph = ph->next;
+    //         }
+    //         ph->next = tmp;
+    //         tmp->pre = ph;
+    //     }
+
+    //     temp = y % 10;
+    //     if (temp) {
+    //         y -= temp;
+    //     } else {
+    //         y -= 5;
+    //     }
+    //     num += 1;
+    // }
+
+
     // x = 45;
     // y = 91;
     // while (0 <= y && 100 > x) {
@@ -890,4 +976,3 @@ void algorithm_two(struct camerainfo *ch, struct retcam *reh, struct line *l) {
         max = 999;
     }
 }
-
