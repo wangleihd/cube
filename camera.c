@@ -192,6 +192,7 @@ void point_sort1(struct point *ph) {
     while (p) {
         while (q) {
             if (q->x < p->x) {
+                temp = malloc(sizeof(struct point));
                 temp->x = p->x;
                 temp->y = p->y;
                 temp->id = p->id;
@@ -203,6 +204,8 @@ void point_sort1(struct point *ph) {
                 q->x = temp->x;
                 q->y = temp->y;
                 q->id = temp->id;
+
+                free(temp);
             }
             q = q->next;
         }
