@@ -84,7 +84,7 @@ typedef struct camerainfo {
     int isdelete;
     int lines[100];
     int resum;
-    int reline[10];
+    int reline[100];
     struct line *line;
     struct npoint *camera;
     struct camerainfo *next;
