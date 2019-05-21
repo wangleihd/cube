@@ -73,10 +73,10 @@ int main(void) {
     // insert_sort(&ph);
     point_out(&ph);
 
-    line_create(&lh, &ph);
-    // line_out(&lh);
+     line_create(&lh, &ph);
+     line_out(&lh);
 
-    save_init(&ch);
+     save_init(&ch);
     save_init(&tch);
     save_init_line(&lih);
     line(&nh, &lh, &ch, &lih);
@@ -88,12 +88,12 @@ int main(void) {
 
     one_init(&one);
     algorithm_one(&ch, &one, &lh);
-    // one_out(&one);
+    one_out(&one);
 
     one_init(&two);
     algorithm_two(&tch, &two, &lh);
     printf("\n\n");
-    // two_out(&two);
+    two_out(&two);
 
     return 0;
 }
@@ -195,15 +195,15 @@ void point_sort1(struct point *ph) {
                 temp = malloc(sizeof(struct point));
                 temp->x = p->x;
                 temp->y = p->y;
-                temp->id = p->id;
+                //temp->id = p->id;
 
                 p->x = q->x;
                 p->y = q->y;
-                p->id = q->id;
+                //p->id = q->id;
 
                 q->x = temp->x;
                 q->y = temp->y;
-                q->id = temp->id;
+               // q->id = temp->id;
 
                 free(temp);
             }
@@ -953,11 +953,13 @@ void two_out(struct retcam *reh) {
 
 void algorithm_two(struct camerainfo *ch, struct retcam *reh, struct line *l) {
     // find line sum min
-    struct line *line = l->next;
-    struct camerainfo *tmp = ch->next;
+    struct retcam *ret;
     struct camerainfo *min;
     struct retcam *pret = reh;
-    struct retcam *ret;
+    
+    struct line *line = l->next;
+    struct camerainfo *tmp = ch->next;
+
     int max = 999;
 
     while (line) {
@@ -973,7 +975,7 @@ void algorithm_two(struct camerainfo *ch, struct retcam *reh, struct line *l) {
             }
             tmp = tmp->next;
         }
-
+        min = malloc(sizeof(struct camerainfo));
         if (min) {
             min->isdelete = 1;
             ret = malloc(sizeof(struct retcam));
