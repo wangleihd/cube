@@ -18,6 +18,7 @@ void newpoint_out(struct npoint *nh);
 void point_create(struct point *);
 void point_init(struct point *);
 void point_sort(struct point *ph);
+void point_sort1(struct point *ph);
 void insert_sort(struct point *ph);
 void point_out(struct point *);
 void line_init(struct line *);
@@ -67,7 +68,9 @@ int main(void) {
     point_create(&ph);
     // point_out(&ph);
     // point_sort(&ph);
-    insert_sort(&ph);
+    point_sort1(&ph);
+
+    // insert_sort(&ph);
     point_out(&ph);
 
     line_create(&lh, &ph);
@@ -110,7 +113,7 @@ void point_init(struct point *tmp) {
 void insert_sort(struct point *ph) {
     struct point *tmp;
     struct point *q;
-    struct point *t; 
+    struct point *t;
     point_init(tmp);
     q = ph;
     t = q->next;  // q指向待排序节点的前一个节点，t指向待排序节点
@@ -156,12 +159,7 @@ void point_sort(struct point *ph) {
         onep = one;
         two = one->next;
         while (two) {
-            if ((p->x - two->x) >= 0 && (p->y - two->y) >= 0) {
-                printf(
-                    "p = %p id=%d (%f, %f) n = %p, p=%p \ntmp = %p id=%d (%f, "
-                    "%f) n->%p, p=%p\nn = %p, p=%p\n",
-                    p, p->id, p->x, p->y, p->next, p->pre, two, two->id, two->x,
-                    two->y, two->next, two->pre, onep->next, onep->pre);
+            if ((p->x - two->x) > 0 && (p->y - two->y) >= 0) {
                 p = two;
             }
             two = two->next;
@@ -169,31 +167,59 @@ void point_sort(struct point *ph) {
         if (p != onep) {
             tmp = malloc(sizeof(struct point));
             memcpy(tmp, p, sizeof(struct point));
-            p->next = onep->next;
-            p->pre = onep->pre;
-            onep->next->pre = p;
-            onep->pre->next = p;
+            memcpy(p, one, sizeof(struct point));
+            memcpy(one, tmp, sizeof(struct point));
+            // p->next = onep->next;
+            // p->pre = onep->pre;
+            // onep->next->pre = p;
+            // onep->pre->next = p;
 
-            tmp->pre->next = onep;
-            tmp->next->pre = onep;
-            onep->pre = tmp->pre;
-            onep->next = tmp->next;
-            one = p;
+            // tmp->pre->next = onep;
+            // tmp->next->pre = onep;
+            // onep->pre = tmp->pre;
+            // onep->next = tmp->next;
+            // one = p;
             free(tmp);
         }
         one = one->next;
     }
 }
 
+void point_sort1(struct point *ph) {
+    struct point *temp;
+    struct point *p = ph;
+    struct point *q = ph->next;
+    while (p) {
+        while (q) {
+            if (q->x < p->x) {
+                temp->x = p->x;
+                temp->y = p->y;
+                temp->id = p->id;
+
+                p->x = q->x;
+                p->y = q->y;
+                p->id = q->id;
+
+                q->x = temp->x;
+                q->y = temp->y;
+                q->id = temp->id;
+            }
+            q = q->next;
+        }
+        p = p->next;
+        q = p;
+    }
+}
+
 void point_create(struct point *ph) {
     struct point *tmp;
-    int limit_x = 45;
-    int limit_y = 91;
-    int x = 0, y;
+    float limit_x = 45;
+    float limit_y = 91;
+    float x = 0, y;
     int num = 1;
     int temp;
     point_init(ph);
-   
+
     while (x <= limit_x) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
@@ -209,11 +235,11 @@ void point_create(struct point *ph) {
         x += 5;
         num += 1;
     }
-     y = 0;
-        while (y <= limit_y) {
+    y = 5;
+    while (y <= limit_y) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        x = (y + 1) / 2;
+        x = (y - 1) / 2;
         tmp->x = x;
         tmp->y = y;
         tmp->id = num;
@@ -225,11 +251,11 @@ void point_create(struct point *ph) {
         y += 5;
         num += 1;
     }
-    x = limit_x;
-     while (x <= 100) {
+    x = limit_x + 5;
+    while (x <= 100) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        y = - x + 136;
+        y = -x + 136;
         tmp->x = x;
         tmp->y = y;
         tmp->id = num;
@@ -241,8 +267,8 @@ void point_create(struct point *ph) {
         x += 5;
         num += 1;
     }
-     y = limit_x;
-        while (y <= 100) {
+    y = limit_x + 5;
+    while (y <= 100) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
         x = -y + 136;
@@ -281,7 +307,6 @@ void point_create(struct point *ph) {
     //     }
     //     num += 1;
     // }
-
 
     // x = 45;
     // y = 91;
