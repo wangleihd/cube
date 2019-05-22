@@ -255,7 +255,7 @@ void point_create(struct point *ph) {
         y += 5;
         num += 1;
     }
-    x = limit_x + 5;
+    x = limit_x + 5 ;
     while (x <= 100) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
@@ -271,8 +271,8 @@ void point_create(struct point *ph) {
         x += 5;
         num += 1;
     }
-    y = limit_x + 5;
-    while (y <= 100) {
+    y = limit_x - 5;
+    while (y <= 90) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
         x = -y + 136;
@@ -859,6 +859,7 @@ void one_init(struct retcam *tmp) {
     tmp->pos = 0;
     tmp->cameraId = 0;
     tmp->sum = 0;
+    tmp->lineId=0;
     tmp->next = NULL;
 }
 
@@ -866,8 +867,8 @@ void one_out(struct retcam *reh) {
     struct retcam *tmp = reh->next;
 
     while (tmp) {
-        printf("# one\t id= %3d, pos = %d, sum = %2d\n", tmp->cameraId,
-               tmp->pos, tmp->sum);
+        printf("# one\t cameraId= %3d, pos = %d, sum = %2d, lineId= %d\n", tmp->cameraId,
+               tmp->pos, tmp->sum,tmp->lineId);
         tmp = tmp->next;
     }
 }
@@ -900,6 +901,7 @@ void algorithm_one(struct camerainfo *ch, struct retcam *reh, struct line *l) {
         ret->pos = min->pos;
         ret->cameraId = min->cameraId;
         ret->sum = min->sum;
+        ret->lineId=min->reline;
         memcpy(ret->lines, min->lines, 100 * sizeof(int));
         while (pret->next) {
             pret = pret->next;
