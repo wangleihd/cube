@@ -3,7 +3,7 @@
 const int max_side = 100;
 const float min_side = 5;
 const float max = 20;
-const float h = 3;
+const float h = 5;
 
 struct point pitem[100];
 int p_total = 0;
@@ -84,8 +84,8 @@ int main(void) {
 
     resum(&ch, &newch);
     resum(&tch, &newch);
-    save_out(&newch);
-    save_out(&ch);
+    // save_out(&newch);
+    // save_out(&ch);
 
     one_init(&one);
     algorithm_one(&ch, &one, &lh);
@@ -649,7 +649,7 @@ int lineinOval(float x, float y, float x0, float y0, float h, int flag) {
     }
 
     fun = ((4 * tma * tma) / (3 * h * h)) +
-          ((12 * (y - y0) * (y - y0)) / (h * h));
+          ((3 * (y - y0) * (y - y0)) / (h * h));
 
     if (1 >= fun) {
         ret = 1;
@@ -948,7 +948,7 @@ void two_out(struct retcam *reh) {
     struct retcam *tmp = reh->next;
 
     while (tmp) {
-        printf("# tow\t id= %2d, cameraId = %3d, pos = %d, sum = %2d\n",
+        printf("# two\t id= %2d, cameraId = %3d, pos = %d, sum = %2d\n",
                tmp->lineId, tmp->cameraId, tmp->pos, tmp->sum);
         tmp = tmp->next;
     }
