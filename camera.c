@@ -87,9 +87,9 @@ int main(void) {
     // save_out(&ch);
     // save_out(&tch);
     
-    // save_init(&one);
-    // algorithm_one(&ch, &one, &lh);
-    // one_out(&one);
+    save_init(&one);
+    algorithm_one(&ch, &one, &lh);
+    one_out(&one);
 
     save_init(&two);
     algorithm_two(&tch, &two, &lh);
@@ -871,11 +871,70 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh, struct line *l
     struct camerainfo *tmp = ch->next;
     struct camerainfo *pret = reh;
     struct camerainfo *ret;
-    struct camerainfo *comp = ch->next;
-    struct line *line = l->next;
-    int max = 999;
+    struct camerainfo *comp;
+    struct line *line;
+    int max;
     int num = 1;
     int flag = 0;
+
+    while (num) {
+        num = 0;
+        tmp = ch->next;
+        max = 1000;
+        min.resum = 1000;
+
+        while(tmp) {
+            if(!tmp->isdelete){
+                if(max > tmp->resum) {
+                    max = tmp->resum;
+                    memcpy(&min, tmp, sizeof(struct camerainfo));
+                }
+            }
+            tmp = tmp->next;
+        }
+
+        if(min.resum < 999) {
+            ret = malloc(sizeof(struct camerainfo));
+            memcpy(ret, &min, sizeof(struct camerainfo));
+            ret->next = NULL;
+            while (pret->next) {
+                pret = pret->next;
+            }
+            pret->next = ret;
+        } else {
+            printf("min is error \n");
+
+        }
+        tmp = ch->next;
+        while(tmp) {
+            if(!tmp->isdelete && tmp->cameraId == min.cameraId) {
+                tmp->isdelete = 1;
+                break;
+            }
+            tmp = tmp->next;
+        }
+
+        line = l->next;
+        while (line) {
+            flag = 0;
+            comp = reh->next;
+            while (comp) {
+                if (comp->lines[line->id] != 1) {
+                    flag = 1;
+                    break;
+                }
+                comp = comp->next;
+            }
+            if (flag) {
+                break;
+            }
+            line = line->next;
+        }
+
+        if (!line) {
+            return;
+        }
+    }
 
     // while (num) {
     //     num = 0;
@@ -1030,7 +1089,6 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh, struct line *l
                         max = tmp->sum;
                          memcpy(&min, tmp, sizeof(struct camerainfo));
                          min.lineId = line->id;
-                         printf("min -> lineid = %d\n", min.lineId);
                     }
                 }
 
@@ -1038,7 +1096,6 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh, struct line *l
             }
             tmp = tmp->next;
         }
-        printf("min = %d \n", min.cameraId);
         if (min.resum < 999) {
             ret = malloc(sizeof(struct camerainfo));
             memcpy(ret, &min, sizeof(struct camerainfo));
