@@ -79,6 +79,7 @@ typedef struct line {
 
 typedef struct camerainfo {
     int pos;
+    int lineId;
     int cameraId;
     int sum;
     int isdelete;
