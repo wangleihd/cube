@@ -39,7 +39,7 @@ void resum(struct camerainfo *ch, struct camerainfo *newch);
 void save_out(struct camerainfo *ch);
 
 void algorithm_one(struct camerainfo *ch, struct camerainfo *reh, struct line *l);
-void one_out(struct camerainfo *reh);
+void one_out(struct camerainfo *reh, struct line *l);
 void two_out(struct camerainfo *reh, struct line *l);
 
 void algorithm_two(struct camerainfo *ch, struct camerainfo *reh, struct line *l);
@@ -89,12 +89,12 @@ int main(void) {
     
     save_init(&one);
     algorithm_one(&ch, &one, &lh);
-    one_out(&one);
+    one_out(&one, &lh);
 
     save_init(&two);
     algorithm_two(&tch, &two, &lh);
     printf("\n\n");
-    two_out(&two, &lh);
+    // two_out(&two, &lh);
 
     return 0;
 }
@@ -856,13 +856,45 @@ void newpoint_out(struct npoint *nh) {
 }
 
 
-void one_out(struct camerainfo *reh) {
+void one_out(struct camerainfo *reh, struct line * l) {
     struct camerainfo *tmp = reh->next;
+    struct line *ltmp;
+    int i;
 
     while (tmp) {
-        printf("# one\t cameraId= %3d, pos = %d, sum = %2d, lineId= %d\n", tmp->cameraId,
-               tmp->pos, tmp->sum,tmp->sum);
+        printf("===================\ncamera Id = %3d, pos = %d, sum = %2d resum=%2d\n",tmp->cameraId, tmp->pos, tmp->sum, tmp->resum);
+               printf("-------------------\n");
+               for(i = 0; i < 100; i++) {
+                   if(tmp->lines[i] == 1) {
+                   printf("line = %d\t", i);
+        ltmp = l->next;
+                   while (ltmp){
+                       if(ltmp->id == i) {
+                           printf("start(x,y) = (%f, %f), end(x, y) = (%f, %f), long = %f\n", ltmp->startx, ltmp->starty, ltmp->endx, ltmp->endy, ltmp->timestamp);
+                       }
+                       ltmp = ltmp->next;
+                   }
+                   }
+               }
+               if(tmp->resum) {
+                   printf("+++++++++++++++++++\n");
+                   for(i = 0; i < 100; i++) {
+                   if(tmp->reline[i] == 1) {
+                   printf("reline = %d\t", tmp->reline[i]);
+                   ltmp = l->next;
+                   while (ltmp){
+                       if(ltmp->id == i) {
+                           printf("start(x,y) = (%f, %f), end(x, y) = (%f, %f), long = %f\n", ltmp->startx, ltmp->starty, ltmp->endx, ltmp->endy, ltmp->timestamp);
+                       }
+                       ltmp = ltmp->next;
+                   }
+                   
+                   }
+               }
+               }
+               
         tmp = tmp->next;
+               printf("===================\n\n");
     }
 }
 
@@ -873,9 +905,10 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh, struct line *l
     struct camerainfo *ret;
     struct camerainfo *comp;
     struct line *line;
-    int max;
+    int max, i;
     int num = 1;
     int flag = 0;
+    int lineisdel[100] = {0};
 
     while (num) {
         num = 0;
@@ -885,6 +918,7 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh, struct line *l
 
         while(tmp) {
             if(!tmp->isdelete){
+                num = 1;
                 if(max > tmp->resum) {
                     max = tmp->resum;
                     memcpy(&min, tmp, sizeof(struct camerainfo));
@@ -918,12 +952,15 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh, struct line *l
         while (line) {
             flag = 0;
             comp = reh->next;
-            while (comp) {
-                if (comp->lines[line->id] != 1) {
-                    flag = 1;
-                    break;
+            if(lineisdel[line->id] != 1) {
+                while (comp) {
+                    if (comp->lines[line->id] != 1) {
+                       lineisdel[line->id] = 1; 
+                        flag = 1;
+                        break;
+                    }
+                    comp = comp->next;
                 }
-                comp = comp->next;
             }
             if (flag) {
                 break;
@@ -935,82 +972,6 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh, struct line *l
             return;
         }
     }
-
-    // while (num) {
-    //     num = 0;
-    //     save_init(&min);
-    //     max = 999;
-    //     while(tmp) {
-
-    //         if(!tmp->isdelete) {
-    //             num = 1;
-    //             if (max > tmp->resum) {
-    //                 max = tmp->resum;
-    //                 memcpy(&min, tmp, sizeof(struct camerainfo));
-    //              }
-    //         } else {
-
-    //             printf("tmp-id = %d\n", tmp->cameraId);
-    //         }
-
-    //         tmp = tmp->next;
-    //     }
-    //     // while (tmp) {
-    //     //     if (tmp->isdelete == 0) {
-    //     //         num = 1;
-    //     //         if (max >= tmp->resum) {
-    //     //             max = tmp->resum;
-    //     //             min = tmp;
-    //     //         }
-    //     //     } else {
-    //     //     }
-    //     //         printf("delete: id = %d delet = %d\n", tmp->cameraId, tmp->isdelete);
-    //     //     tmp = tmp->next;
-    //     // }
-    //     if(min.sum) {
-    //     ret = malloc(sizeof(struct camerainfo));
-    //     save_init(ret);
-    //     memcpy(ret, &min, sizeof(struct camerainfo));
-    //     while (pret->next) {
-    //         pret = pret->next;
-    //     }
-    //     pret->next = ret;
-    //     tmp = comp;
-    //     while(tmp) {
-    //         if(!tmp->isdelete && tmp->cameraId == min.cameraId) {
-    //             tmp->isdelete = 1;
-    //             break;
-    //         }
-    //         tmp = tmp->next;
-    //     }
-
-
-    //     tmp = ch->next;
-
-    //     }
-
-        // while (line) {
-        //     flag = 0;
-        //     comp = reh->next;
-        //     while (comp) {
-        //         if (comp->lines[line->id] != 1) {
-        //             flag = 1;
-        //             break;
-        //         }
-        //         comp = comp->next;
-        //     }
-        //     if (flag) {
-        //         break;
-        //     }
-        //     line = line->next;
-        // }
-
-        // if (!line) {
-        //     return;
-        // }
-
-        // line = l->next;
-    // }
 }
 
 void two_out(struct camerainfo *reh, struct line *l) {
