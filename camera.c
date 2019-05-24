@@ -859,10 +859,12 @@ void newpoint_out(struct npoint *nh) {
 void one_out(struct camerainfo *reh, struct line * l) {
     struct camerainfo *tmp = reh->next;
     struct line *ltmp;
-    int i;
+    int i,j;
+    j=1;
 
     while (tmp) {
-        printf("===================\ncamera Id = %3d, pos = %d, sum = %2d resum=%2d\n",tmp->cameraId, tmp->pos, tmp->sum, tmp->resum);
+       
+        printf("one:%d\n===================\ncamera Id = %3d, pos = %d, sum = %2d resum=%2d\n",j,tmp->cameraId, tmp->pos, tmp->sum, tmp->resum);
                printf("-------------------\n");
                for(i = 0; i < 100; i++) {
                    if(tmp->lines[i] == 1) {
@@ -895,6 +897,7 @@ void one_out(struct camerainfo *reh, struct line * l) {
                
         tmp = tmp->next;
                printf("===================\n\n");
+               j++;
     }
 }
 
@@ -980,7 +983,7 @@ void two_out(struct camerainfo *reh, struct line *l) {
     int i;
 
     while (tmp) {
-        printf("line Id = %2d\n===================\ncamera Id = %3d, pos = %d, sum = %2d resum=%2d\n",
+        printf("two :line Id = %2d\n===================\ncamera Id = %3d, pos = %d, sum = %2d resum=%2d\n",
                tmp->lineId, tmp->cameraId, tmp->pos, tmp->sum, tmp->resum);
                printf("-------------------\n");
                for(i = 0; i < 100; i++) {
