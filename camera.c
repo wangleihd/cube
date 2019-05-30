@@ -938,9 +938,6 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh, struct line *l
                 pret = pret->next;
             }
             pret->next = ret;
-        } else {
-            printf("min is error \n");
-
         }
         tmp = ch->next;
         while(tmp) {
@@ -1068,10 +1065,7 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh, struct line *l
                 pret = pret->next;
             }
             pret->next = ret;
-        } else {
-            printf("min is error \n");
         }
-
         line = line->next;
     }
 }
