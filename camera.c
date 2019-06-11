@@ -3,7 +3,7 @@
 const int max_side = 100;
 const float min_side = 5;
 const float max = 20;
-const float h = 5;
+const float height = 5;
 
 struct point pitem[100];
 int p_total = 0;
@@ -58,31 +58,31 @@ int main(void) {
     int i;
     int id = 1;
     int len = 10;
-    cube_create(&head);
-    // result_out(&head);
+    cube_create(&head);   //A network of layers of squares forms the logical cube
+     result_out(&head);     //Outputs the vertex coordinates of each cube
 
-    newpoint(&head, &nh);
+    newpoint(&head, &nh);   //Place the camera on top of the vertex of the top cube
     // newpoint_out(&nh);
 
-    point_create(&ph);
+    point_create(&ph);  //Coordinates of the ground path and grid focus
     // point_out(&ph);
     // point_sort(&ph);
-    point_sort1(&ph);
+    point_sort1(&ph);   //Sort the camera Numbers from smallest to largest
 
     // insert_sort(&ph);
     // point_out(&ph);
 
-     line_create(&lh, &ph);
+     line_create(&lh, &ph); //Connect the ground line to the intersection of the grid into a line segment
     //  line_out(&lh);
 
     save_init(&ch);
     save_init(&tch);
     save_init_line(&lih);
     line(&nh, &lh, &ch, &lih);
-    line(&nh, &lh, &tch, &lih);
+    line(&nh, &lh, &tch, &lih);//The ground segment establishes contact with the camera
 
     resum(&ch, &newch);
-    resum(&tch, &newch);
+    resum(&tch, &newch);//Calculate the repeated sum
     // save_out(&newch);
     // save_out(&ch);
     // save_out(&tch);
@@ -94,7 +94,7 @@ int main(void) {
     save_init(&two);
     algorithm_two(&tch, &two, &lh);
     printf("\n\n");
-    // two_out(&two, &lh);
+    two_out(&two, &lh);
 
     return 0;
 }
@@ -236,10 +236,10 @@ void point_create(struct point *ph) {
         }
         ph->next = tmp;
         tmp->pre = ph;
-        x += 5;
+        x += min_side;
         num += 1;
     }
-    y = 5;
+    y = min_side;
     while (y <= limit_y) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
@@ -252,10 +252,10 @@ void point_create(struct point *ph) {
         }
         ph->next = tmp;
         tmp->pre = ph;
-        y += 5;
+        y +=min_side;
         num += 1;
     }
-    x = limit_x + 5 ;
+    x = limit_x + min_side ;
     while (x <= 100) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
@@ -268,10 +268,10 @@ void point_create(struct point *ph) {
         }
         ph->next = tmp;
         tmp->pre = ph;
-        x += 5;
+        x += min_side;
         num += 1;
     }
-    y = limit_x - 5;
+    y = limit_x - min_side;
     while (y <= 90) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
@@ -284,59 +284,10 @@ void point_create(struct point *ph) {
         }
         ph->next = tmp;
         tmp->pre = ph;
-        y += 5;
+        y += min_side;
         num += 1;
     }
-    // while (x <= limit_x) {
-    //     y = -x + 136;
-
-    //     if (100 > x) {
-    //         tmp = malloc(sizeof(struct point));
-    //         point_init(tmp);
-    //         tmp->x = x;
-    //         tmp->y = y;
-    //         tmp->id = num;
-    //         while (ph->next) {
-    //             ph = ph->next;
-    //         }
-    //         ph->next = tmp;
-    //         tmp->pre = ph;
-    //     }
-
-    //     temp = y % 10;
-    //     if (temp) {
-    //         y -= temp;
-    //     } else {
-    //         y -= 5;
-    //     }
-    //     num += 1;
-    // }
-
-    // x = 45;
-    // y = 91;
-    // while (0 <= y && 100 > x) {
-    //     x = -y + 136;
-
-    //     if (100 > x) {
-    //         tmp = malloc(sizeof(struct point));
-    //         point_init(tmp);
-    //         tmp->x = x;
-    //         tmp->y = y;
-    //         tmp->id = num;
-    //         while (ph->next) {
-    //             ph = ph->next;
-    //         }
-    //         ph->next = tmp;
-    //     }
-
-    //     temp = y % 10;
-    //     if (temp) {
-    //         y -= temp;
-    //     } else {
-    //         y -= 5;
-    //     }
-    //     num += 1;
-    // }
+ 
 }
 
 void point_out(struct point *ph) {
@@ -402,19 +353,25 @@ void cube_create(struct cube *head) {
 
     cube_init(head);
     // printf("head.id=%d\n", head.id);
-    for (i = 0; i < max_side / min_side; i++) {
-        for (k = 0; k < max_side / min_side; k++) {
-            num += 1;
-            p = malloc(sizeof(struct cube));
-            cube_init(p);
-            // head->left = p;
-            p->id = num;
-            p->floor = 0;
-            p->row = i + 1;
-            p->column = k + 1;
-            p->width = min_side;
-            cube_dot(p);
-            cube_link(head, p);
+    for (f = 0; f < max_side / min_side; f++)
+    {
+        for (i = 0; i < max_side / min_side; i++)
+        {
+            for (k = 0; k < max_side / min_side; k++)
+            {
+                num += 1;
+                p = malloc(sizeof(struct cube));
+                cube_init(p);
+                // head->left = p;
+                p->id = num;
+                p->floor = 0;
+                p->row = i + 1;
+                p->column = k + 1;
+                p->floor = f + 1;
+                p->width = min_side;
+                cube_dot(p);
+                cube_link(head, p);
+            }
         }
     }
 }
@@ -437,7 +394,7 @@ void cube_dot(struct cube *c) {
     int row = c->row;
     int column = c->column;
     int floor = c->floor;
-    c->height = min_side;
+    c->height = height;
 
     for (; i < dotleng; i++) {
         c->dot[i].id = i;
@@ -539,15 +496,20 @@ void result_out(struct cube *m) {
             // height);
             printf("\tid = %d \n", h->id);
             // fprintf(fp,"%d", h -> id);
-            for (i = 0; i < dotleng; i++) {
+            for (i = 0; i < dotleng; i++)
+            {
                 // printf("dot->id = %d\t (x, y, z) =  (%d, %d, %d)\n",
                 // h->dot[i].id, h->dot[i].x, h->dot[i].y, h->dot[i].z);
-                printf("dot->id = %d\t  (%f, %f, %fq)\n", h->dot[i].id,
-                       h->dot[i].x, h->dot[i].y, h->dot[i].z);
-                // fprintf(fp,"\t(%d, %d, %d)\n", h->dot[i].x, h->dot[i].y,
-                // h->dot[i].z);
-                fprintf(fp, "%f, %f, %f\n", h->dot[i].x, h->dot[i].y,
-                        h->dot[i].z);
+                if (height == h->dot[i].z)
+                {
+                    printf("%f",height);
+                    printf("dot->id = %d\t  (%f, %f, %f)\n", h->dot[i].id,
+                           h->dot[i].x, h->dot[i].y, h->dot[i].z);
+                    // fprintf(fp,"\t(%d, %d, %d)\n", h->dot[i].x, h->dot[i].y,
+                    // h->dot[i].z);
+                    fprintf(fp, "%f, %f, %f\n", h->dot[i].x, h->dot[i].y,
+                            h->dot[i].z);
+                }
             }
             if (!row) {
                 return;
@@ -561,13 +523,16 @@ void result_out(struct cube *m) {
         printf("\tid = %d \n", h->id);
         // fprintf(fp,"%d", h -> id);
         for (i = 0; i < dotleng; i++) {
-            // printf("dot->id = %d\t (x, y, z) =  (%d, %d, %d)\n",
-            // h->dot[i].id, h->dot[i].x, h->dot[i].y, h->dot[i].z);
-            printf("dot->id = %d\t  (%f, %f, %f)\n", h->dot[i].id, h->dot[i].x,
-                   h->dot[i].y, h->dot[i].z);
-            // fprintf(fp,"\t(%d, %d, %d)\n", h->dot[i].x, h->dot[i].y,
-            // h->dot[i].z);
-            fprintf(fp, "%f, %f, %f\n", h->dot[i].x, h->dot[i].y, h->dot[i].z);
+            if (height == h->dot[i].z)
+            {
+                // printf("dot->id = %d\t (x, y, z) =  (%d, %d, %d)\n",
+                // h->dot[i].id, h->dot[i].x, h->dot[i].y, h->dot[i].z);
+                printf("dot->id = %d\t  (%f, %f, %f)\n", h->dot[i].id, h->dot[i].x,
+                       h->dot[i].y, h->dot[i].z);
+                // fprintf(fp,"\t(%d, %d, %d)\n", h->dot[i].x, h->dot[i].y,
+                // h->dot[i].z);
+                fprintf(fp, "%f, %f, %f\n", h->dot[i].x, h->dot[i].y, h->dot[i].z);
+            }
         }
         h = h->right;
     }
@@ -584,14 +549,14 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
         // printf("camerid = %d, (x,y) = %f, %f\n", ph->cameraId, ph->x, ph->y);
         while (plh) {
             int startret =
-                lineincircle(plh->startx, plh->starty, ph->x, ph->y, h);
-            int endret = lineincircle(plh->endx, plh->endy, ph->x, ph->y, h);
+                lineincircle(plh->startx, plh->starty, ph->x, ph->y, height);
+            int endret = lineincircle(plh->endx, plh->endy, ph->x, ph->y, height);
 
-            int sl = lineinOval(plh->startx, plh->starty, ph->x, ph->y, h, 0);
-            int el = lineinOval(plh->startx, plh->starty, ph->x, ph->y, h, 0);
+            int sl = lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 0);
+            int el = lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 0);
 
-            int sr = lineinOval(plh->startx, plh->starty, ph->x, ph->y, h, 1);
-            int er = lineinOval(plh->startx, plh->starty, ph->x, ph->y, h, 1);
+            int sr = lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 1);
+            int er = lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 1);
 
             if (startret && endret) {
                 // printf("### Circle cameraId= %d \t in circle (x, y) = %f, %f
