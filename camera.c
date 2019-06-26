@@ -59,10 +59,10 @@ int main(void) {
     int id = 1;
     int len = 10;
     cube_create(&head);   //A network of layers of squares forms the logical cube
-     result_out(&head);     //Outputs the vertex coordinates of each cube
+    // result_out(&head);     //Outputs the vertex coordinates of each cube
 
     newpoint(&head, &nh);   //Place the camera on top of the vertex of the top cube
-    // newpoint_out(&nh);
+    newpoint_out(&nh);
 
     point_create(&ph);  //Coordinates of the ground path and grid focus
     // point_out(&ph);
@@ -97,6 +97,256 @@ int main(void) {
     two_out(&two, &lh);
 
     return 0;
+}
+
+void cube_create(struct cube *head) {
+    int i, k, f;
+    struct cube *p;
+    int num = 0;
+    double res[12] = {0};
+
+    cube_init(head);
+    // printf("head.id=%d\n", head.id);
+   // for (f = 0; f < max_side / min_side; f++)
+   // {
+        for (i = 0; i < max_side / min_side; i++)
+        {
+            for (k = 0; k < max_side / min_side; k++)
+            {
+                num += 1;
+                p = malloc(sizeof(struct cube));
+                cube_init(p);
+                // head->left = p;
+                p->id = num;
+                p->floor = 0;
+                p->row = i + 1;
+                p->column = k + 1;
+              //  p->height = f + 1;
+                p->width = min_side;
+                cube_dot(p);
+                cube_link(head, p);
+            }
+        }
+   // }
+}
+
+void cube_init(struct cube *p) {
+    p->top = NULL;
+    p->left = NULL;
+    p->bottom = NULL;
+    p->right = NULL;
+    p->id = 0;
+    p->floor = 0;
+    p->height = 0;
+    p->row = 0;
+    p->column = 0;
+}
+
+void cube_dot(struct cube *c) {
+    int i = 0;
+    int side_lenght = min_side;
+    int row = c->row;
+    int column = c->column;
+    int floor = c->floor;
+    c->height = height;
+
+    for (; i < dotleng; i++) {
+        c->dot[i].id = i;
+        if (i == 0) {
+            c->dot[i].x = (row - 1) * side_lenght;
+            c->dot[i].y = (column - 1) * side_lenght;
+            c->dot[i].z = (floor - 1) * side_lenght;
+        }
+        if (i == 1) {
+            c->dot[i].x = row * side_lenght;
+            c->dot[i].y = (column - 1) * side_lenght;
+            c->dot[i].z = (floor - 1) * side_lenght;
+        }
+        if (i == 2) {
+            c->dot[i].x = row * side_lenght;
+            c->dot[i].y = column * side_lenght;
+            c->dot[i].z = (floor - 1) * side_lenght;
+        }
+        if (i == 3) {
+            c->dot[i].x = (row - 1) * side_lenght;
+            c->dot[i].y = column * side_lenght;
+            c->dot[i].z = (floor - 1) * side_lenght;
+        }
+        if (i == 4) {
+            c->dot[i].x = (row - 1) * side_lenght;
+            c->dot[i].y = (column - 1) * side_lenght;
+            c->dot[i].z = (floor)*side_lenght;
+        }
+        if (i == 5) {
+            c->dot[i].x = row * side_lenght;
+            c->dot[i].y = (column - 1) * side_lenght;
+            c->dot[i].z = (floor)*side_lenght;
+        }
+        if (i == 6) {
+            c->dot[i].x = row * side_lenght;
+            c->dot[i].y = column * side_lenght;
+            c->dot[i].z = (floor)*side_lenght;
+        }
+        if (i == 7) {
+            c->dot[i].x = (row - 1) * side_lenght;
+            c->dot[i].y = column * side_lenght;
+            c->dot[i].z = (floor)*side_lenght;
+        }
+    }
+}
+
+void cube_link(struct cube *h, struct cube *p) {
+    struct cube *tmpright = h;
+    struct cube *tmptop = h->right;
+    int i = 0;
+    int dot = 0;
+    while (tmpright->right) {
+        tmpright = tmpright->right;
+        if (0 == (tmpright->column % (int)max)) {
+            if (tmptop->top) {
+                tmpright = tmptop->top;
+                tmptop = tmptop->top;
+            } else {
+                dot = 1;
+                tmpright = tmptop;
+                break;
+            }
+        }
+    }
+    if (dot == 1) {
+        tmpright->top = p;
+        p->bottom = tmpright;
+    } else {
+        tmpright->right = p;
+        p->left = tmpright;
+        if (tmpright->row > 1) {
+            tmpright->bottom->right->top = p;
+            p->bottom = tmpright->bottom->right;
+        }
+    }
+}
+
+void result_out(struct cube *m) {
+    struct cube *h = m->right;
+    struct cube *row = m->right->top;
+    int i;
+    FILE *fp;
+    // fp=fopen("All vertex coordinates.txt","w");//打开文件
+    // if ((fp=fopen("All vertex coordinates.txt","w"))==NULL)
+    // //判断文件是否能打开
+    fp = fopen("All vertex coordinates1.txt", "w");  //打开文件
+    if ((fp = fopen("All vertex coordinates1.txt", "w")) ==
+        NULL)  //判断文件是否能打开
+    {
+        printf("fail to open the file!\n");
+        exit(0);
+    }
+
+    while (h) {
+        // printf("column: %d", h->column);
+        if (!(h->column % (int)min_side)) {
+            // printf("\n\nid = %d\t floot = %d\t row = %d\t column = %d\t
+            // height = %d\n", h -> id, h -> floor, h -> row, h -> column, h ->
+            // height);
+            printf("\tid = %d \n", h->id);
+            // fprintf(fp,"%d", h -> id);
+            for (i = 0; i < dotleng; i++)
+            {
+                // printf("dot->id = %d\t (x, y, z) =  (%d, %d, %d)\n",
+                // h->dot[i].id, h->dot[i].x, h->dot[i].y, h->dot[i].z);
+                if (height == h->dot[i].z)
+                {
+                    printf("%f",height);
+                    printf("dot->id = %d\t  (%f, %f, %f)\n", h->dot[i].id,
+                           h->dot[i].x, h->dot[i].y, h->dot[i].z);
+                    // fprintf(fp,"\t(%d, %d, %d)\n", h->dot[i].x, h->dot[i].y,
+                    // h->dot[i].z);
+                    fprintf(fp, "%f, %f, %f\n", h->dot[i].x, h->dot[i].y,
+                            h->dot[i].z);
+                }
+            }
+            if (!row) {
+                return;
+            } else {
+                h = row;
+                row = row->top;
+            }
+        }
+        // printf("\n\nid = %d\t floot = %d\t row = %d\t column = %d\t height =
+        // %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
+        printf("\tid = %d \n", h->id);
+        // fprintf(fp,"%d", h -> id);
+        for (i = 0; i < dotleng; i++) {
+            if (height == h->dot[i].z)
+            {
+                // printf("dot->id = %d\t (x, y, z) =  (%d, %d, %d)\n",
+                // h->dot[i].id, h->dot[i].x, h->dot[i].y, h->dot[i].z);
+                printf("dot->id = %d\t  (%f, %f, %f)\n", h->dot[i].id, h->dot[i].x,
+                       h->dot[i].y, h->dot[i].z);
+                // fprintf(fp,"\t(%d, %d, %d)\n", h->dot[i].x, h->dot[i].y,
+                // h->dot[i].z);
+                fprintf(fp, "%f, %f, %f\n", h->dot[i].x, h->dot[i].y, h->dot[i].z);
+            }
+        }
+        h = h->right;
+    }
+    fclose(fp);  //关闭文件
+}
+
+void newpoint_init(struct npoint *tmp) {
+    tmp->x = 0;
+    tmp->y = 0;
+    tmp->height = 0;
+    tmp->cameraId = 0;
+    tmp->next = NULL;
+}
+
+int newpoint(struct cube *head, struct npoint *nh) {
+    struct cube *ph = head->right;
+    struct cube *ptop = ph->top;
+    struct npoint *tmp;
+    newpoint_init(nh);
+    while (ph ) {//   && ph->id <= 441
+        tmp = malloc(sizeof(struct npoint));
+        newpoint_init(tmp);
+        tmp->x = ph->dot[0].x;
+        tmp->y = ph->dot[0].y;
+        tmp->height = ph->height;
+        tmp->cameraId = ph->id;
+        while (nh->next) {
+            nh = nh->next;
+        }
+        nh->next = tmp;
+
+        if (!(ph->column % (int)max)) {
+            tmp = malloc(sizeof(struct npoint));
+            newpoint_init(tmp);
+            tmp->x = ph->dot[1].x;
+            tmp->y = ph->dot[1].y;
+            tmp->height = ph->height;
+            tmp->cameraId = ph->id + 1;
+            while (nh->next) {
+                nh = nh->next;
+            }
+            nh->next = tmp;
+
+            if (!ptop) {
+                return 0;
+            } else {
+                ph = ptop;
+                ptop = ptop->top;
+            }
+        }
+        ph = ph->right;
+    }
+    return 0;
+}
+void newpoint_out(struct npoint *nh) {
+    struct npoint *p = nh->next;
+    while (p) {
+        printf("x =%f, y=%f, cameraId=%d\n", p->x, p->y, p->cameraId);
+        p = p->next;
+    }
 }
 
 float distance(struct point *p, struct point *q) {
@@ -345,199 +595,7 @@ void line_out(struct line *lh) {
     }
 }
 
-void cube_create(struct cube *head) {
-    int i, k, f;
-    struct cube *p;
-    int num = 0;
-    double res[12] = {0};
 
-    cube_init(head);
-    // printf("head.id=%d\n", head.id);
-    for (f = 0; f < max_side / min_side; f++)
-    {
-        for (i = 0; i < max_side / min_side; i++)
-        {
-            for (k = 0; k < max_side / min_side; k++)
-            {
-                num += 1;
-                p = malloc(sizeof(struct cube));
-                cube_init(p);
-                // head->left = p;
-                p->id = num;
-                p->floor = 0;
-                p->row = i + 1;
-                p->column = k + 1;
-                p->floor = f + 1;
-                p->width = min_side;
-                cube_dot(p);
-                cube_link(head, p);
-            }
-        }
-    }
-}
-
-void cube_init(struct cube *p) {
-    p->top = NULL;
-    p->left = NULL;
-    p->bottom = NULL;
-    p->right = NULL;
-    p->id = 0;
-    p->floor = 0;
-    p->height = 0;
-    p->row = 0;
-    p->column = 0;
-}
-
-void cube_dot(struct cube *c) {
-    int i = 0;
-    int side_lenght = min_side;
-    int row = c->row;
-    int column = c->column;
-    int floor = c->floor;
-    c->height = height;
-
-    for (; i < dotleng; i++) {
-        c->dot[i].id = i;
-        if (i == 0) {
-            c->dot[i].x = (row - 1) * side_lenght;
-            c->dot[i].y = (column - 1) * side_lenght;
-            c->dot[i].z = (floor - 1) * side_lenght;
-        }
-        if (i == 1) {
-            c->dot[i].x = row * side_lenght;
-            c->dot[i].y = (column - 1) * side_lenght;
-            c->dot[i].z = (floor - 1) * side_lenght;
-        }
-        if (i == 2) {
-            c->dot[i].x = row * side_lenght;
-            c->dot[i].y = column * side_lenght;
-            c->dot[i].z = (floor - 1) * side_lenght;
-        }
-        if (i == 3) {
-            c->dot[i].x = (row - 1) * side_lenght;
-            c->dot[i].y = column * side_lenght;
-            c->dot[i].z = (floor - 1) * side_lenght;
-        }
-        if (i == 4) {
-            c->dot[i].x = (row - 1) * side_lenght;
-            c->dot[i].y = (column - 1) * side_lenght;
-            c->dot[i].z = (floor)*side_lenght;
-        }
-        if (i == 5) {
-            c->dot[i].x = row * side_lenght;
-            c->dot[i].y = (column - 1) * side_lenght;
-            c->dot[i].z = (floor)*side_lenght;
-        }
-        if (i == 6) {
-            c->dot[i].x = row * side_lenght;
-            c->dot[i].y = column * side_lenght;
-            c->dot[i].z = (floor)*side_lenght;
-        }
-        if (i == 7) {
-            c->dot[i].x = (row - 1) * side_lenght;
-            c->dot[i].y = column * side_lenght;
-            c->dot[i].z = (floor)*side_lenght;
-        }
-    }
-}
-
-void cube_link(struct cube *h, struct cube *p) {
-    struct cube *tmpright = h;
-    struct cube *tmptop = h->right;
-    int i = 0;
-    int dot = 0;
-    while (tmpright->right) {
-        tmpright = tmpright->right;
-        if (0 == (tmpright->column % (int)max)) {
-            if (tmptop->top) {
-                tmpright = tmptop->top;
-                tmptop = tmptop->top;
-            } else {
-                dot = 1;
-                tmpright = tmptop;
-                break;
-            }
-        }
-    }
-    if (dot == 1) {
-        tmpright->top = p;
-        p->bottom = tmpright;
-    } else {
-        tmpright->right = p;
-        p->left = tmpright;
-        if (tmpright->row > 1) {
-            tmpright->bottom->right->top = p;
-            p->bottom = tmpright->bottom->right;
-        }
-    }
-}
-
-void result_out(struct cube *m) {
-    struct cube *h = m->right;
-    struct cube *row = m->right->top;
-    int i;
-    FILE *fp;
-    // fp=fopen("All vertex coordinates.txt","w");//打开文件
-    // if ((fp=fopen("All vertex coordinates.txt","w"))==NULL)
-    // //判断文件是否能打开
-    fp = fopen("All vertex coordinates1.txt", "w");  //打开文件
-    if ((fp = fopen("All vertex coordinates1.txt", "w")) ==
-        NULL)  //判断文件是否能打开
-    {
-        printf("fail to open the file!\n");
-        exit(0);
-    }
-
-    while (h) {
-        // printf("column: %d", h->column);
-        if (!(h->column % (int)min_side)) {
-            // printf("\n\nid = %d\t floot = %d\t row = %d\t column = %d\t
-            // height = %d\n", h -> id, h -> floor, h -> row, h -> column, h ->
-            // height);
-            printf("\tid = %d \n", h->id);
-            // fprintf(fp,"%d", h -> id);
-            for (i = 0; i < dotleng; i++)
-            {
-                // printf("dot->id = %d\t (x, y, z) =  (%d, %d, %d)\n",
-                // h->dot[i].id, h->dot[i].x, h->dot[i].y, h->dot[i].z);
-                if (height == h->dot[i].z)
-                {
-                    printf("%f",height);
-                    printf("dot->id = %d\t  (%f, %f, %f)\n", h->dot[i].id,
-                           h->dot[i].x, h->dot[i].y, h->dot[i].z);
-                    // fprintf(fp,"\t(%d, %d, %d)\n", h->dot[i].x, h->dot[i].y,
-                    // h->dot[i].z);
-                    fprintf(fp, "%f, %f, %f\n", h->dot[i].x, h->dot[i].y,
-                            h->dot[i].z);
-                }
-            }
-            if (!row) {
-                return;
-            } else {
-                h = row;
-                row = row->top;
-            }
-        }
-        // printf("\n\nid = %d\t floot = %d\t row = %d\t column = %d\t height =
-        // %d\n", h -> id, h -> floor, h -> row, h -> column, h -> height);
-        printf("\tid = %d \n", h->id);
-        // fprintf(fp,"%d", h -> id);
-        for (i = 0; i < dotleng; i++) {
-            if (height == h->dot[i].z)
-            {
-                // printf("dot->id = %d\t (x, y, z) =  (%d, %d, %d)\n",
-                // h->dot[i].id, h->dot[i].x, h->dot[i].y, h->dot[i].z);
-                printf("dot->id = %d\t  (%f, %f, %f)\n", h->dot[i].id, h->dot[i].x,
-                       h->dot[i].y, h->dot[i].z);
-                // fprintf(fp,"\t(%d, %d, %d)\n", h->dot[i].x, h->dot[i].y,
-                // h->dot[i].z);
-                fprintf(fp, "%f, %f, %f\n", h->dot[i].x, h->dot[i].y, h->dot[i].z);
-            }
-        }
-        h = h->right;
-    }
-    fclose(fp);  //关闭文件
-}
 
 int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
          struct lineinfo *li) {
@@ -761,62 +819,6 @@ void save_out(struct camerainfo *ch) {
         //   n->x, n->y); n = n->next;
         // }
         ch = ch->next;
-    }
-}
-
-void newpoint_init(struct npoint *tmp) {
-    tmp->x = 0;
-    tmp->y = 0;
-    tmp->height = 0;
-    tmp->cameraId = 0;
-    tmp->next = NULL;
-}
-
-int newpoint(struct cube *head, struct npoint *nh) {
-    struct cube *ph = head->right;
-    struct cube *ptop = ph->top;
-    struct npoint *tmp;
-    newpoint_init(nh);
-    while (ph) {
-        tmp = malloc(sizeof(struct npoint));
-        newpoint_init(tmp);
-        tmp->x = ph->dot[0].x;
-        tmp->y = ph->dot[0].y;
-        tmp->height = ph->height;
-        tmp->cameraId = ph->id;
-        while (nh->next) {
-            nh = nh->next;
-        }
-        nh->next = tmp;
-
-        if (!(ph->column % (int)max)) {
-            tmp = malloc(sizeof(struct npoint));
-            newpoint_init(tmp);
-            tmp->x = ph->dot[1].x;
-            tmp->y = ph->dot[1].y;
-            tmp->height = ph->height;
-            tmp->cameraId = ph->id + 1;
-            while (nh->next) {
-                nh = nh->next;
-            }
-            nh->next = tmp;
-
-            if (!ptop) {
-                return 0;
-            } else {
-                ph = ptop;
-                ptop = ptop->top;
-            }
-        }
-        ph = ph->right;
-    }
-    return 0;
-}
-void newpoint_out(struct npoint *nh) {
-    struct npoint *p = nh->next;
-    while (p) {
-        printf("x =%f, y=%f, cameraId=%d\n", p->x, p->y, p->cameraId);
-        p = p->next;
     }
 }
 
