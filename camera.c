@@ -317,27 +317,13 @@ int newpoint(struct cube *head, struct npoint *nh) {
             nh = nh->next;
         }
         nh->next = tmp;
-
-        if (!(ph->column % (int)max)) {
-            tmp = malloc(sizeof(struct npoint));
-            newpoint_init(tmp);
-            tmp->x = ph->dot[1].x;
-            tmp->y = ph->dot[1].y;
-            tmp->height = ph->height;
-            tmp->cameraId = ph->id + 1;
-            while (nh->next) {
-                nh = nh->next;
-            }
-            nh->next = tmp;
-
-            if (!ptop) {
-                return 0;
-            } else {
+        ph = ph->right;
+        if(!ph) {
+            if(ptop) {
                 ph = ptop;
                 ptop = ptop->top;
             }
         }
-        ph = ph->right;
     }
     return 0;
 }
