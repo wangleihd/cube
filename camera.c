@@ -872,18 +872,18 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh, struct line *l
         max = 1000;
         min.resum = 1000;
 
-        while(tmp) {
+        while(tmp) {   //找到重复累加和最小的摄像头
             if(!tmp->isdelete){
                 num = 1;
                 if(max > tmp->resum) {
-                    max = tmp->resum;
+                    max = tmp->resum;//  这里的max其实代表的是min，最小的重复累加和 
                     memcpy(&min, tmp, sizeof(struct camerainfo));
                 }
             }
             tmp = tmp->next;
         }
 
-        if(min.resum < 999) {
+        if(min.resum < 999) {//  为了显示结果， 将选出的摄像头信息存入ret中
             ret = malloc(sizeof(struct camerainfo));
             memcpy(ret, &min, sizeof(struct camerainfo));
             ret->next = NULL;
@@ -893,7 +893,7 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh, struct line *l
             pret->next = ret;
         }
         tmp = ch->next;
-        while(tmp) {
+        while(tmp) {      //将摄像头信息删除
             if(!tmp->isdelete && tmp->cameraId == min.cameraId) {
                 tmp->isdelete = 1;
                 break;
@@ -902,7 +902,7 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh, struct line *l
         }
 
         line = l->next;
-        while (line) {
+        while (line) {        // 找到最小累加和摄像头覆盖的线段，并将其从线段集合中删掉
             flag = 0;
             comp = reh->next;
             if(lineisdel[line->id] != 1) {
@@ -981,7 +981,7 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh, struct line *l
 
     int max = 999;
 
-    while (line) {
+    while (line) {    //以线段为主体，对覆盖该线段的摄像头进行重复累加和最小的选择 
         tmp = ch->next;
         min.resum = 1000;
         max = 1000;
@@ -990,7 +990,7 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh, struct line *l
             if (tmp->isdelete == 0) {
                 if(tmp->resum) {
                     if (tmp->reline[line->id] == 1) {
-                    if (max > tmp->resum) {
+                    if (max > tmp->resum) {   //这里的max其实还是min  ，找到的是重复累加和最小的摄像头
                         max = tmp->resum;
                          memcpy(&min, tmp, sizeof(struct camerainfo));
                          min.lineId = line->id;
@@ -999,25 +999,25 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh, struct line *l
                     
                 } else {
                 if (tmp->lines[line->id] == 1) {
-                    if (max > tmp->sum) {
+                    if (max > tmp->sum) {            
                         max = tmp->sum;
                          memcpy(&min, tmp, sizeof(struct camerainfo));
                          min.lineId = line->id;
                     }
-                }
+                }                  //算法二允许摄像头被多次选择（即切换不同的档位），所以摄像头不用删除，区别与算法1  
 
                 }
             }
             tmp = tmp->next;
         }
         if (min.resum < 999) {
-            ret = malloc(sizeof(struct camerainfo));
+            ret = malloc(sizeof(struct camerainfo));       //同样为了显示结果，将摄像头信息存放在ret中
             memcpy(ret, &min, sizeof(struct camerainfo));
             ret->next = NULL;
             while (pret->next) {
                 pret = pret->next;
             }
-            pret->next = ret;
+            pret->next = ret;        
         }
         line = line->next;
     }
