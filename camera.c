@@ -8,7 +8,7 @@ const int max_side_x = 100;
 const int max_side_y = 100;
 const int min_side_x = 5;
 const int min_side_y = 5;
-const float height = max_side_x / min_side_x;
+const int height = 20;             //max_side_x / min_side_x;
 
 struct point pitem[100];
 int p_total = 0;
@@ -74,16 +74,16 @@ int main(void) {
     newpoint_out(&nh);
 
     point_create(&ph);  // Coordinates of the ground path and grid focus
-    // point_out(&ph);
+     point_out(&ph);
     // point_sort(&ph);
     point_sort1(&ph);  // Sort the camera Numbers from smallest to largest
-
+    printf(" after sort\n");
     // insert_sort(&ph);
-    // point_out(&ph);
+     point_out(&ph);
 
     line_create(&lh, &ph);  // Connect the ground line to the intersection of
                             // the grid into a line segment
-    //  line_out(&lh);
+      line_out(&lh);
 
     save_init(&ch);
     save_init(&tch);
@@ -536,7 +536,7 @@ void point_create(struct point *ph) {
 void point_out(struct point *ph) {
     struct point *p;
     p = ph->next;
-    while (p->next) {
+    while (p) {
         printf("(x,y) = (%f, %f) id = %d \n", p->x, p->y, p->id);
         // printf("pre (x,y) = (%f, %f) id = %d \n", p->pre->x, p->pre->y,
         //  p->pre->id);
@@ -578,7 +578,7 @@ void line_create(struct line *lh, struct point *ph) {
 
 void line_out(struct line *lh) {
     struct line *p = lh->next;
-    while (p->next) {
+    while (p) {
         printf(
             "start(x,y) = (%f, %f) end(x,y) = (%f, %f)\n id = %d time = %f\n\n",
             p->startx, p->starty, p->endx, p->endy, p->id, p->timestamp);
@@ -894,8 +894,7 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh,
             if (!tmp->isdelete) {
                 num = 1;
                 if (max > tmp->resum) {
-                    max =
-                        tmp->resum;  //  这里的max其实代表的是min，最小的重复累加和
+                    max =tmp->resum;  //  这里的max其实代表的是min，最小的重复累加和
                     memcpy(&min, tmp, sizeof(struct camerainfo));
                 }
             }
