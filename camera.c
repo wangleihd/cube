@@ -89,8 +89,7 @@ int main(void) {
     save_init(&tch);
     save_init_line(&lih);
     line(&nh, &lh, &ch, &lih);
-    line(&nh, &lh, &tch,
-         &lih);  // The ground segment establishes contact with the camera
+    line(&nh, &lh, &tch,&lih);  // The ground segment establishes contact with the camera
 
     resum(&ch, &newch);
     resum(&tch, &newch);  // Calculate the repeated sum
@@ -605,12 +604,12 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
             int sl =
                 lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 0);
             int el =
-                lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 0);
+                lineinOval(plh->endx, plh->endy, ph->x, ph->y, height, 0);
 
             int sr =
                 lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 1);
             int er =
-                lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 1);
+                lineinOval(plh->endx, plh->endy, ph->x, ph->y, height, 1);
 
             if (startret && endret) {
                 // printf("### Circle cameraId= %d \t in circle (x, y) = %f, %f
