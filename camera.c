@@ -263,7 +263,7 @@ void result_out(struct cube *m) {
                 // printf("dot->id = %d\t (x, y, z) =  (%d, %d, %d)\n",
                 // h->dot[i].id, h->dot[i].x, h->dot[i].y, h->dot[i].z);
                 if (height == h->dot[i].z) {
-                    printf("%f", height);
+                    printf("%d", height);
                     printf("dot->id = %d\t  (%f, %f, %f)\n", h->dot[i].id,
                            h->dot[i].x, h->dot[i].y, h->dot[i].z);
                     // fprintf(fp,"\t(%d, %d, %d)\n", h->dot[i].x, h->dot[i].y,
