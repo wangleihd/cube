@@ -911,46 +911,48 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh,
                     memcpy(&min, tmp, sizeof(struct camerainfo));
                 }
             } else {
-                printf(" delete camera id =%d and pos = %d\n", tmp->cameraId, tmp->pos);
+                // printf(" delete camera id =%d and pos = %d\n", tmp->cameraId, tmp->pos);
             }
             tmp = tmp->next;
         }
 
+printf("id = %d, sum = %d, resum = %d\n", min.cameraId, min.sum, min.resum);
+
         if(num && min.resum < 999) {
             num = 0;
+            flag = 0;
             for(j = 0; j < 100; j++) {
                 if(isline[j]) {
                     num = 1;
                     // printf("is line id = %d\n", j);
                     for(k = 0 ; k < 100; k ++) {
                         if(min.lines[k] && k == j) {
+                            flag = 1;
                             // printf("lnne and camera id = %d  min id = %d  resum = %d\n", k, min.cameraId, min.resum);
                             isline[j] = 0;
-                            ret = malloc(sizeof(struct camerainfo));
-                            memcpy(ret, &min, sizeof(struct camerainfo));
-                            ret->next = NULL;
-                            while (pret->next) {
-                                if(pret->cameraId == ret->cameraId) {
-                                    ret->isdelete = 1;
-                                }
-                                pret = pret->next;
-                            }
-                            if(ret->isdelete) {
-                                free(ret);
-                            } else {
-                            pret->next = ret;
-                            }
-                            
                             
                         } 
                     }
                 }
+
             }
+            if(flag) {
+                        ret = malloc(sizeof(struct camerainfo));
+                        memcpy(ret, &min, sizeof(struct camerainfo));
+                        ret->next = NULL;
+                        while (pret->next) {
+                            if(pret->cameraId == ret->cameraId) {
+                                ret->isdelete = 1;
+                            }
+                            pret = pret->next;
+                        }
+                        pret->next = ret;
+                    }
+
             tmp = ch->next;
             while (tmp) {  //将摄像头信息删除
             if(!tmp->isdelete) {
                 if (tmp->cameraId == min.cameraId) {
-            printf("delete id = %d, cameraid =%d resum = %d pos = %d\n", min.cameraId, tmp->cameraId, min.resum, tmp->pos);
                     tmp->isdelete = 1;
                 }
             }
