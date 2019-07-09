@@ -878,10 +878,24 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh,
     struct camerainfo *ret;
     struct camerainfo *comp;
     struct line *line;
-    int max, i;
+    int max, i, j, k;
     int num = 1;
     int flag = 0;
     int lineisdel[100] = {0};
+    int isline[100] = {0};
+
+
+    line = l->next;
+    while(line) {
+        isline[line->id] = 1;
+        line = line->next;
+    }
+
+    while(tmp) {
+        printf("tmp = %p \t cameraid = %d\t, pos = %d\n", tmp, tmp->cameraId, tmp->pos);
+        tmp = tmp->next;
+    }
+    
 
     while (num) {
         num = 0;
@@ -893,55 +907,92 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh,
             if (!tmp->isdelete) {
                 num = 1;
                 if (max > tmp->resum) {
-                    max =tmp->resum;  //  这里的max其实代表的是min，最小的重复累加和
+                    max = tmp->resum;  //  这里的max其实代表的是min，最小的重复累加和
                     memcpy(&min, tmp, sizeof(struct camerainfo));
                 }
+            } else {
+                printf(" delete camera id =%d and pos = %d\n", tmp->cameraId, tmp->pos);
             }
             tmp = tmp->next;
         }
 
-        if (min.resum < 999) {  //  为了显示结果， 将选出的摄像头信息存入ret中
-            ret = malloc(sizeof(struct camerainfo));
-            memcpy(ret, &min, sizeof(struct camerainfo));
-            ret->next = NULL;
-            while (pret->next) {
-                pret = pret->next;
-            }
-            pret->next = ret;
-        }
-        tmp = ch->next;
-        while (tmp) {  //将摄像头信息删除
-            if (!tmp->isdelete && tmp->cameraId == min.cameraId) {
-                tmp->isdelete = 1;
-                break;
-            }
-            tmp = tmp->next;
-        }
-
-        line = l->next;
-        while (
-            line) {  // 找到最小累加和摄像头覆盖的线段，并将其从线段集合中删掉
-            flag = 0;
-            comp = reh->next;
-            if (lineisdel[line->id] != 1) {
-                while (comp) {
-                    if (comp->lines[line->id] != 1) {
-                        lineisdel[line->id] = 1;
-                        flag = 1;
-                        break;
+        if(num && min.resum < 999) {
+            num = 0;
+            for(j = 0; j < 100; j++) {
+                if(isline[j]) {
+                    num = 1;
+                    // printf("is line id = %d\n", j);
+                    for(k = 0 ; k < 100; k ++) {
+                        if(min.lines[k] && k == j) {
+                            // printf("lnne and camera id = %d  min id = %d  resum = %d\n", k, min.cameraId, min.resum);
+                            isline[j] = 0;
+                            ret = malloc(sizeof(struct camerainfo));
+                            memcpy(ret, &min, sizeof(struct camerainfo));
+                            ret->next = NULL;
+                            while (pret->next) {
+                                if(pret->cameraId == ret->cameraId) {
+                                    ret->isdelete = 1;
+                                }
+                                pret = pret->next;
+                            }
+                            if(ret->isdelete) {
+                                free(ret);
+                            } else {
+                            pret->next = ret;
+                            }
+                            
+                            
+                        } 
                     }
-                    comp = comp->next;
                 }
             }
-            if (flag) {
-                break;
+            tmp = ch->next;
+            while (tmp) {  //将摄像头信息删除
+            if(!tmp->isdelete) {
+                if (tmp->cameraId == min.cameraId) {
+            printf("delete id = %d, cameraid =%d resum = %d pos = %d\n", min.cameraId, tmp->cameraId, min.resum, tmp->pos);
+                    tmp->isdelete = 1;
+                }
             }
-            line = line->next;
-        }
+                tmp = tmp->next;
+                
+            }
 
-        if (!line) {
-            return;
+
+        } else {
+            num = 0;
         }
+        
+
+        printf("aaaaaaaaaa = \n\n");
+
+
+
+        
+
+        // line = l->next;
+        // while (line) {  // 找到最小累加和摄像头覆盖的线段，并将其从线段集合中删掉
+        //     flag = 0;
+        //     comp = reh->next;
+        //     if (lineisdel[line->id] != 1) {
+        //         while (comp) {
+        //             if (comp->lines[line->id] != 1) {
+        //                 lineisdel[line->id] = 1;
+        //                 flag = 1;
+        //                 break;
+        //             }
+        //             comp = comp->next;
+        //         }
+        //     }
+        //     if (flag) {
+        //         break;
+        //     }
+        //     line = line->next;
+        // }
+
+        // if (!line) {
+        //     return;
+        // }
     }
 }
 
