@@ -53,6 +53,7 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh,
                    struct line *l);
 
 void grid_init(struct point *t);
+void line_lengthSum(struct line *lh);
 
 int main(void) {
     struct cube head;
@@ -75,19 +76,19 @@ int main(void) {
     //newpoint_out(&nh);
 
     point_create(&ph);  // Coordinates of the ground path and grid focus
-     point_out(&ph);
+    // point_out(&ph);
     // point_sort(&ph);
     point_sort1(&ph);  // Sort the camera Numbers from smallest to largest
    // printf(" after sort\n");
     // insert_sort(&ph);
-    point_out(&ph);
+   // point_out(&ph);
     point_delete(&ph);
-     point_out(&ph);
+   //  point_out(&ph);
 
     line_create(&lh, &ph);  // Connect the ground line to the intersection of
                             // the grid into a line segment
       line_out(&lh);
-
+    line_lengthSum(&lh);
     save_init(&ch);
     save_init(&tch);
     save_init_line(&lih);
@@ -102,12 +103,12 @@ int main(void) {
 
     save_init(&one);
     algorithm_one(&ch, &one, &lh);
-   // one_out(&one, &lh);
+    one_out(&one, &lh);
 
     save_init(&two);
     algorithm_two(&tch, &two, &lh);
     printf("\n\n");
-//two_out(&two, &lh);
+    two_out(&two, &lh);
 
     return 0;
 }
@@ -606,14 +607,25 @@ void line_create(struct line *lh, struct point *ph) {
         p = p->next;
     }
 }
-
+void line_lengthSum(struct line *lh)
+{
+   struct line *p = lh->next;
+    float sum=0;
+    while (p)
+    {
+        sum = sum + p->timestamp;
+        p=p->next;
+        
+    }
+    printf("all line 's length is %f\n",sum);
+}
 void line_out(struct line *lh) {
     struct line *p = lh->next;
     int n=1;
     while (p) {
         printf(
-            "the %dth line start(x,y) = (%f, %f) end(x,y) = (%f, %f)\n id = %d time = %f\n\n",n,
-            p->startx, p->starty, p->endx, p->endy, p->id, p->timestamp);
+            "start(x,y) = (%f, %f) end(x,y) = (%f, %f)\n id = %d time = %f\n\n",
+            p->startx, p->starty, p->endx, p->endy, n, p->timestamp);
 
         p = p->next;
         n++;
