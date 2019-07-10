@@ -24,6 +24,7 @@ void point_create(struct point *);
 void point_init(struct point *);
 void point_sort(struct point *ph);
 void point_sort1(struct point *ph);
+void point_delete(struct point *ph);
 void insert_sort(struct point *ph);
 void point_out(struct point *);
 void line_init(struct line *);
@@ -71,14 +72,16 @@ int main(void) {
 
     newpoint(&head,
              &nh);  // Place the camera on top of the vertex of the top cube
-    newpoint_out(&nh);
+    //newpoint_out(&nh);
 
     point_create(&ph);  // Coordinates of the ground path and grid focus
      point_out(&ph);
     // point_sort(&ph);
     point_sort1(&ph);  // Sort the camera Numbers from smallest to largest
-    printf(" after sort\n");
+   // printf(" after sort\n");
     // insert_sort(&ph);
+    point_out(&ph);
+    point_delete(&ph);
      point_out(&ph);
 
     line_create(&lh, &ph);  // Connect the ground line to the intersection of
@@ -99,12 +102,12 @@ int main(void) {
 
     save_init(&one);
     algorithm_one(&ch, &one, &lh);
-    one_out(&one, &lh);
+   // one_out(&one, &lh);
 
     save_init(&two);
     algorithm_two(&tch, &two, &lh);
     printf("\n\n");
-    two_out(&two, &lh);
+//two_out(&two, &lh);
 
     return 0;
 }
@@ -457,20 +460,58 @@ void point_sort1(struct point *ph) {
         q = p;
     }
 }
+void point_delete(struct point *ph)
+{
+    struct point *p = ph;
+    struct point *q = p->next;
+    while (q)
+    {
+        
+        if (q->x == p->x && q->y == p->y)
+        {
+            p->next = q->next;
+            
+            
+        }
+        p = p->next;
+        q = p->next;
+    }
+}
 
 void point_create(struct point *ph) {
     struct point *tmp;
-    float limit_x = 45;
-    float limit_y = 91;
+    float limit_x = 19;
+    float limit_y = 39;
     float x = 0, y;
     int num = 1;
     int temp;
     point_init(ph);
 
-    while (x <= limit_x) {
+    while (x <= limit_x && x >= 0 && y<=100 && y >= 0) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
         y = 2 * x + 1;
+        if(y>=100){
+            break;
+        }
+        tmp->x = x;
+        tmp->y = y;
+        tmp->id = num;
+        while (ph->next) {
+            ph = ph->next;
+        }
+        ph->next = tmp;
+        tmp->pre = ph;
+        x += min_side_x;
+        num += 1;
+    }
+    while (x <= 100 && x >= 0 && y<=100 && y >= 0) {
+        tmp = malloc(sizeof(struct point));
+        point_init(tmp);
+        y = x + 20;
+        if(y>=100){
+            break;
+        }
         tmp->x = x;
         tmp->y = y;
         tmp->id = num;
@@ -483,10 +524,13 @@ void point_create(struct point *ph) {
         num += 1;
     }
     y = min_side_y;
-    while (y <= limit_y) {
+    while (y <= limit_y && y >= 0 && x<=100 && x>=0) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
         x = (y - 1) / 2;
+         if(x<=0){
+            break;
+        }
         tmp->x = x;
         tmp->y = y;
         tmp->id = num;
@@ -498,27 +542,15 @@ void point_create(struct point *ph) {
         y += min_side_y;
         num += 1;
     }
-    x = limit_x + min_side_x;
-    while (x <= 100) {
+   
+   // y = limit_x - min_side_y;
+    while (y <= 100 && y >= 0 && x<=100 && x>=0) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        y = -x + 136;
-        tmp->x = x;
-        tmp->y = y;
-        tmp->id = num;
-        while (ph->next) {
-            ph = ph->next;
+        x = y - 20;
+         if(x<=0){
+            break;
         }
-        ph->next = tmp;
-        tmp->pre = ph;
-        x += min_side_x;
-        num += 1;
-    }
-    y = limit_x - min_side_y;
-    while (y <= 90) {
-        tmp = malloc(sizeof(struct point));
-        point_init(tmp);
-        x = -y + 136;
         tmp->x = x;
         tmp->y = y;
         tmp->id = num;
@@ -577,12 +609,14 @@ void line_create(struct line *lh, struct point *ph) {
 
 void line_out(struct line *lh) {
     struct line *p = lh->next;
+    int n=1;
     while (p) {
         printf(
-            "start(x,y) = (%f, %f) end(x,y) = (%f, %f)\n id = %d time = %f\n\n",
+            "the %dth line start(x,y) = (%f, %f) end(x,y) = (%f, %f)\n id = %d time = %f\n\n",n,
             p->startx, p->starty, p->endx, p->endy, p->id, p->timestamp);
 
         p = p->next;
+        n++;
         /* code */
     }
 }
