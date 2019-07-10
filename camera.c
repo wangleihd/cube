@@ -890,13 +890,7 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh,
         isline[line->id] = 1;
         line = line->next;
     }
-
-    while(tmp) {
-        printf("tmp = %p \t cameraid = %d\t, pos = %d\n", tmp, tmp->cameraId, tmp->pos);
-        tmp = tmp->next;
-    }
     
-
     while (num) {
         num = 0;
         tmp = ch->next;
