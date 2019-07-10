@@ -916,7 +916,6 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh,
             tmp = tmp->next;
         }
 
-printf("id = %d, sum = %d, resum = %d\n", min.cameraId, min.sum, min.resum);
 
         if(num && min.resum < 999) {
             num = 0;
@@ -937,17 +936,17 @@ printf("id = %d, sum = %d, resum = %d\n", min.cameraId, min.sum, min.resum);
 
             }
             if(flag) {
-                        ret = malloc(sizeof(struct camerainfo));
-                        memcpy(ret, &min, sizeof(struct camerainfo));
-                        ret->next = NULL;
-                        while (pret->next) {
-                            if(pret->cameraId == ret->cameraId) {
-                                ret->isdelete = 1;
-                            }
-                            pret = pret->next;
-                        }
-                        pret->next = ret;
+                ret = malloc(sizeof(struct camerainfo));
+                memcpy(ret, &min, sizeof(struct camerainfo));
+                ret->next = NULL;
+                while (pret->next) {
+                    if(pret->cameraId == ret->cameraId) {
+                        ret->isdelete = 1;
                     }
+                    pret = pret->next;
+                }
+                pret->next = ret;
+            }
 
             tmp = ch->next;
             while (tmp) {  //将摄像头信息删除
@@ -964,12 +963,6 @@ printf("id = %d, sum = %d, resum = %d\n", min.cameraId, min.sum, min.resum);
         } else {
             num = 0;
         }
-        
-
-        printf("aaaaaaaaaa = \n\n");
-
-
-
         
 
         // line = l->next;
