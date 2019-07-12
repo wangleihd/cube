@@ -97,9 +97,9 @@ int main(void) {
 
     resum(&ch, &newch);
     resum(&tch, &newch);  // Calculate the repeated sum
-    // save_out(&newch);
-    // save_out(&ch);
-    // save_out(&tch);
+    save_out(&newch);
+    save_out(&ch);
+    save_out(&tch);
 
     save_init(&one);
     algorithm_one(&ch, &one, &lh);
@@ -1092,9 +1092,18 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh,
 
     struct camerainfo *pret = reh;
     struct line *line = l->next;
+    int i, j, k, flag;
 
     int max = 999;
+    int isline[100] = {0};
 
+
+    while(line) {
+        isline[line->id] = 1;
+        line = line->next;
+    }
+
+    line = l->next;
     while (line) {  //以线段为主体，对覆盖该线段的摄像头进行重复累加和最小的选择
         tmp = ch->next;
         min.resum = 1000;
@@ -1136,6 +1145,21 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh,
                 pret = pret->next;
             }
             pret->next = ret;
+            flag = 0;
+            for(j = 0; j < 100; j++) {
+                if(isline[j]) {
+                    flag = 1;
+                    for(k = 0 ; k < 100; k ++) {
+                        if(min.lines[k] && k == j) {
+                            isline[j] = 0;
+                        } 
+                    }
+                }
+        
+            }
+            if(!flag) {
+                return ;
+            }
         }
         line = line->next;
     }
