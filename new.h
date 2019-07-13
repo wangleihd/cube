@@ -8,6 +8,9 @@
 #include <time.h>
 
 typedef struct camera {
+    int x;
+    int y;
+    int h;
     int id;
     int pos;
     int sum;
@@ -17,9 +20,6 @@ typedef struct camera {
     int isdelete;
     int lines[100];
     int reline[100];
-    int x;
-    int y;
-    int h;
     struct camera * next;
     struct camera * pre;
 } c;
