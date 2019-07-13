@@ -62,8 +62,8 @@ typedef struct point {
 } poi;
 
 typedef struct npoint {
-    float x;
-    float y;
+    int x;
+    int y;
     int height;
     int cameraId;
     struct npoint *next;

@@ -1,5 +1,14 @@
 
 #include "camera.h"
+
+// 摄像头的个数
+#define X 10      // 每行摄像头的数量
+#define Y 10      // 每列摄像头的数量
+#define X_WIDTH 5 // 每行相邻摄像头的间距
+#define Y_WIDTH 5 // 每列相邻摄像头的间距
+#define H 3       // 摄像头水平高度
+
+
 const int max_side = 100;
 const float min_side = 5;
 const float max = 20;
@@ -18,10 +27,10 @@ void cube_init(struct cube *cube);
 void cube_dot(struct cube *cube);
 void cube_link(struct cube *head, struct cube *cube);
 void result_out(struct cube *head);
-int newpoint(struct cube *head, struct npoint *nh);
+int newpoint(struct npoint *nh);
 void newpoint_out(struct npoint *nh);
-void point_create(struct point *);
-void point_init(struct point *);
+void point_create(struct point *po);
+void point_init(struct point *po);
 void point_sort(struct point *ph);
 void point_sort1(struct point *ph);
 void point_delete(struct point *ph);
@@ -67,27 +76,26 @@ int main(void) {
     int i;
     int id = 1;
     int len = 10;
-    cube_create(&head);  // A network of layers of squares forms the logical
+    // cube_create(&head);  // A network of layers of squares forms the logical
                          // cube
     // result_out(&head);     //Outputs the vertex coordinates of each cube
 
-    newpoint(&head,
-             &nh);  // Place the camera on top of the vertex of the top cube
-    //newpoint_out(&nh);
+    newpoint(&nh);  // Place the camera on top of the vertex of the top cube
+    newpoint_out(&nh);
 
     point_create(&ph);  // Coordinates of the ground path and grid focus
      point_out(&ph);
     // point_sort(&ph);
     point_sort1(&ph);  // Sort the camera Numbers from smallest to largest
-   // printf(" after sort\n");
+    // printf(" after sort\n");
     // insert_sort(&ph);
     point_out(&ph);
     point_delete(&ph);
-     point_out(&ph);
+    point_out(&ph);
 
     line_create(&lh, &ph);  // Connect the ground line to the intersection of
                             // the grid into a line segment
-      line_out(&lh);
+    line_out(&lh);
     line_lengthSum(&lh);
     save_init(&ch);
     save_init(&tch);
@@ -312,36 +320,31 @@ void newpoint_init(struct npoint *tmp) {
     tmp->next = NULL;
 }
 
-int newpoint(struct cube *head, struct npoint *nh) {
-    struct cube *ph = head->right;
-    struct cube *ptop = ph->top;
+int newpoint(struct npoint *nh) {
     struct npoint *tmp;
     newpoint_init(nh);
-    while (ph) {  //   && ph->id <= 441
-        tmp = malloc(sizeof(struct npoint));
-        newpoint_init(tmp);
-        tmp->x = ph->dot[0].x;
-        tmp->y = ph->dot[0].y;
-        tmp->height = ph->height;
-        tmp->cameraId = ph->id;
-        while (nh->next) {
-            nh = nh->next;
-        }
-        nh->next = tmp;
-        ph = ph->right;
-        if (!ph) {
-            if (ptop) {
-                ph = ptop;
-                ptop = ptop->top;
-            }
-        }
+
+    int i, j, k = 1;
+  for (i = 0; i < Y; i++) {
+    for (j = 0; j < X; j++) {
+      tmp = malloc(sizeof(struct npoint));
+      newpoint_init(tmp);
+      tmp->x = j * X_WIDTH;
+      tmp->y = i * Y_WIDTH;
+      tmp->height = H;
+      tmp->cameraId = k;
+      nh->next = tmp;
+      nh = nh->next;
+      k++;
     }
+  }
+
     return 0;
 }
 void newpoint_out(struct npoint *nh) {
     struct npoint *p = nh->next;
     while (p) {
-        printf("x =%f, y=%f, cameraId=%d\n", p->x, p->y, p->cameraId);
+        printf("x =%d, y=%d, cameraId=%d\n", p->x, p->y, p->cameraId);
         p = p->next;
     }
 }
