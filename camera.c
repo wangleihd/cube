@@ -76,14 +76,14 @@ int main(void) {
     //newpoint_out(&nh);
 
     point_create(&ph);  // Coordinates of the ground path and grid focus
-    // point_out(&ph);
+     point_out(&ph);
     // point_sort(&ph);
     point_sort1(&ph);  // Sort the camera Numbers from smallest to largest
    // printf(" after sort\n");
     // insert_sort(&ph);
-   // point_out(&ph);
+    point_out(&ph);
     point_delete(&ph);
-   //  point_out(&ph);
+     point_out(&ph);
 
     line_create(&lh, &ph);  // Connect the ground line to the intersection of
                             // the grid into a line segment
@@ -97,9 +97,9 @@ int main(void) {
 
     resum(&ch, &newch);
     resum(&tch, &newch);  // Calculate the repeated sum
-    // save_out(&newch);
-    // save_out(&ch);
-    // save_out(&tch);
+    save_out(&newch);
+    save_out(&ch);
+    save_out(&tch);
 
     save_init(&one);
     algorithm_one(&ch, &one, &lh);
@@ -488,11 +488,11 @@ void point_create(struct point *ph) {
     int temp;
     point_init(ph);
 
-    while (x <= limit_x && x >= 0 && y<=100 && y >= 0) {
+    while (x <= limit_x && x >= 0 && y<=max_side_y && y >= 0) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
         y = 2 * x + 1;
-        if(y>=100){
+        if(y>=max_side_y){
             break;
         }
         tmp->x = x;
@@ -506,11 +506,11 @@ void point_create(struct point *ph) {
         x += min_side_x;
         num += 1;
     }
-    while (x <= 100 && x >= 0 && y<=100 && y >= 0) {
+    while (x <= 100 && x >= 0 && y<=max_side_y && y >= 0) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
         y = x + 20;
-        if(y>=100){
+        if(y>=max_side_y){
             break;
         }
         tmp->x = x;
@@ -525,7 +525,7 @@ void point_create(struct point *ph) {
         num += 1;
     }
     y = min_side_y;
-    while (y <= limit_y && y >= 0 && x<=100 && x>=0) {
+    while (y <= limit_y && y >= 0 && x<=max_side_x && x>=0) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
         x = (y - 1) / 2;
@@ -545,7 +545,7 @@ void point_create(struct point *ph) {
     }
    
    // y = limit_x - min_side_y;
-    while (y <= 100 && y >= 0 && x<=100 && x>=0) {
+    while (y <= 100 && y >= 0 && x<=max_side_x && x>=0) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
         x = y - 20;
@@ -692,7 +692,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
     return 0;
 }
 
-int lineincircle(float x, float y, float x0, float y0, float h) {
+int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 60 
     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
     int ret = 0;
     float r2 = sqrt(3) / 3 * h;
@@ -703,7 +703,7 @@ int lineincircle(float x, float y, float x0, float y0, float h) {
     return ret;
 }
 
-int lineinOval(float x, float y, float x0, float y0, float h, int flag) {
+int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 60 
     int ret = 0;
     float fun, tma;
     if (flag) {
@@ -721,6 +721,63 @@ int lineinOval(float x, float y, float x0, float y0, float h, int flag) {
     return ret;
 }
 
+// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 20 
+//     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
+//     int ret = 0;
+//     float r2 = sqrt(0.0311) * h;
+//     float l = r2 * r2;
+//     if (l >= r) {
+//         ret = 1;
+//     }
+//     return ret;
+// }
+
+// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 20 
+//     int ret = 0;
+//     float fun, tma;
+//     if (flag) {// flag=1, left
+//         tma = (x - x0 + 0.3639 * h);
+//     } else {
+//         tma = (x - x0 - 0.3639 * h);
+//     }
+
+//     fun =
+//         (( tma * tma) / (0.0564 * h * h)) + (((y - y0) * (y - y0)) / (0.0311 * h * h));
+
+//     if (1 >= fun) {
+//         ret = 1;
+//     }
+//     return ret;
+// }
+
+// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 40 
+//     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
+//     int ret = 0;
+//     float r2 = sqrt(0.1325) * h;
+//     float l = r2 * r2;
+//     if (l >= r) {
+//         ret = 1;
+//     }
+//     return ret;
+// }
+
+// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 40 
+//     int ret = 0;
+//     float fun, tma;
+//     if (flag) {// flag=1, left
+//         tma = (x - x0 + 0.1763 * h);
+//     } else {
+//         tma = (x - x0 - 0.1763 * h);
+//     }
+
+//     fun =
+//         (( tma * tma) / (0.2578 * h * h)) + (((y - y0) * (y - y0)) / (0.1325 * h * h));
+
+//     if (1 >= fun) {
+//         ret = 1;
+//     }
+//     return ret;
+// }
 void save_init(struct camerainfo *ctmp) {
     ctmp->pos = 0;
     ctmp->cameraId = 0;
@@ -1092,9 +1149,18 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh,
 
     struct camerainfo *pret = reh;
     struct line *line = l->next;
+    int i, j, k, flag;
 
     int max = 999;
+    int isline[100] = {0};
 
+
+    while(line) {
+        isline[line->id] = 1;
+        line = line->next;
+    }
+
+    line = l->next;
     while (line) {  //以线段为主体，对覆盖该线段的摄像头进行重复累加和最小的选择
         tmp = ch->next;
         min.resum = 1000;
@@ -1136,6 +1202,21 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh,
                 pret = pret->next;
             }
             pret->next = ret;
+            flag = 0;
+            for(j = 0; j < 100; j++) {
+                if(isline[j]) {
+                    flag = 1;
+                    for(k = 0 ; k < 100; k ++) {
+                        if(min.lines[k] && k == j) {
+                            isline[j] = 0;
+                        } 
+                    }
+                }
+        
+            }
+            if(!flag) {
+                return ;
+            }
         }
         line = line->next;
     }
