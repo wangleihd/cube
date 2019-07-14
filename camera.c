@@ -1021,12 +1021,16 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh,
             num = 0;
             flag = 0;
             for(j = 0; j < 100; j++) {
+                for(k = 0 ; k < 100; k ++) {
+                if(min.lines[k] && k == j) {
+                            flag = 1;
+                }
+                }
                 if(isline[j]) {
                     num = 1;
                     // printf("is line id = %d\n", j);
                     for(k = 0 ; k < 100; k ++) {
                         if(min.lines[k] && k == j) {
-                            flag = 1;
                             // printf("lnne and camera id = %d  min id = %d  resum = %d\n", k, min.cameraId, min.resum);
                             isline[j] = 0;
                             
