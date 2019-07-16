@@ -2,8 +2,8 @@
 #include "camera.h"
 
 // 摄像头的个数
-#define X 20      // 每行摄像头的数量
-#define Y 20      // 每列摄像头的数量
+#define X 10      // 每行摄像头的数量
+#define Y 10      // 每列摄像头的数量
 #define X_WIDTH 5 // 每行相邻摄像头的间距
 #define Y_WIDTH 5 // 每列相邻摄像头的间距
 #define H 3       // 摄像头水平高度
@@ -84,39 +84,39 @@ int main(void) {
     //newpoint_out(&nh);
 
     point_create(&ph);  // Coordinates of the ground path and grid focus
-     point_out(&ph);
+    // point_out(&ph);
     // point_sort(&ph);
     point_sort1(&ph);  // Sort the camera Numbers from smallest to largest
     // printf(" after sort\n");
     // insert_sort(&ph);
-    point_out(&ph);
+    //point_out(&ph);
     point_delete(&ph);
-    point_out(&ph);
+    //point_out(&ph);
 
     line_create(&lh, &ph);  // Connect the ground line to the intersection of
                             // the grid into a line segment
     //line_out(&lh);
     line_lengthSum(&lh);
-    // save_init(&ch);
-    // save_init(&tch);
-    // save_init_line(&lih);
-    // line(&nh, &lh, &ch, &lih);
-    // line(&nh, &lh, &tch,&lih);  // The ground segment establishes contact with the camera
+    save_init(&ch);
+    save_init(&tch);
+    save_init_line(&lih);
+    line(&nh, &lh, &ch, &lih);
+    line(&nh, &lh, &tch,&lih);  // The ground segment establishes contact with the camera
 
-    // resum(&ch, &newch);
-    // resum(&tch, &newch);  // Calculate the repeated sum
-    // save_out(&newch);
+    resum(&ch, &newch);
+    resum(&tch, &newch);  // Calculate the repeated sum
+     //save_out(&newch);//有错误，内存访问错误
     // save_out(&ch);
     // save_out(&tch);
 
-    // save_init(&one);
-    // algorithm_one(&ch, &one, &lh);
-    // one_out(&one, &lh);
+    save_init(&one);
+    algorithm_one(&ch, &one, &lh);
+    one_out(&one, &lh);
 
-    // save_init(&two);
-    // algorithm_two(&tch, &two, &lh);
-    // printf("\n\n");
-    // two_out(&two, &lh);
+    save_init(&two);
+    algorithm_two(&tch, &two, &lh);
+    printf("\n\n");
+    two_out(&two, &lh);
 
     return 0;
 }
