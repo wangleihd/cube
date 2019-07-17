@@ -464,8 +464,8 @@ void point_delete(struct point *ph)
 
 void point_create(struct point *ph) {// 164
     struct point *tmp;
-    int max_x = X * X_WIDTH;
-    int max_y = Y * Y_WIDTH;
+    int max_x = (X - 1) * X_WIDTH;
+    int max_y = (Y - 1) * Y_WIDTH;
     float limit_x = 80;
     float limit_y = 21;
     float x = 0, y;
