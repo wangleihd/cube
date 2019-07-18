@@ -51,6 +51,7 @@ void save_init_line(struct lineinfo *ltmp);
 void save(struct npoint *head, struct line *lp, struct camerainfo *ci,
           struct lineinfo *li, int pos);
 void resum(struct camerainfo *ch, struct camerainfo *newch);
+void resum_out(struct camerainfo *ch);
 void save_out(struct camerainfo *ch);
 
 void algorithm_one(struct camerainfo *ch, struct camerainfo *reh,
@@ -81,10 +82,10 @@ int main(void) {
     // result_out(&head);     //Outputs the vertex coordinates of each cube
 
     newpoint(&nh);  // Place the camera on top of the vertex of the top cube
-    // newpoint_out(&nh);
+     newpoint_out(&nh);
 
     point_create(&ph);  // Coordinates of the ground path and grid focus
-    // point_out(&ph);
+     point_out(&ph);
     // point_sort(&ph);
     point_sort1(&ph);  // Sort the camera Numbers from smallest to largest
     // printf(" after sort\n");
@@ -105,6 +106,8 @@ int main(void) {
 
     resum(&ch, &newch);
     resum(&tch, &newch);  // Calculate the repeated sum
+    resum_out(&ch);//输出摄像头的累加和结果
+    //resum_out(&tch);
      //save_out(&newch);//有错误，内存访问错误
     // save_out(&ch);
     // save_out(&tch);
@@ -462,22 +465,22 @@ void point_delete(struct point *ph)
 //     }
 // }
 
-void point_create(struct point *ph) {// 164
+void point_create(struct point *ph) {// 164   -》
     struct point *tmp;
     int max_x = (X - 1) * X_WIDTH;
     int max_y = (Y - 1) * Y_WIDTH;
-    float limit_x = 80;
-    float limit_y = 21;
+    float limit_x = 45;
+    float limit_y = 91;
     float x = 0, y;
     int num = 1;
     //int temp;
     point_init(ph);
 
-    while (x <= limit_x && x >= 0 && y<=max_side_y && y >= 0) {
+    while (x <= limit_x && x >= 0 && y<=max_y && y >= 0 && x <= max_x) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        y = 0.25 * x + 1;
-        if(y>=max_side_y){
+        y = 2 * x + 1;
+        if(y>=max_y){
             break;
         }
         tmp->x = x;
@@ -488,14 +491,14 @@ void point_create(struct point *ph) {// 164
         }
         ph->next = tmp;
         tmp->pre = ph;
-        x += min_side_x;
+        x += X_WIDTH;
         num += 1;
     }
-    while (x <= max_x && x >= 0 && y<=max_side_y && y >= 0) {
+    while (x <= max_x && x >= 0 && y<=max_y && y >= 0) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        y = 4 * x - 299;
-        if(y>=max_side_y){
+        y = (-1) * x + 136;
+        if(y>=max_y){
             break;
         }
         tmp->x = x;
@@ -506,14 +509,14 @@ void point_create(struct point *ph) {// 164
         }
         ph->next = tmp;
         tmp->pre = ph;
-        x += min_side_x;
+        x += X_WIDTH;
         num += 1;
-    }
-    y = min_side_y;
-    while (y <= limit_y && y >= 0 && x<=max_side_x && x>=0) {
+    }   
+    y = Y_WIDTH;
+    while (y <= limit_y && y >= 0 && x<=max_x && x>=0 && y<=max_y) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        x = 4 * y - 4;
+        x = ( y-1)/2;
          if(x<=0){
             break;
         }
@@ -525,15 +528,15 @@ void point_create(struct point *ph) {// 164
         }
         ph->next = tmp;
         tmp->pre = ph;
-        y += min_side_y;
+        y += Y_WIDTH;
         num += 1;
     }
    
    // y = limit_x - min_side_y;
-    while (y <= max_y && y >= 0 && x<=max_side_x && x>=0) {
+    while (y <= max_y && y >= 0 && x<=max_x && x>=0) {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        x = (y + 299) / 4;
+        x = -y+136;
          if(x<=0){
             break;
         }
@@ -545,7 +548,7 @@ void point_create(struct point *ph) {// 164
         }
         ph->next = tmp;
         tmp->pre = ph;
-        y += min_side_y;
+        y += Y_WIDTH;
         num += 1;
     }
 }
@@ -974,6 +977,7 @@ int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 60
     if (l >= r) {
         ret = 1;
     }
+    //printf("(x,y) =%lf,%lf,(x0,y0)=%lf,%lf,r=%lf\n",x,y,x0,y0,r);
     return ret;
 }
 
@@ -992,6 +996,7 @@ int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita 
     if (1 >= fun) {
         ret = 1;
     }
+    //printf("(x,y) =%lf,%lf,(x0,y0)=%lf,%lf,fun=%lf\n",x,y,x0,y0,fun);
     return ret;
 }
 
@@ -1119,7 +1124,13 @@ void resum(struct camerainfo *ch, struct camerainfo *newch) {
         cp = cp->next;
     }
 }
-
+void resum_out(struct camerainfo *ch){
+    struct camerainfo *p = ch->next;
+    while (p) {
+        printf(" cameraId=%d , sum =%d, resum=%d \n",  p->cameraId,p->sum,p->resum);
+        p = p->next;
+    }
+}
 void save_out(struct camerainfo *ch) {
     struct npoint *n;
     ch = ch->next;
