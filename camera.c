@@ -977,7 +977,8 @@ int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 60
     if (l >= r) {
         ret = 1;
     }
-    //printf("(x,y) =%lf,%lf,(x0,y0)=%lf,%lf,r=%lf\n",x,y,x0,y0,r);
+   // printf("x-x0=%lf,y-y0=%lf\t ",x - x0 , y - y0);
+   // printf("(x,y) =%lf,%lf,(x0,y0)=%lf,%lf,r=%lf\n",x,y,x0,y0,r);
     return ret;
 }
 
@@ -996,7 +997,7 @@ int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita 
     if (1 >= fun) {
         ret = 1;
     }
-    //printf("(x,y) =%lf,%lf,(x0,y0)=%lf,%lf,fun=%lf\n",x,y,x0,y0,fun);
+  //  printf("(x,y) =%lf,%lf,(x0,y0)=%lf,%lf,fun=%lf\n",x,y,x0,y0,fun);
     return ret;
 }
 
