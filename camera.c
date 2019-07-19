@@ -104,10 +104,10 @@ int main(void) {
      line(&nh, &lh, &tch,&lih);  // The ground segment establishes contact with the camera
      resum(&ch);
      resum(&tch);  // Calculate the repeated sum
-     resum_out(&ch);//输出摄像头的累加和结果
+    // resum_out(&ch);//输出摄像头的累加和结果
      resum_sort(&ch);
     // printf(" after sort\n\n");
-    // resum_out(&ch);
+     resum_out(&ch);
     //save_init(&one);
     // algorithm_one1(&ch, &lh);
     //resum_out(&tch);
