@@ -64,7 +64,7 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh,
 
 void grid_init(struct point *t);
 void line_lengthSum(struct line *lh);
-
+void resum_sort(struct camerainfo *ch) ;
 int main(void) {
     struct cube head;
     struct point ph;
@@ -107,19 +107,21 @@ int main(void) {
     resum(&ch, &newch);
     resum(&tch, &newch);  // Calculate the repeated sum
     resum_out(&ch);//输出摄像头的累加和结果
+    resum_sort(&ch);
+    resum_out(&ch);
     //resum_out(&tch);
      //save_out(&newch);//有错误，内存访问错误
     // save_out(&ch);
     // save_out(&tch);
 
-    save_init(&one);
-    algorithm_one(&ch, &one, &lh);
-    one_out(&one, &lh);
+    // save_init(&one);
+    // algorithm_one(&ch, &one, &lh);
+    // one_out(&one, &lh);
 
-    save_init(&two);
-    algorithm_two(&tch, &two, &lh);
-    printf("\n\n");
-    two_out(&two, &lh);
+    // save_init(&two);
+    // algorithm_two(&tch, &two, &lh);
+    // printf("\n\n");
+    // two_out(&two, &lh);
 
     return 0;
 }
@@ -270,6 +272,60 @@ void point_sort1(struct point *ph) {
                 free(temp);
             }
             q = q->next;
+        }
+        p = p->next;
+        q = p;
+    }
+}
+
+void resum_sort(struct camerainfo *ch) {
+    struct camerainfo *temp;
+    //int i = 0;
+    temp = malloc(sizeof(struct camerainfo));
+    struct camerainfo *p = ch;
+    struct camerainfo *q = ch->next;
+    while (p)
+    {
+        while (q)
+        {
+            if (q->resum < p->resum)
+            {
+                //temp = p;
+                //p = q;
+                //q = temp;
+                //temp = malloc(sizeof(struct camerainfo));
+                //memcpy(temp, p, sizeof(struct camerainfo));
+                temp->pos = p->pos;
+                temp->lineId = p->lineId;
+                temp->cameraId = p->cameraId;
+                temp->sum = p->sum;
+                temp->isdelete = p->isdelete;
+                temp->resum=p->resum;
+                memcpy(temp->reline, p->reline, 100*sizeof(int));
+                memcpy(temp->lines, p->lines, 100*sizeof(int));
+               
+               // memcpy(p, q, sizeof(struct camerainfo));
+                p->pos = q->pos;
+                p->lineId = q->lineId;
+                p->cameraId = q->cameraId;
+                p->sum = q->sum;
+                p->isdelete = q->isdelete;
+                p->resum=q->resum;
+                memcpy(p->reline, q->reline, 100*sizeof(int));
+                memcpy(p->lines, q->lines, 100*sizeof(int));
+               // memcpy(q, temp, sizeof(struct camerainfo));
+                 q->pos = temp->pos;
+                q->lineId = temp->lineId;
+                q->cameraId = temp->cameraId;
+                q->sum = temp->sum;
+                q->isdelete = temp->isdelete;
+                q->resum=temp->resum;
+                memcpy(q->reline, temp->reline, 100*sizeof(int));
+                memcpy(q->lines, temp->lines, 100*sizeof(int));
+                //i++;
+                //free(temp);
+            }
+           q = q->next;//冒泡，每次找到resum最小的，放到p所指向的位置。
         }
         p = p->next;
         q = p;
@@ -1094,7 +1150,7 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
 void resum(struct camerainfo *ch, struct camerainfo *newch) {
     struct camerainfo *cp, *tcp, *newp, *tmp, *tmp2;
     int i;
-    cp = ch->next;
+    cp = ch;
     // newp = newch;
     // save_init(newch);
 
@@ -1128,7 +1184,7 @@ void resum(struct camerainfo *ch, struct camerainfo *newch) {
 void resum_out(struct camerainfo *ch){
     struct camerainfo *p = ch->next;
     while (p) {
-        printf(" cameraId=%d , sum =%d, resum=%d \n",  p->cameraId,p->sum,p->resum);
+        printf(" cameraId=%d ,pos=%d, sum =%d, resum=%d \n",  p->cameraId,p->pos,p->sum,p->resum);
         p = p->next;
     }
 }
@@ -1320,6 +1376,13 @@ void algorithm_one(struct camerainfo *ch, struct camerainfo *reh, struct line *l
     }
 }
 
+
+void algorithm_one1(struct camerainfo *ch,  struct line *l) {
+    struct camerainfo *tmp = ch->next;
+      
+
+}
+
 void two_out(struct camerainfo *reh, struct line *l) {
     struct camerainfo *tmp = reh->next;
     struct line *ltmp;
@@ -1400,9 +1463,8 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh,
         while (tmp) {
             // printf("cameraId = %d  lines = %d, line=%d delete = %d\n",
             // line->id, tmp->lines[line->id], line->id, tmp->isdelete);
-            if (tmp->isdelete == 0) {
                 if (tmp->resum) {
-                    if (tmp->reline[line->id] == 1) {
+                    if (tmp->reline[line->id] >= 1) {
                         if (max >
                             tmp->resum) {  //这里的max其实还是min
                                            //，找到的是重复累加和最小的摄像头
@@ -1412,19 +1474,24 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh,
                         }
                     }
 
-                } else {
-                    if (tmp->lines[line->id] == 1) {
-                        if (max > tmp->sum) {
-                            max = tmp->sum;
-                            memcpy(&min, tmp, sizeof(struct camerainfo));
-                            min.lineId = line->id;
-                        }
-                    }  //算法二允许摄像头被多次选择（即切换不同的档位），所以摄像头不用删除，区别与算法1
-                }
+                // } else {
+                //     if (tmp->lines[line->id] == 1) {
+                //         if (max > tmp->sum) {
+                //             max = tmp->sum;
+                //             memcpy(&min, tmp, sizeof(struct camerainfo));
+                //             min.lineId = line->id;
+                //         }
+                //     }  //算法二允许摄像头被多次选择（即切换不同的档位），所以摄像头不用删除，区别与算法1
+                // }
             }
             tmp = tmp->next;
         }
         if (min.resum < 999) {
+            flag = 0;
+                    for(k = 0 ; k < 100; k ++) {
+                        if(min.lines[k] && k == line->id) {
+                            flag=1;
+                            //isline[j] = 0;
             ret = malloc(sizeof(
                 struct
                 camerainfo));  //同样为了显示结果，将摄像头信息存放在ret中
@@ -1434,18 +1501,20 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh,
                 pret = pret->next;
             }
             pret->next = ret;
-            flag = 0;
-            for(j = 0; j < 100; j++) {
-                if(isline[j]) {
-                    flag = 1;
-                    for(k = 0 ; k < 100; k ++) {
-                        if(min.lines[k] && k == j) {
-                            isline[j] = 0;
+                            printf("\n\n k=%d,j=%d",k,j);
                         } 
                     }
-                }
+            // for(j = 0; j < 100; j++) {
+            //     if(isline[j]) {
+            //         flag = 1;
+            //         for(k=0;k<100;k++){
+            //             if(min.lines[k])
+            //             printf("\n\n cameraid=%d,min.lines[k]=%d,id=s%d\n",min.cameraId,k,l->id);
+            //         }
+
+            //     }
         
-            }
+            // }
             if(!flag) {
                 return ;
             }
