@@ -93,19 +93,19 @@ int main(void) {
     point_out(&ph);
     point_delete(&ph);
     point_out(&ph);
-    // line_create(&lh, &ph);  // Connect the ground line to the intersection of                                  // the grid into a line segment
+     line_create(&lh, &ph);  // Connect the ground line to the intersection of                                  // the grid into a line segment
     // line_out(&lh);
 
-    // line_lengthSum(&lh);
-    // save_init(&ch);
-    // save_init(&tch);
-    // save_init_line(&lih);
-    // line(&nh, &lh, &ch, &lih);
-    // line(&nh, &lh, &tch,&lih);  // The ground segment establishes contact with the camera
-    // resum(&ch);
-    // resum(&tch);  // Calculate the repeated sum
-   // resum_out(&ch);//输出摄像头的累加和结果
-    // resum_sort(&ch);
+     line_lengthSum(&lh);
+     save_init(&ch);
+     save_init(&tch);
+     save_init_line(&lih);
+     line(&nh, &lh, &ch, &lih);
+     line(&nh, &lh, &tch,&lih);  // The ground segment establishes contact with the camera
+     resum(&ch);
+     resum(&tch);  // Calculate the repeated sum
+     resum_out(&ch);//输出摄像头的累加和结果
+     resum_sort(&ch);
     // printf(" after sort\n\n");
     // resum_out(&ch);
     //save_init(&one);
@@ -984,6 +984,7 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
 {
     struct camerainfo *cp, *ctmp;
     struct lineinfo *lip, *ltmp;
+    printf(" head->cameraId= %d,\t\tl->id= %d\n", head->cameraId, l->id);
     cp = ci;
     lip = li;
     ctmp = malloc(sizeof(struct camerainfo));
