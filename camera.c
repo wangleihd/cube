@@ -83,36 +83,28 @@ int main(void) {
     // result_out(&head);     //Outputs the vertex coordinates of each cube
 
     newpoint(&nh);  // Place the camera on top of the vertex of the top cube
-    // newpoint_out(&nh);
+     newpoint_out(&nh);
 
     point_create(&ph);  // Coordinates of the ground path and grid focus
-    // point_out(&ph);
+     point_out(&ph);
     // point_sort(&ph);
     point_sort1(&ph);  // Sort the camera Numbers from smallest to largest
     // printf(" after sort\n");
     // insert_sort(&ph);
     // point_out(&ph);
     point_delete(&ph);
-    //point_out(&ph);
-
-    line_create(&lh, &ph);  // Connect the ground line to the intersection of
-                            // the grid into a line segment
-    //line_out(&lh);
+    point_out(&ph);
+    line_create(&lh, &ph);  // Connect the ground line to the intersection of                        // the grid into a line segment
+    line_out(&lh);
     line_lengthSum(&lh);
     save_init(&ch);
-   
     save_init(&tch);
     save_init_line(&lih);
- 
     line(&nh, &lh, &ch, &lih);
-    
     line(&nh, &lh, &tch,&lih);  // The ground segment establishes contact with the camera
-
     resum(&ch);
-   
     resum(&tch);  // Calculate the repeated sum
-
-    resum_out(&ch);//输出摄像头的累加和结果
+   // resum_out(&ch);//输出摄像头的累加和结果
     resum_sort(&ch);
     // printf(" after sort\n\n");
     resum_out(&ch);
@@ -782,65 +774,39 @@ void line_out(struct line *lh) {
 }
 
 int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
-         struct lineinfo *li) {
+         struct lineinfo *li)
+{
     struct npoint *ph = head->next;
     struct line *plh;
     int i = 0;
-    plh = lp->next;
-    while (ph) {
-        // printf("camerid = %d, (x,y) = %f, %f\n", ph->cameraId, ph->x, ph->y);
-        while (plh) {
-            int startret =
-                lineincircle(plh->startx, plh->starty, ph->x, ph->y, height);
-            int endret =
-                lineincircle(plh->endx, plh->endy, ph->x, ph->y, height);
-
-            int sl =
-                lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 0);
-            int el =
-                lineinOval(plh->endx, plh->endy, ph->x, ph->y, height, 0);
-
-            int sr =
-                lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 1);
-            int er =
-                lineinOval(plh->endx, plh->endy, ph->x, ph->y, height, 1);
-
+    while (ph)
+    {
+         printf("camerid = %d, (x,y) = %d, %d\t\t", ph->cameraId, ph->x, ph->y);
+        plh = lp->next;
+        while (plh)
+        {
+            printf("plh->id = %d\n", plh->id);
+            int startret =lineincircle(plh->startx, plh->starty, ph->x, ph->y, height);
+            int endret = lineincircle(plh->endx, plh->endy, ph->x, ph->y, height);
+            int sl =lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 0);
+            int el =lineinOval(plh->endx, plh->endy, ph->x, ph->y, height, 0);
+            int sr = lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 1);
+            int er =lineinOval(plh->endx, plh->endy, ph->x, ph->y, height, 1);
             if (startret && endret) {
-                // printf("### Circle cameraId= %d \t in circle (x, y) = %f, %f
-                // "
-                //        "s=%d, e=%d line = %d\n",
-                //        ph->cameraId, ph->x, ph->y, startret, endret,
-                //        plh->id);
                 save(ph, plh, ci, li, 1);
             }
             if (sl && el) {
                 save(ph, plh, ci, li, 0);
-                // printf("### Oval left camerid =%d i = %d \t in circle (x, y)
-                // = %f, %f
-                // "
-                //        " s=%d, e=%d line = %d\n",
-                //        ph->cameraId, i, ph->x, ph->y, sl, el, plh->id);
-                // saveret(struct camerainfo *ci, struct lineinfo * li);
             }
-
-            if (sr && er) {
+            if (sr && er){
                 save(ph, plh, ci, li, 2);
-                // printf("### Oval right camerid =%d i = %d \t in circle (x, y)
-                // = %f, %f "
-                //        "  s=%d, e=%d line = %d\n",
-                //        ph->cameraId, i, ph->x, ph->y, sl, el, plh->id);
-                // saveret(struct camerainfo *ci, struct lineinfo * li);
             }
-
-            plh = plh->next;
+             plh = plh->next;
         }
-        plh = lp->next;
-        ph = ph->next;
+          ph = ph->next;
     }
     return 0;
 }
-
-
 
 // int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 20 
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
@@ -1008,92 +974,39 @@ void save_init_line(struct lineinfo *ltmp) {
 }
 
 void save(struct npoint *head, struct line *l, struct camerainfo *ci,
-          struct lineinfo *li, int pos) {
-    struct camerainfo *cp, *tcp;
-    struct camerainfo *ctmp;
-    struct lineinfo *lip, *tlp;
-    struct lineinfo *ltmp;
-    struct npoint *cnext;
-    struct line *lnext;
-    int flag = 0;
-     cp = ci;
+          struct lineinfo *li, int pos)
+{
+    struct camerainfo *cp, *ctmp;
+    struct lineinfo *lip, *ltmp;
+    cp = ci;
     lip = li;
-    tlp = li->next;
-    while (cp)
+    ctmp = malloc(sizeof(struct camerainfo));
+    save_init(ctmp);
+    ctmp->pos = pos;
+    ctmp->cameraId = head->cameraId;
+    ctmp->sum += 1;
+    ctmp->lines[l->id] = 1;
+    while (cp->next)
     {
-        if (cp->cameraId == head->cameraId && cp->pos == pos)
-        {
-            // flag = 1;
-            // break;
-            //ci一开始是空的，当有了摄像头覆盖线段后，初始化ci
-            ctmp = malloc(sizeof(struct camerainfo));
-            save_init(ctmp);
-            ctmp->pos = pos;
-            ctmp->cameraId = head->cameraId;
-            ctmp->sum += 1;
-            ctmp->lines[l->id] = 1;
-            while (cp->next)
-            {
-                cp = cp->next; //其实是把这些都挂到ci链上去了
-            }
-            cp->next = ctmp;
-        }
-        cp = cp->next;
+        cp = cp->next; //其实是把这些都挂到ci链上去了
     }
-
-    // if (flag)
-    // {
-    //     tcp->sum += 1;
-    //     tcp->lines[l->id] = 1;
-    // }
-    // else
-    // { //ci一开始是空的，当有了摄像头覆盖线段后，初始化ci
-    //     ctmp = malloc(sizeof(struct camerainfo));
-    //     save_init(ctmp);
-    //     ctmp->pos = pos;
-    //     ctmp->cameraId = head->cameraId;
-    //     ctmp->sum += 1;
-    //     ctmp->line = l;
-    //     ctmp->camera = head;
-    //     ctmp->lines[l->id] = 1;
-    //     while (cp->next)
-    //     {
-    //         cp = cp->next; //其实是把这些都挂到ci链上去了
-    //     }
-    //     cp->next = ctmp;
-    // }
-    flag = 0;
-
-    while (tlp) {
-        if (l->id == tlp->lineId) {
-            flag = 1;
-            break;
-        }
-        tlp = tlp->next;
+    cp->next = ctmp;
+    ltmp = malloc(sizeof(struct lineinfo));
+    save_init_line(ltmp);
+    ltmp->lineId = l->id;
+    ltmp->cameraId[head->cameraId] =1 ;
+    while (lip->next)
+    {
+        lip = lip->next;
     }
-    if (flag) {
-        // tlp->sum += 1;
-
-    } else {
-        ltmp = malloc(sizeof(struct lineinfo));
-        save_init_line(ltmp);
-
-        ltmp->lineId = l->id;
-        ltmp->line = l;
-        ltmp->camera = head;
-
-        while (lip->next) {
-            lip = lip->next;
-        }
-        lip->next = ltmp;
-    }
+    lip->next = ltmp;
 }
 
 void resum(struct camerainfo *ch) {
     struct camerainfo *cp, *tcp;
     int i;
     cp = ch;
-     printf(" after sort\n\n");
+    // printf(" after sort\n\n");
     while (cp->next) {
         tcp = cp->next;
 
