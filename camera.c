@@ -1156,27 +1156,18 @@ void resum(struct camerainfo *ch, struct camerainfo *newch) {
 
     while (cp->next) {
         tcp = cp->next;
-        for (i = 0; i < 100; i++) {
-            if (cp->lines[i] == 1 && tcp->lines[i] == 1) {
-                cp->reline[i] = 1;
-                cp->resum += 1;
 
-                tcp->reline[i] = 1;
-                tcp->resum += 1;
+        while (tcp){
+            for (i = 0; i < 100; i++) {
+                if (cp->lines[i] == 1 && tcp->lines[i] == 1) {
+                    cp->reline[i] = 1;
+                    cp->resum += 1;
 
-                // tmp = malloc(sizeof(struct camerainfo));
-                // tmp2 = malloc(sizeof(struct camerainfo));
-                // save_init(tmp);
-                // save_init(tmp2);
-                // memcpy(tmp, cp, sizeof(struct camerainfo));
-                // memcpy(tmp2, tcp, sizeof(struct camerainfo));
-                // tmp->next = tmp2;
-                // tmp2->next = NULL;
-                // while (newp->next) {
-                //     newp = newp->next;
-                // }
-                // newp->next = tmp;
+                    tcp->reline[i] = 1;
+                    tcp->resum += 1;
+                }
             }
+            tcp = tcp -> next;
         }
         cp = cp->next;
     }
