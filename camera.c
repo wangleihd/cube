@@ -1119,7 +1119,7 @@ void resum(struct camerainfo *ch, struct camerainfo *newch) {
 void resum_out(struct camerainfo *ch){
     struct camerainfo *p = ch->next;
     while (p) {
-        printf(" cameraId=%d , sum =%d, resum=%d \n",  p->cameraId,p->sum,p->resum);
+        printf(" cameraId=%2d,  pos = %d sum =%d, resum=%d \n",  p->cameraId, p->pos, p->sum,p->resum);
         p = p->next;
     }
 }
