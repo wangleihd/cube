@@ -1077,73 +1077,25 @@ void save_init_line(struct lineinfo *ltmp) {
 
 void save(struct npoint *head, struct line *l, struct camerainfo *ci,
           struct lineinfo *li, int pos) {
-    struct camerainfo *cp, *tcp;
-    struct camerainfo *ctmp;
-    struct lineinfo *lip, *tlp;
-    struct lineinfo *ltmp;
-    struct npoint *cnext;
-    struct line *lnext;
-    int flag = 0;
-
+    struct camerainfo *cp;
+    struct lineinfo *lip;
     cp = ci;
-    tcp = cp->next;
     lip = li;
-    tlp = li->next;
-    while (tcp) {
-        if (tcp->cameraId == head->cameraId && tcp->pos == pos) {
-            flag = 1;
+    while (cp) {
+        if (cp->cameraId == head->cameraId && cp->pos == pos) {
+            cp->sum += 1;
+            cp->lines[l->id] = 1;
             break;
         }
-        tcp = tcp->next;
+        cp = cp->next;
     }
 
-    if (flag) {
-        tcp->sum += 1;
-        tcp->lines[l->id] = 1;
-        // cnext = tcp->camera;
-        // while(cnext->next) {
-        //   cnext = cnext->next;
-        // }
-        // cnext->next = head;
-
-    } else {
-        ctmp = malloc(sizeof(struct camerainfo));
-        save_init(ctmp);
-        ctmp->pos = pos;
-        ctmp->cameraId = head->cameraId;
-        ctmp->sum += 1;
-        ctmp->line = l;
-        ctmp->camera = head;
-        ctmp->lines[l->id] = 1;
-        while (cp->next) {
-            cp = cp->next;
+    while (lip) {
+        if (l->id == lip->lineId) {
+            lip->cameraId[head->cameraId]=1;
+             break;
         }
-        cp->next = ctmp;
-    }
-    flag = 0;
-
-    while (tlp) {
-        if (l->id == tlp->lineId) {
-            flag = 1;
-            break;
-        }
-        tlp = tlp->next;
-    }
-    if (flag) {
-        // tlp->sum += 1;
-
-    } else {
-        ltmp = malloc(sizeof(struct lineinfo));
-        save_init_line(ltmp);
-
-        ltmp->lineId = l->id;
-        ltmp->line = l;
-        ltmp->camera = head;
-
-        while (lip->next) {
-            lip = lip->next;
-        }
-        lip->next = ltmp;
+        lip = lip->next;
     }
 }
 
