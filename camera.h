@@ -79,22 +79,19 @@ typedef struct line {
 
 typedef struct camerainfo {
     int pos;
-    int lineId;
     int cameraId;
     int sum;
+    int resum;
     int isdelete;
     int lines[100];
-    int resum;
     int reline[100];
-    struct line *line;
-    struct npoint *camera;
     struct camerainfo *next;
 } cii;
 
 struct lineinfo {
     int lineId;
-    struct line *line;
-    struct npoint *camera;
+    int cameraId[100];
+    int isdelete;
     struct lineinfo *next;
 };
 
