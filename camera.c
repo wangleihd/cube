@@ -83,33 +83,33 @@ int main(void) {
     // result_out(&head);     //Outputs the vertex coordinates of each cube
 
     newpoint(&nh);  // Place the camera on top of the vertex of the top cube
-     newpoint_out(&nh);
+    // newpoint_out(&nh);
 
     point_create(&ph);  // Coordinates of the ground path and grid focus
-     point_out(&ph);
+    point_out(&ph);
     // point_sort(&ph);
     point_sort1(&ph);  // Sort the camera Numbers from smallest to largest
-    // printf(" after sort\n");
-    // insert_sort(&ph);
-    // point_out(&ph);
+    printf(" after sort\n");
+    point_out(&ph);
     point_delete(&ph);
     point_out(&ph);
-    line_create(&lh, &ph);  // Connect the ground line to the intersection of                        // the grid into a line segment
-    line_out(&lh);
-    line_lengthSum(&lh);
-    save_init(&ch);
-    save_init(&tch);
-    save_init_line(&lih);
-    line(&nh, &lh, &ch, &lih);
-    line(&nh, &lh, &tch,&lih);  // The ground segment establishes contact with the camera
-    resum(&ch);
-    resum(&tch);  // Calculate the repeated sum
+    // line_create(&lh, &ph);  // Connect the ground line to the intersection of                                  // the grid into a line segment
+    // line_out(&lh);
+
+    // line_lengthSum(&lh);
+    // save_init(&ch);
+    // save_init(&tch);
+    // save_init_line(&lih);
+    // line(&nh, &lh, &ch, &lih);
+    // line(&nh, &lh, &tch,&lih);  // The ground segment establishes contact with the camera
+    // resum(&ch);
+    // resum(&tch);  // Calculate the repeated sum
    // resum_out(&ch);//输出摄像头的累加和结果
-    resum_sort(&ch);
+    // resum_sort(&ch);
     // printf(" after sort\n\n");
-    resum_out(&ch);
+    // resum_out(&ch);
     //save_init(&one);
-    algorithm_one1(&ch, &lh);
+    // algorithm_one1(&ch, &lh);
     //resum_out(&tch);
      //save_out(&newch);//有错误，内存访问错误
     // save_out(&ch);
@@ -450,8 +450,8 @@ void point_create(struct point *ph) {// 164   -》
     struct point *tmp;
     int max_x = (X - 1) * X_WIDTH;
     int max_y = (Y - 1) * Y_WIDTH;
-    float limit_x = 45;
-    float limit_y = 91;
+    int limit_x = 45;
+    int limit_y = 91;
     float x = 0, y;
     int num = 1;
     //int temp;
@@ -957,20 +957,26 @@ int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita 
 }
 
 void save_init(struct camerainfo *ctmp) {
+    int i;
     ctmp->pos = 0;
     ctmp->cameraId = 0;
     ctmp->sum = 0;
     ctmp->resum = 0;
     ctmp->isdelete = 0;
     ctmp->next = NULL;
-    ctmp->lines[100]=0;
-    ctmp->reline[100]=0;
+    for(i = 0; i < 100; i++) {
+        ctmp->lines[i]=0;
+        ctmp->reline[i]=0;
+    }
 }
 
 void save_init_line(struct lineinfo *ltmp) {
+    int i;
     ltmp->lineId = 0;
     ltmp->next = NULL;
-    ltmp->cameraId[100]=0;
+    for(i = 0; i < 100; i++) {
+        ltmp->cameraId[i]=0;
+    }
 }
 
 void save(struct npoint *head, struct line *l, struct camerainfo *ci,
