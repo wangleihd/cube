@@ -50,6 +50,7 @@ void save_init_line(struct lineinfo *ltmp);
 void save(struct npoint *head, struct line *lp, struct camerainfo *ci,
           struct lineinfo *li, int pos);
 void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li);
+void resum_sum(struct camerainfo * ch, struct line *l );
 void resum_out(struct camerainfo *ch);
 void save_out(struct camerainfo *ch);
 
@@ -94,7 +95,7 @@ int main(void)
     point_delete(&ph);
     // point_out(&ph);
     line_create(&lh, &ph); // Connect the ground line to the intersection of                                  // the grid into a line segment
-   // line_out(&lh);
+    line_out(&lh);
 
     line_lengthSum(&lh);
     save_init(&ch);
@@ -103,6 +104,7 @@ int main(void)
     line(&nh, &lh, &ch, &lih);
     line(&nh, &lh, &tch, &lih); // The ground segment establishes contact with the camera
     resum(&ch, &lh, &lih);
+    resum_sum(&ch, &lh);
     resum(&tch, &lh, &lih); // Calculate the repeated sum
                       // resum_out(&ch);//输出摄像头的累加和结果
     resum_sort(&ch);
@@ -1103,29 +1105,33 @@ void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li)
             {
                 if (cp->lines[i] == 1 && tcp->lines[i] == 1)
                 {
-                    while (lip)
-                    {
-                        if (lip->cameraId == i && lip->isCoverage == 0) //确保当前线段没有被覆盖过
-                        {
-                            cp->reline[i] = 1;
-                            //cp->resum += 1;
-                            while (lp)
-                            {
-                                if (lp->id == i)
-                                {
-                                    cp->resum += lp->timestamp;
-                                    tcp->resum += lp->timestamp;
-                                    break;
-                                }
-                                lp = lp->next;
-                            }
-                            tcp->reline[i] = 1;
-                            // tcp->resum += 1;
-                            lip->isCoverage = 1;
-                            break;
-                        }
-                        lip = lip->next;
-                    }
+                    cp -> reline[i] = 1;
+                    tcp -> reline[i] = 1;
+                    // while (lip)
+                    // {
+                    //    // if (lip->lineId == i && lip->isCoverage == 0) //确保当前线段没有被覆盖过
+                    //     //{
+                    //         cp->reline[i] = 1;
+                    //         //cp->resum += 1;
+                    //         lp = l->next;
+                    //         while (lp)
+                    //         {
+                    //             if (lp->id == i)
+                    //             {
+                    //                 printf("resum = %d \n", lp->id);
+                    //                 cp->resum += lp->timestamp;
+                    //                 tcp->resum += lp->timestamp;
+                    //                 break;
+                    //             }
+                    //             lp = lp->next;
+                    //         }
+                    //         tcp->reline[i] = 1;
+                    //         // tcp->resum += 1;
+                    //         lip->isCoverage = 1;
+                    //         break;
+                    //    // }
+                    //  //   lip = lip->next;
+                    // }
                 }
             }
             tcp = tcp->next;
@@ -1133,12 +1139,39 @@ void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li)
         cp = cp->next;
     }
 }
+
+void resum_sum(struct camerainfo * ch, struct line *l ) {
+    struct camerainfo * ca = ch -> next;
+    struct line *li = l -> next;
+    int i;
+    while(ca) {
+        for(i = 0; i < 100; i++ ) {
+            if(ca -> reline[i]) {
+                li = l ->next;
+                while(li) {
+                    if(li ->id == i) {
+                        ca -> resum += li->timestamp;
+                    }
+                    li =  li -> next;
+                }
+            }
+        }
+        ca = ca -> next;
+    }
+}
+
 void resum_out(struct camerainfo *ch)
 {
+    int i;
     struct camerainfo *p = ch->next;
     while (p)
     {
-        printf(" cameraId=%d ,pos=%d, sum =%d, resum=%d \n", p->cameraId, p->pos, p->sum, p->resum);
+        printf(" cameraId=%d ,pos=%d, sum =%d, resum=%f \n", p->cameraId, p->pos, p->sum, p->resum);
+        for(i = 0; i < 100; i ++) {
+            if(p->reline[i])
+            printf("%d\t", i);
+        }
+        printf("\n");
         p = p->next;
     }
 }

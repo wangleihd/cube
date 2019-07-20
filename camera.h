@@ -81,7 +81,7 @@ typedef struct camerainfo {
     int pos;
     int cameraId;
     int sum;
-    int resum;
+    float resum;
     int isdelete;
     int lines[100];
     int reline[100];
