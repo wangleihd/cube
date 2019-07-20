@@ -92,6 +92,7 @@ struct lineinfo {
     int lineId;
     int cameraId[100];
     int isdelete;
+    int isCoverage;
     struct lineinfo *next;
 };
 

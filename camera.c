@@ -8,7 +8,6 @@
 #define Y_WIDTH 5 // 每列相邻摄像头的间距
 #define H 3       // 摄像头水平高度
 
-
 const int max_side = 100;
 const float min_side = 5;
 const float max = 20;
@@ -17,7 +16,7 @@ const int max_side_x = 100;
 const int max_side_y = 100;
 const int min_side_x = 5;
 const int min_side_y = 5;
-const int height = 20;             //max_side_x / min_side_x;
+const int height = 20; //max_side_x / min_side_x;
 
 struct point pitem[100];
 int p_total = 0;
@@ -42,15 +41,15 @@ void line_out(struct line *lh);
 float distance(struct point *p, struct point *q);
 int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
          struct lineinfo *li);
-int lineincircle(float x, float y, float x0, float y0, float h);
+int lineincircle(float x, float y, int x0, int y0, int h);
 
-int lineinOval(float x, float y, float x0, float y0, float h, int flag);
+int lineinOval(float x, float y, int x0, int y0, int h, int flag);
 
 void save_init(struct camerainfo *ctmp);
 void save_init_line(struct lineinfo *ltmp);
 void save(struct npoint *head, struct line *lp, struct camerainfo *ci,
           struct lineinfo *li, int pos);
-void resum(struct camerainfo *ch);
+void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li);
 void resum_out(struct camerainfo *ch);
 void save_out(struct camerainfo *ch);
 
@@ -64,9 +63,10 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh,
 
 void grid_init(struct point *t);
 void line_lengthSum(struct line *lh);
-void resum_sort(struct camerainfo *ch) ;
-void algorithm_one1(struct camerainfo *ch,  struct line *l) ;
-int main(void) {
+void resum_sort(struct camerainfo *ch);
+void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li);
+int main(void)
+{
     struct cube head;
     struct point ph;
     struct line lh;
@@ -79,39 +79,39 @@ int main(void) {
     int id = 1;
     int len = 10;
     // cube_create(&head);  // A network of layers of squares forms the logical
-                         // cube
+    // cube
     // result_out(&head);     //Outputs the vertex coordinates of each cube
 
-    newpoint(&nh);  // Place the camera on top of the vertex of the top cube
+    newpoint(&nh); // Place the camera on top of the vertex of the top cube
     // newpoint_out(&nh);
 
-    point_create(&ph);  // Coordinates of the ground path and grid focus
-    point_out(&ph);
+    point_create(&ph); // Coordinates of the ground path and grid focus
+                       // point_out(&ph);
     // point_sort(&ph);
-    point_sort1(&ph);  // Sort the camera Numbers from smallest to largest
+    point_sort1(&ph); // Sort the camera Numbers from smallest to largest
     printf(" after sort\n");
-    point_out(&ph);
+    //point_out(&ph);
     point_delete(&ph);
-    point_out(&ph);
-     line_create(&lh, &ph);  // Connect the ground line to the intersection of                                  // the grid into a line segment
-    // line_out(&lh);
+    // point_out(&ph);
+    line_create(&lh, &ph); // Connect the ground line to the intersection of                                  // the grid into a line segment
+   // line_out(&lh);
 
-     line_lengthSum(&lh);
-     save_init(&ch);
-     save_init(&tch);
-     save_init_line(&lih);
-     line(&nh, &lh, &ch, &lih);
-     line(&nh, &lh, &tch,&lih);  // The ground segment establishes contact with the camera
-     resum(&ch);
-     resum(&tch);  // Calculate the repeated sum
-    // resum_out(&ch);//输出摄像头的累加和结果
-     resum_sort(&ch);
+    line_lengthSum(&lh);
+    save_init(&ch);
+    save_init(&tch);
+    save_init_line(&lih);
+    line(&nh, &lh, &ch, &lih);
+    line(&nh, &lh, &tch, &lih); // The ground segment establishes contact with the camera
+    resum(&ch, &lh, &lih);
+    resum(&tch, &lh, &lih); // Calculate the repeated sum
+                      // resum_out(&ch);//输出摄像头的累加和结果
+    resum_sort(&ch);
     // printf(" after sort\n\n");
-     resum_out(&ch);
+    resum_out(&ch);
     //save_init(&one);
-    // algorithm_one1(&ch, &lh);
+    //algorithm_one1(&ch, &lh);
     //resum_out(&tch);
-     //save_out(&newch);//有错误，内存访问错误
+    //save_out(&newch);//有错误，内存访问错误
     // save_out(&ch);
     // save_out(&tch);
 
@@ -127,7 +127,8 @@ int main(void) {
     return 0;
 }
 
-void newpoint_init(struct npoint *tmp) {
+void newpoint_init(struct npoint *tmp)
+{
     tmp->x = 0;
     tmp->y = 0;
     tmp->height = 0;
@@ -135,39 +136,46 @@ void newpoint_init(struct npoint *tmp) {
     tmp->next = NULL;
 }
 
-int newpoint(struct npoint *nh) {
+int newpoint(struct npoint *nh)
+{
     struct npoint *tmp;
     newpoint_init(nh);
     int i, j, k = 1;
-    for (i = 0; i < Y; i++) {
-      for (j = 0; j < X; j++) {
-        tmp = malloc(sizeof(struct npoint));
-        newpoint_init(tmp);
-        tmp->x = j * X_WIDTH;
-        tmp->y = i * Y_WIDTH;
-        tmp->height = H;
-        tmp->cameraId = k;
-        nh->next = tmp;
-        nh = nh->next;
-        k++;
-      }
+    for (i = 0; i < Y; i++)
+    {
+        for (j = 0; j < X; j++)
+        {
+            tmp = malloc(sizeof(struct npoint));
+            newpoint_init(tmp);
+            tmp->x = j * X_WIDTH;
+            tmp->y = i * Y_WIDTH;
+            tmp->height = H;
+            tmp->cameraId = k;
+            nh->next = tmp;
+            nh = nh->next;
+            k++;
+        }
     }
     return 0;
 }
 
-void newpoint_out(struct npoint *nh) {
+void newpoint_out(struct npoint *nh)
+{
     struct npoint *p = nh->next;
-    while (p) {
+    while (p)
+    {
         printf("x =%d, y=%d, cameraId=%d\n", p->x, p->y, p->cameraId);
         p = p->next;
     }
 }
 
-float distance(struct point *p, struct point *q) {
+float distance(struct point *p, struct point *q)
+{
     return sqrt((p->x - q->x) * (p->x - q->x) + (p->y - q->y) * (p->y - q->y));
 }
 
-void point_init(struct point *tmp) {
+void point_init(struct point *tmp)
+{
     tmp->x = 0;
     tmp->y = 0;
     tmp->id = 0;
@@ -175,14 +183,17 @@ void point_init(struct point *tmp) {
     tmp->pre = NULL;
 }
 
-
-void point_sort1(struct point *ph) {
+void point_sort1(struct point *ph)
+{
     struct point *temp;
     struct point *p = ph;
     struct point *q = ph->next;
-    while (p) {
-        while (q) {
-            if (q->x < p->x) {
+    while (p)
+    {
+        while (q)
+        {
+            if (q->x < p->x)
+            {
                 temp = malloc(sizeof(struct point));
                 temp->x = p->x;
                 temp->y = p->y;
@@ -205,7 +216,8 @@ void point_sort1(struct point *ph) {
     }
 }
 
-void resum_sort(struct camerainfo *ch) {
+void resum_sort(struct camerainfo *ch)
+{
     struct camerainfo *temp;
     //int i = 0;
     temp = malloc(sizeof(struct camerainfo));
@@ -226,31 +238,31 @@ void resum_sort(struct camerainfo *ch) {
                 temp->cameraId = p->cameraId;
                 temp->sum = p->sum;
                 temp->isdelete = p->isdelete;
-                temp->resum=p->resum;
-                memcpy(temp->reline, p->reline, 100*sizeof(int));
-                memcpy(temp->lines, p->lines, 100*sizeof(int));
-               
-              // memcpy(p, q, sizeof(struct camerainfo));
+                temp->resum = p->resum;
+                memcpy(temp->reline, p->reline, 100 * sizeof(int));
+                memcpy(temp->lines, p->lines, 100 * sizeof(int));
+
+                // memcpy(p, q, sizeof(struct camerainfo));
                 p->pos = q->pos;
                 p->cameraId = q->cameraId;
                 p->sum = q->sum;
                 p->isdelete = q->isdelete;
-                p->resum=q->resum;
-                memcpy(p->reline, q->reline, 100*sizeof(int));
-                memcpy(p->lines, q->lines, 100*sizeof(int));
-              //  memcpy(q, temp, sizeof(struct camerainfo));
+                p->resum = q->resum;
+                memcpy(p->reline, q->reline, 100 * sizeof(int));
+                memcpy(p->lines, q->lines, 100 * sizeof(int));
+                //  memcpy(q, temp, sizeof(struct camerainfo));
 
                 q->pos = temp->pos;
                 q->cameraId = temp->cameraId;
                 q->sum = temp->sum;
                 q->isdelete = temp->isdelete;
-                q->resum=temp->resum;
-                memcpy(q->reline, temp->reline, 100*sizeof(int));
-                memcpy(q->lines, temp->lines, 100*sizeof(int));
+                q->resum = temp->resum;
+                memcpy(q->reline, temp->reline, 100 * sizeof(int));
+                memcpy(q->lines, temp->lines, 100 * sizeof(int));
                 //i++;
                 //free(temp);
             }
-           q = q->next;//冒泡，每次找到resum最小的，放到p所指向的位置。
+            q = q->next; //冒泡，每次找到resum最小的，放到p所指向的位置。
         }
         p = p->next;
         q = p;
@@ -262,12 +274,10 @@ void point_delete(struct point *ph)
     struct point *q = p->next;
     while (q)
     {
-        
+
         if (q->x == p->x && q->y == p->y)
         {
             p->next = q->next;
-            
-            
         }
         p = p->next;
         q = p->next;
@@ -338,7 +348,7 @@ void point_delete(struct point *ph)
 //         y += min_side_y;
 //         num += 1;
 //     }
-   
+
 //    // y = limit_x - min_side_y;
 //     while (y <= 100 && y >= 0 && x<=max_side_x && x>=0) {
 //         tmp = malloc(sizeof(struct point));
@@ -424,7 +434,7 @@ void point_delete(struct point *ph)
 //         y += min_side_y;
 //         num += 1;
 //     }
-   
+
 //    // y = limit_x - min_side_y;
 //     while (y <= 100 && y >= 0 && x<=max_side_x && x>=0) {
 //         tmp = malloc(sizeof(struct point));
@@ -446,7 +456,8 @@ void point_delete(struct point *ph)
 //     }
 // }
 
-void point_create(struct point *ph) {// 164   -》
+void point_create(struct point *ph)
+{ // 164   -》
     struct point *tmp;
     int max_x = (X - 1) * X_WIDTH;
     int max_y = (Y - 1) * Y_WIDTH;
@@ -457,17 +468,20 @@ void point_create(struct point *ph) {// 164   -》
     //int temp;
     point_init(ph);
 
-    while (x <= limit_x && x >= 0 && y<=max_y && y >= 0 && x <= max_x) {
+    while (x <= limit_x && x >= 0 && y <= max_y && y >= 0 && x <= max_x)
+    {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
         y = 2 * x + 1;
-        if(y>=max_y){
+        if (y >= max_y)
+        {
             break;
         }
         tmp->x = x;
         tmp->y = y;
         tmp->id = num;
-        while (ph->next) {
+        while (ph->next)
+        {
             ph = ph->next;
         }
         ph->next = tmp;
@@ -475,36 +489,42 @@ void point_create(struct point *ph) {// 164   -》
         x += X_WIDTH;
         num += 1;
     }
-    while (x <= max_x && x >= 0 && y<=max_y && y >= 0) {
+    while (x <= max_x && x >= 0 && y <= max_y && y >= 0)
+    {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
         y = (-1) * x + 136;
-        if(y>=max_y){
+        if (y >= max_y)
+        {
             break;
         }
         tmp->x = x;
         tmp->y = y;
         tmp->id = num;
-        while (ph->next) {
+        while (ph->next)
+        {
             ph = ph->next;
         }
         ph->next = tmp;
         tmp->pre = ph;
         x += X_WIDTH;
         num += 1;
-    }   
+    }
     y = Y_WIDTH;
-    while (y <= limit_y && y >= 0 && x<=max_x && x>=0 && y<=max_y) {
+    while (y <= limit_y && y >= 0 && x <= max_x && x >= 0 && y <= max_y)
+    {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        x = ( y-1)/2;
-         if(x<=0){
+        x = (y - 1) / 2;
+        if (x <= 0)
+        {
             break;
         }
         tmp->x = x;
         tmp->y = y;
         tmp->id = num;
-        while (ph->next) {
+        while (ph->next)
+        {
             ph = ph->next;
         }
         ph->next = tmp;
@@ -512,19 +532,22 @@ void point_create(struct point *ph) {// 164   -》
         y += Y_WIDTH;
         num += 1;
     }
-   
-   // y = limit_x - min_side_y;
-    while (y <= max_y && y >= 0 && x<=max_x && x>=0) {
+
+    // y = limit_x - min_side_y;
+    while (y <= max_y && y >= 0 && x <= max_x && x >= 0)
+    {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        x = -y+136;
-         if(x<=0){
+        x = -y + 136;
+        if (x <= 0)
+        {
             break;
         }
         tmp->x = x;
         tmp->y = y;
         tmp->id = num;
-        while (ph->next) {
+        while (ph->next)
+        {
             ph = ph->next;
         }
         ph->next = tmp;
@@ -597,7 +620,7 @@ void point_create(struct point *ph) {// 164   -》
 //         y += min_side_y;
 //         num += 1;
 //     }
-   
+
 //    // y = limit_x - min_side_y;
 //     while (y <= 100 && y >= 0 && x<=max_side_x && x>=0) {
 //         tmp = malloc(sizeof(struct point));
@@ -683,7 +706,7 @@ void point_create(struct point *ph) {// 164   -》
 //         y += min_side_y;
 //         num += 1;
 //     }
-   
+
 //    // y = limit_x - min_side_y;
 //     while (y <= 100 && y >= 0 && x<=max_side_x && x>=0) {
 //         tmp = malloc(sizeof(struct point));
@@ -705,10 +728,12 @@ void point_create(struct point *ph) {// 164   -》
 //     }
 // }
 
-void point_out(struct point *ph) {
+void point_out(struct point *ph)
+{
     struct point *p;
     p = ph->next;
-    while (p) {
+    while (p)
+    {
         printf("(x,y) = (%f, %f) id = %d \n", p->x, p->y, p->id);
         // printf("pre (x,y) = (%f, %f) id = %d \n", p->pre->x, p->pre->y,
         //  p->pre->id);
@@ -716,7 +741,8 @@ void point_out(struct point *ph) {
     }
 }
 
-void line_init(struct line *l) {
+void line_init(struct line *l)
+{
     l->startx = 0;
     l->starty = 0;
     l->endx = 0;
@@ -725,12 +751,14 @@ void line_init(struct line *l) {
     l->id = 0;
     l->next = NULL;
 }
-void line_create(struct line *lh, struct point *ph) {
+void line_create(struct line *lh, struct point *ph)
+{
     struct point *p;
     struct line *tmp;
     p = ph->next;
     line_init(lh);
-    while (p->next) {
+    while (p->next)
+    {
         tmp = malloc(sizeof(struct point));
         line_init(tmp);
         tmp->startx = p->x;
@@ -740,7 +768,8 @@ void line_create(struct line *lh, struct point *ph) {
         tmp->id = p->id;
         tmp->timestamp = distance(p->next, p);
 
-        while (lh->next) {
+        while (lh->next)
+        {
             lh = lh->next;
         }
         lh->next = tmp;
@@ -749,20 +778,21 @@ void line_create(struct line *lh, struct point *ph) {
 }
 void line_lengthSum(struct line *lh)
 {
-   struct line *p = lh->next;
-    float sum=0;
+    struct line *p = lh->next;
+    float sum = 0;
     while (p)
     {
         sum = sum + p->timestamp;
-        p=p->next;
-        
+        p = p->next;
     }
-    printf("all line 's length is %f\n",sum);
+    printf("all line 's length is %f\n", sum);
 }
-void line_out(struct line *lh) {
+void line_out(struct line *lh)
+{
     struct line *p = lh->next;
-    int n=1;
-    while (p) {
+    int n = 1;
+    while (p)
+    {
         printf(
             "start(x,y) = (%f, %f) end(x,y) = (%f, %f)\n id = %d time = %f\n\n",
             p->startx, p->starty, p->endx, p->endy, n, p->timestamp);
@@ -781,34 +811,47 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
     int i = 0;
     while (ph)
     {
-         printf("camerid = %d, (x,y) = %d, %d\t\t", ph->cameraId, ph->x, ph->y);
         plh = lp->next;
         while (plh)
         {
-            printf("plh->id = %d\n", plh->id);
-            int startret =lineincircle(plh->startx, plh->starty, ph->x, ph->y, height);
+            int startret = lineincircle(plh->startx, plh->starty, ph->x, ph->y, height);
             int endret = lineincircle(plh->endx, plh->endy, ph->x, ph->y, height);
-            int sl =lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 0);
-            int el =lineinOval(plh->endx, plh->endy, ph->x, ph->y, height, 0);
+            int sl = lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 0);
+            int el = lineinOval(plh->endx, plh->endy, ph->x, ph->y, height, 0);
             int sr = lineinOval(plh->startx, plh->starty, ph->x, ph->y, height, 1);
-            int er =lineinOval(plh->endx, plh->endy, ph->x, ph->y, height, 1);
-            if (startret && endret) {
+            int er = lineinOval(plh->endx, plh->endy, ph->x, ph->y, height, 1);
+            if (startret && endret)
+            {
+                // printf("camerid = %d, (x,y) = %d, %d\t\t", ph->cameraId, ph->x, ph->y);
+                // printf("plh->id in circle= %d\n", plh->id);
+                // printf("plh->startx=%f, plh->starty=%f,height=%d\t\t", plh->startx, plh->starty, height);
+                // printf("plh->endx=%f, plh->endy=%f, height=%d\n", plh->endx, plh->endy, height);
                 save(ph, plh, ci, li, 1);
             }
-            if (sl && el) {
+            if (sl && el)
+            {
+                // printf("camerid = %d, (x,y) = %d, %d\t\t", ph->cameraId, ph->x, ph->y);
+                // printf("plh->id in leftOval= %d\n", plh->id);
+                // printf("plh->startx=%f, plh->starty=%f,height=%d\t\t", plh->startx, plh->starty, height);
+                // printf("plh->endx=%f, plh->endy=%f, height=%d\n", plh->endx, plh->endy, height);
                 save(ph, plh, ci, li, 0);
             }
-            if (sr && er){
+            if (sr && er)
+            {
+                // printf("camerid = %d, (x,y) = %d, %d\t\t", ph->cameraId, ph->x, ph->y);
+                // printf("plh->id in rightOval= %d\n", plh->id);
+                // printf("plh->startx=%f, plh->starty=%f,height=%d\t\t", plh->startx, plh->starty, height);
+                // printf("plh->endx=%f, plh->endy=%f, height=%d\n", plh->endx, plh->endy, height);
                 save(ph, plh, ci, li, 2);
             }
-             plh = plh->next;
+            plh = plh->next;
         }
-          ph = ph->next;
+        ph = ph->next;
     }
     return 0;
 }
 
-// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 20 
+// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 20
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
 //     int ret = 0;
 //     float r2 = sqrt(0.0311) * h;
@@ -819,7 +862,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 20 
+// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 20
 //     int ret = 0;
 //     float fun, tma;
 //     if (flag) {// flag=1, left
@@ -837,7 +880,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 30 
+// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 30
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
 //     int ret = 0;
 //     float r2 = 0.27 * h;
@@ -848,7 +891,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 30 
+// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 30
 //     int ret = 0;
 //     float fun, tma;
 //     if (flag) {
@@ -866,7 +909,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 40 
+// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 40
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
 //     int ret = 0;
 //     float r2 = sqrt(0.1325) * h;
@@ -877,7 +920,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 40 
+// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 40
 //     int ret = 0;
 //     float fun, tma;
 //     if (flag) {// flag=1, left
@@ -895,7 +938,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 50 
+// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 50
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
 //     int ret = 0;
 //     float r2 = sqrt(0.2174) * h;
@@ -906,7 +949,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 50 
+// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 50
 //     int ret = 0;
 //     float fun, tma;
 //     if (flag) {// flag=1, left
@@ -924,39 +967,47 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 60 
+int lineincircle(float x, float y, int x0, int y0, int h)
+{ //cita = 60
     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
     int ret = 0;
     float r2 = sqrt(3) / 3 * h;
     float l = r2 * r2;
-    if (l >= r) {
+    if (l >= r)
+    {
         ret = 1;
     }
-   // printf("x-x0=%lf,y-y0=%lf\t ",x - x0 , y - y0);
-   // printf("(x,y) =%lf,%lf,(x0,y0)=%lf,%lf,r=%lf\n",x,y,x0,y0,r);
+    // printf("x-x0=%lf,y-y0=%lf\t ",x - x0 , y - y0);
+    // printf("(x,y) =%lf,%lf,(x0,y0)=%lf,%lf,r=%lf\n",x,y,x0,y0,r);
     return ret;
 }
 
-int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 60 
+int lineinOval(float x, float y, int x0, int y0, int h, int flag)
+{ //cita = 60
     int ret = 0;
     float fun, tma;
-    if (flag) {
+    if (flag)
+    {
         tma = (x - x0 + sqrt(3) / 2 * h);
-    } else {
+    }
+    else
+    {
         tma = (x - x0 - sqrt(3) / 2 * h);
     }
 
     fun =
         ((4 * tma * tma) / (3 * h * h)) + ((3 * (y - y0) * (y - y0)) / (h * h));
 
-    if (1 >= fun) {
+    if (1 >= fun)
+    {
         ret = 1;
     }
-  //  printf("(x,y) =%lf,%lf,(x0,y0)=%lf,%lf,fun=%lf\n",x,y,x0,y0,fun);
+    //  printf("(x,y) =%lf,%lf,(x0,y0)=%lf,%lf,fun=%lf\n",x,y,x0,y0,fun);
     return ret;
 }
 
-void save_init(struct camerainfo *ctmp) {
+void save_init(struct camerainfo *ctmp)
+{
     int i;
     ctmp->pos = 0;
     ctmp->cameraId = 0;
@@ -964,44 +1015,70 @@ void save_init(struct camerainfo *ctmp) {
     ctmp->resum = 0;
     ctmp->isdelete = 0;
     ctmp->next = NULL;
-    for(i = 0; i < 100; i++) {
-        ctmp->lines[i]=0;
-        ctmp->reline[i]=0;
+    for (i = 0; i < 100; i++)
+    {
+        ctmp->lines[i] = 0;
+        ctmp->reline[i] = 0;
     }
 }
 
-void save_init_line(struct lineinfo *ltmp) {
+void save_init_line(struct lineinfo *ltmp)
+{
     int i;
     ltmp->lineId = 0;
     ltmp->next = NULL;
-    for(i = 0; i < 100; i++) {
-        ltmp->cameraId[i]=0;
+    for (i = 0; i < 100; i++)
+    {
+        ltmp->cameraId[i] = 0;
     }
 }
 
 void save(struct npoint *head, struct line *l, struct camerainfo *ci,
           struct lineinfo *li, int pos)
 {
-    struct camerainfo *cp, *ctmp;
+    struct camerainfo *cp, *tcp, *ctmp;
     struct lineinfo *lip, *ltmp;
-    printf(" head->cameraId= %d,\t\tl->id= %d\n", head->cameraId, l->id);
+    // printf(" head->cameraId= %d,\t\t pos=%d,\tl->id= %d\n", head->cameraId,pos, l->id);
     cp = ci;
+    tcp = cp->next;
     lip = li;
-    ctmp = malloc(sizeof(struct camerainfo));
-    save_init(ctmp);
-    ctmp->pos = pos;
-    ctmp->cameraId = head->cameraId;
-    ctmp->sum += 1;
-    ctmp->lines[l->id] = 1;
-    while (cp->next)
+    // tlp = li->next;
+    int flag = 0;
+    while (tcp)
     {
-        cp = cp->next; //其实是把这些都挂到ci链上去了
+        if (tcp->cameraId == head->cameraId && tcp->pos == pos)
+        {
+            flag = 1;
+            break;
+        }
+        tcp = tcp->next;
     }
-    cp->next = ctmp;
+
+    if (flag)
+    {
+        tcp->sum += 1;
+        tcp->lines[l->id] = 1;
+    }
+    else
+    {
+        ctmp = malloc(sizeof(struct camerainfo));
+        save_init(ctmp);
+        ctmp->pos = pos;
+        ctmp->cameraId = head->cameraId;
+        ctmp->sum += 1;
+        ctmp->lines[l->id] = 1;
+        //printf(" \tl->id= %d\n",  l->id);
+        while (cp->next)
+        {
+            cp = cp->next; //其实是把这些都挂到ci链上去了
+        }
+        cp->next = ctmp;
+    }
+
     ltmp = malloc(sizeof(struct lineinfo));
     save_init_line(ltmp);
     ltmp->lineId = l->id;
-    ltmp->cameraId[head->cameraId] =1 ;
+    ltmp->cameraId[head->cameraId] = 1;
     while (lip->next)
     {
         lip = lip->next;
@@ -1009,33 +1086,59 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
     lip->next = ltmp;
 }
 
-void resum(struct camerainfo *ch) {
+void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li)
+{
     struct camerainfo *cp, *tcp;
+    struct line *lp = l->next;
+    struct lineinfo *lip = li->next;
     int i;
     cp = ch;
     // printf(" after sort\n\n");
-    while (cp->next) {
+    while (cp->next)
+    {
         tcp = cp->next;
-
-        while (tcp){
-            for (i = 0; i < 100; i++) {
-                if (cp->lines[i] == 1 && tcp->lines[i] == 1) {
-                    cp->reline[i] = 1;
-                    cp->resum += 1;
-
-                    tcp->reline[i] = 1;
-                    tcp->resum += 1;
+        while (tcp)
+        {
+            for (i = 0; i < 100; i++)
+            {
+                if (cp->lines[i] == 1 && tcp->lines[i] == 1)
+                {
+                    while (lip)
+                    {
+                        if (lip->cameraId == i && lip->isCoverage == 0) //确保当前线段没有被覆盖过
+                        {
+                            cp->reline[i] = 1;
+                            //cp->resum += 1;
+                            while (lp)
+                            {
+                                if (lp->id == i)
+                                {
+                                    cp->resum += lp->timestamp;
+                                    tcp->resum += lp->timestamp;
+                                    break;
+                                }
+                                lp = lp->next;
+                            }
+                            tcp->reline[i] = 1;
+                            // tcp->resum += 1;
+                            lip->isCoverage = 1;
+                            break;
+                        }
+                        lip = lip->next;
+                    }
                 }
             }
-            tcp = tcp -> next;
+            tcp = tcp->next;
         }
         cp = cp->next;
     }
 }
-void resum_out(struct camerainfo *ch){
-    struct camerainfo *p = ch;
-    while (p) {
-        printf(" cameraId=%d ,pos=%d, sum =%d, resum=%d \n",  p->cameraId,p->pos,p->sum,p->resum);
+void resum_out(struct camerainfo *ch)
+{
+    struct camerainfo *p = ch->next;
+    while (p)
+    {
+        printf(" cameraId=%d ,pos=%d, sum =%d, resum=%d \n", p->cameraId, p->pos, p->sum, p->resum);
         p = p->next;
     }
 }
@@ -1055,16 +1158,29 @@ void resum_out(struct camerainfo *ch){
 //     }
 // }
 
-void algorithm_one1(struct camerainfo *ch,  struct line *l) {
-    struct camerainfo *tmp = ch;
-    int i=0;
-    while(tmp){
-        if(tmp->lines[i]==1){
-            printf("tmp->cameraId is %d,\ttmp->pos is %d,\tcoverage %dth line\n",tmp->cameraId,tmp->pos,i);
-         }
-         i++;
+void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
+{
+    struct camerainfo *cp = ch->next;
+    struct lineinfo *lip = li->next;
+    int i = 0;
+    while (cp)
+    {
+        if (cp->lines[i] == 1) //i 是被覆盖的线段的id
+        {
+            //printf("cp->cameraId is %d,\tcp->pos is %d,\tcoverage %dth line\n", cp->cameraId, cp->pos, i);
+            while (lip)
+            {
+                if (lip->lineId == i)
+                {
+                    lip->isdelete = 1; //把该线段删掉
+                }
+                lip = lip->next;
+            }
+            cp->isdelete = 1; //把当前摄像头也删掉
+        }
+        i++;
+        cp = cp->next;
     }
-
 }
 // void one_out(struct camerainfo *reh, struct line *l) {
 //     struct camerainfo *tmp = reh->next;
@@ -1133,13 +1249,12 @@ void algorithm_one1(struct camerainfo *ch,  struct line *l) {
 //     int lineisdel[100] = {0};
 //     int isline[100] = {0};
 
-
 //     line = l->next;
 //     while(line) {
 //         isline[line->id] = 1;
 //         line = line->next;
 //     }
-    
+
 //     while (num) {
 //         num = 0;
 //         tmp = ch->next;
@@ -1159,7 +1274,6 @@ void algorithm_one1(struct camerainfo *ch,  struct line *l) {
 //             tmp = tmp->next;
 //         }
 
-
 //         if(num && min.resum < 999) {
 //             num = 0;
 //             flag = 0;
@@ -1176,8 +1290,8 @@ void algorithm_one1(struct camerainfo *ch,  struct line *l) {
 //                         if(min.lines[k] && k == j) {
 //                             // printf("lnne and camera id = %d  min id = %d  resum = %d\n", k, min.cameraId, min.resum);
 //                             isline[j] = 0;
-                            
-//                         } 
+
+//                         }
 //                     }
 //                 }
 
@@ -1203,14 +1317,12 @@ void algorithm_one1(struct camerainfo *ch,  struct line *l) {
 //                 }
 //             }
 //                 tmp = tmp->next;
-                
-//             }
 
+//             }
 
 //         } else {
 //             num = 0;
 //         }
-        
 
 //         // line = l->next;
 //         // while (line) {  // 找到最小累加和摄像头覆盖的线段，并将其从线段集合中删掉
@@ -1237,9 +1349,6 @@ void algorithm_one1(struct camerainfo *ch,  struct line *l) {
 //         // }
 //     }
 // }
-
-
-
 
 // void two_out(struct camerainfo *reh, struct line *l) {
 //     struct camerainfo *tmp = reh->next;
@@ -1307,7 +1416,6 @@ void algorithm_one1(struct camerainfo *ch,  struct line *l) {
 //     int max = 999;
 //     int isline[100] = {0};
 
-
 //     while(line) {
 //         isline[line->id] = 1;
 //         line = line->next;
@@ -1360,7 +1468,7 @@ void algorithm_one1(struct camerainfo *ch,  struct line *l) {
 //             }
 //             pret->next = ret;
 //                             printf("\n\n k=%d,j=%d",k,j);
-//                         } 
+//                         }
 //                     }
 //             // for(j = 0; j < 100; j++) {
 //             //     if(isline[j]) {
@@ -1371,7 +1479,7 @@ void algorithm_one1(struct camerainfo *ch,  struct line *l) {
 //             //         }
 
 //             //     }
-        
+
 //             // }
 //             if(!flag) {
 //                 return ;
