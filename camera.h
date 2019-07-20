@@ -10,8 +10,6 @@
 
 const double pi = 3.1415926;
 const int dotleng = 8;
-float dot_x[1000];
-float dot_y[1000];
 const int K = 2;  //构造折线
 const int B1 = 1;
 const int K2 = -1;
@@ -83,14 +81,14 @@ typedef struct camerainfo {
     int sum;
     float resum;
     int isdelete;
-    int lines[100];
-    int reline[100];
+    int lines[600];
+    int reline[600];
     struct camerainfo *next;
 } cii;
 
 struct lineinfo {
     int lineId;
-    int cameraId[100];
+    int cameraId[600];
     int isdelete;
     int isCoverage;
     struct lineinfo *next;
@@ -100,7 +98,7 @@ struct retcam {
     int pos;
     int cameraId;
     int sum;
-    int lines[100];
+    int lines[600];
     int lineId;
     struct retcam *next;
 };

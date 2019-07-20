@@ -2,23 +2,23 @@
 #include "camera.h"
 
 // 摄像头的个数
-#define X 10      // 每行摄像头的数量
-#define Y 10      // 每列摄像头的数量
+#define X 10     // 每行摄像头的数量
+#define Y 60     // 每列摄像头的数量
 #define X_WIDTH 5 // 每行相邻摄像头的间距
 #define Y_WIDTH 5 // 每列相邻摄像头的间距
 #define H 3       // 摄像头水平高度
 
-const int max_side = 100;
+const int max_side = 600;
 const float min_side = 5;
 const float max = 20;
 
-const int max_side_x = 100;
-const int max_side_y = 100;
+const int max_side_x = 600;
+const int max_side_y = 600;
 const int min_side_x = 5;
 const int min_side_y = 5;
 const int height = 20; //max_side_x / min_side_x;
 
-struct point pitem[100];
+struct point pitem[600];
 int p_total = 0;
 
 void cube_create(struct cube *);
@@ -65,7 +65,11 @@ void algorithm_two(struct camerainfo *ch, struct camerainfo *reh,
 void grid_init(struct point *t);
 void line_lengthSum(struct line *lh);
 void resum_sort(struct camerainfo *ch);
+
 void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li);
+void resum_del_cam(struct camerainfo * cp);
+void resum_del_reline(struct camerainfo *cp, int num);
+
 int main(void)
 {
     struct cube head;
@@ -105,13 +109,13 @@ int main(void)
     line(&nh, &lh, &tch, &lih); // The ground segment establishes contact with the camera
     resum(&ch, &lh, &lih);
     resum_sum(&ch, &lh);
-    resum(&tch, &lh, &lih); // Calculate the repeated sum
-                      // resum_out(&ch);//输出摄像头的累加和结果
+    resum(&tch, &lh, &lih); // Calculate the repeated sum // resum_out(&ch);//输出摄像头的累加和结果
+    resum_sum(&tch, &lh);
     resum_sort(&ch);
     // printf(" after sort\n\n");
     resum_out(&ch);
     //save_init(&one);
-    //algorithm_one1(&ch, &lh);
+    algorithm_one1(&ch, &lh, &lih);
     //resum_out(&tch);
     //save_out(&newch);//有错误，内存访问错误
     // save_out(&ch);
@@ -241,8 +245,8 @@ void resum_sort(struct camerainfo *ch)
                 temp->sum = p->sum;
                 temp->isdelete = p->isdelete;
                 temp->resum = p->resum;
-                memcpy(temp->reline, p->reline, 100 * sizeof(int));
-                memcpy(temp->lines, p->lines, 100 * sizeof(int));
+                memcpy(temp->reline, p->reline, 600 * sizeof(int));
+                memcpy(temp->lines, p->lines, 600 * sizeof(int));
 
                 // memcpy(p, q, sizeof(struct camerainfo));
                 p->pos = q->pos;
@@ -250,8 +254,8 @@ void resum_sort(struct camerainfo *ch)
                 p->sum = q->sum;
                 p->isdelete = q->isdelete;
                 p->resum = q->resum;
-                memcpy(p->reline, q->reline, 100 * sizeof(int));
-                memcpy(p->lines, q->lines, 100 * sizeof(int));
+                memcpy(p->reline, q->reline, 600 * sizeof(int));
+                memcpy(p->lines, q->lines, 600 * sizeof(int));
                 //  memcpy(q, temp, sizeof(struct camerainfo));
 
                 q->pos = temp->pos;
@@ -259,8 +263,8 @@ void resum_sort(struct camerainfo *ch)
                 q->sum = temp->sum;
                 q->isdelete = temp->isdelete;
                 q->resum = temp->resum;
-                memcpy(q->reline, temp->reline, 100 * sizeof(int));
-                memcpy(q->lines, temp->lines, 100 * sizeof(int));
+                memcpy(q->reline, temp->reline, 600 * sizeof(int));
+                memcpy(q->lines, temp->lines, 600 * sizeof(int));
                 //i++;
                 //free(temp);
             }
@@ -313,7 +317,7 @@ void point_delete(struct point *ph)
 //         x += min_side_x;
 //         num += 1;
 //     }
-//     while (x <= 100 && x >= 0 && y<=max_side_y && y >= 0) {
+//     while (x <= 600 && x >= 0 && y<=max_side_y && y >= 0) {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
 //         y = x + 20;
@@ -352,7 +356,7 @@ void point_delete(struct point *ph)
 //     }
 
 //    // y = limit_x - min_side_y;
-//     while (y <= 100 && y >= 0 && x<=max_side_x && x>=0) {
+//     while (y <= 600 && y >= 0 && x<=max_side_x && x>=0) {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
 //         x = y - 20;
@@ -399,7 +403,7 @@ void point_delete(struct point *ph)
 //         x += min_side_x;
 //         num += 1;
 //     }
-//     while (x <= 100 && x >= 0 && y<=max_side_y && y >= 0) {
+//     while (x <= 600 && x >= 0 && y<=max_side_y && y >= 0) {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
 //         y = -1 * x + 154;
@@ -438,7 +442,7 @@ void point_delete(struct point *ph)
 //     }
 
 //    // y = limit_x - min_side_y;
-//     while (y <= 100 && y >= 0 && x<=max_side_x && x>=0) {
+//     while (y <= 600 && y >= 0 && x<=max_side_x && x>=0) {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
 //         x = -1 * y +154;
@@ -585,7 +589,7 @@ void point_create(struct point *ph)
 //         x += min_side_x;
 //         num += 1;
 //     }
-//     while (x <= 100 && x >= 0 && y<=max_side_y && y >= 0) {
+//     while (x <= 600 && x >= 0 && y<=max_side_y && y >= 0) {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
 //         y = -1 * x + 148;
@@ -624,7 +628,7 @@ void point_create(struct point *ph)
 //     }
 
 //    // y = limit_x - min_side_y;
-//     while (y <= 100 && y >= 0 && x<=max_side_x && x>=0) {
+//     while (y <= 600 && y >= 0 && x<=max_side_x && x>=0) {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
 //         x = -1 * y + 148;
@@ -671,7 +675,7 @@ void point_create(struct point *ph)
 //         x += min_side_x;
 //         num += 1;
 //     }
-//     while (x <= 100 && x >= 0 && y<=max_side_y && y >= 0) {
+//     while (x <= 600 && x >= 0 && y<=max_side_y && y >= 0) {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
 //         y = -1 * x + 118;
@@ -710,7 +714,7 @@ void point_create(struct point *ph)
 //     }
 
 //    // y = limit_x - min_side_y;
-//     while (y <= 100 && y >= 0 && x<=max_side_x && x>=0) {
+//     while (y <= 600 && y >= 0 && x<=max_side_x && x>=0) {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
 //         x = -1 * y + 118;
@@ -1017,7 +1021,7 @@ void save_init(struct camerainfo *ctmp)
     ctmp->resum = 0;
     ctmp->isdelete = 0;
     ctmp->next = NULL;
-    for (i = 0; i < 100; i++)
+    for (i = 0; i < 600; i++)
     {
         ctmp->lines[i] = 0;
         ctmp->reline[i] = 0;
@@ -1029,7 +1033,7 @@ void save_init_line(struct lineinfo *ltmp)
     int i;
     ltmp->lineId = 0;
     ltmp->next = NULL;
-    for (i = 0; i < 100; i++)
+    for (i = 0; i < 600; i++)
     {
         ltmp->cameraId[i] = 0;
     }
@@ -1101,7 +1105,7 @@ void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li)
         tcp = cp->next;
         while (tcp)
         {
-            for (i = 0; i < 100; i++)
+            for (i = 0; i < 600; i++)
             {
                 if (cp->lines[i] == 1 && tcp->lines[i] == 1)
                 {
@@ -1145,14 +1149,15 @@ void resum_sum(struct camerainfo * ch, struct line *l ) {
     struct line *li = l -> next;
     int i;
     while(ca) {
-        for(i = 0; i < 100; i++ ) {
+        ca -> resum = 0;
+        for(i = 0; i < 600; i++ ) {
             if(ca -> reline[i]) {
                 li = l ->next;
                 while(li) {
                     if(li ->id == i) {
                         ca -> resum += li->timestamp;
                     }
-                    li =  li -> next;
+                     li =  li -> next;
                 }
             }
         }
@@ -1167,7 +1172,7 @@ void resum_out(struct camerainfo *ch)
     while (p)
     {
         printf(" cameraId=%d ,pos=%d, sum =%d, resum=%f \n", p->cameraId, p->pos, p->sum, p->resum);
-        for(i = 0; i < 100; i ++) {
+        for(i = 0; i < 600; i ++) {
             if(p->reline[i])
             printf("%d\t", i);
         }
@@ -1195,25 +1200,56 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 {
     struct camerainfo *cp = ch->next;
     struct lineinfo *lip = li->next;
+    struct line *ln = l->next;
     int i = 0;
-    while (cp)
-    {
-        if (cp->lines[i] == 1) //i 是被覆盖的线段的id
-        {
-            //printf("cp->cameraId is %d,\tcp->pos is %d,\tcoverage %dth line\n", cp->cameraId, cp->pos, i);
-            while (lip)
-            {
-                if (lip->lineId == i)
-                {
-                    lip->isdelete = 1; //把该线段删掉
+    int line[600] = {0};
+    while(ln) {
+        line[ln->id] = 1;
+        ln = ln->next;
+    }
+    while (cp) {
+        if(!cp->isdelete) {
+            for(i = 0; i< 600; i++) {
+                if(cp->reline[i]) {
+                    // printf("reline: %d\n", i);
+                    if(line[i]) {
+                        line[i] = 0;
+                        // printf("camerinfo: %d i=%d\n", cp->cameraId, i);
+                        resum_del_reline(cp, i);
+        printf("\ncp->cameraId=%d,,cp->pos=%d,i=%d,cp->resum=%f\n",cp->cameraId,cp->pos,i,cp->resum);
+                    }
+
                 }
-                lip = lip->next;
             }
-            cp->isdelete = 1; //把当前摄像头也删掉
+            resum_del_cam(cp);
+            resum_sum(cp, l);
         }
-        i++;
+        resum_sort(cp);
         cp = cp->next;
     }
+}
+
+void resum_del_cam(struct camerainfo * cp) {
+    struct camerainfo * p = cp;
+    int camid = p->cameraId;
+    while(p) {
+        if(p->cameraId == camid)
+            p->isdelete = 1;
+        p = p->next;
+    }
+}
+void resum_del_reline(struct camerainfo *cp, int num){
+    struct camerainfo *p = cp->next;
+    int i;
+    while (p) {
+        for(i = 0; i < 600; i++) {
+            if(p -> reline[i] && i == num) {
+                p->reline[i] = 0;
+            }
+        }
+        p = p -> next;
+    }
+
 }
 // void one_out(struct camerainfo *reh, struct line *l) {
 //     struct camerainfo *tmp = reh->next;
@@ -1227,7 +1263,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //             "resum=%2d\n",
 //             j, tmp->cameraId, tmp->pos, tmp->sum, tmp->resum);
 //         printf("-------------------\n");
-//         for (i = 0; i < 100; i++) {
+//         for (i = 0; i < 600; i++) {
 //             if (tmp->lines[i] == 1) {
 //                 printf("line = %d\t", i);
 //                 ltmp = l->next;
@@ -1245,7 +1281,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //         }
 //         if (tmp->resum) {
 //             printf("+++++++++++++++++++\n");
-//             for (i = 0; i < 100; i++) {
+//             for (i = 0; i < 600; i++) {
 //                 if (tmp->reline[i] == 1) {
 //                     printf("reline = %d\t", tmp->reline[i]);
 //                     ltmp = l->next;
@@ -1279,8 +1315,8 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //     int max, i, j, k;
 //     int num = 1;
 //     int flag = 0;
-//     int lineisdel[100] = {0};
-//     int isline[100] = {0};
+//     int lineisdel[600] = {0};
+//     int isline[600] = {0};
 
 //     line = l->next;
 //     while(line) {
@@ -1291,8 +1327,8 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //     while (num) {
 //         num = 0;
 //         tmp = ch->next;
-//         max = 1000;
-//         min.resum = 1000;
+//         max = 6000;
+//         min.resum = 6000;
 
 //         while (tmp) {  //找到重复累加和最小的摄像头
 //             if (!tmp->isdelete) {
@@ -1310,8 +1346,8 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //         if(num && min.resum < 999) {
 //             num = 0;
 //             flag = 0;
-//             for(j = 0; j < 100; j++) {
-//                 for(k = 0 ; k < 100; k ++) {
+//             for(j = 0; j < 600; j++) {
+//                 for(k = 0 ; k < 600; k ++) {
 //                 if(min.lines[k] && k == j) {
 //                             flag = 1;
 //                 }
@@ -1319,7 +1355,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //                 if(isline[j]) {
 //                     num = 1;
 //                     // printf("is line id = %d\n", j);
-//                     for(k = 0 ; k < 100; k ++) {
+//                     for(k = 0 ; k < 600; k ++) {
 //                         if(min.lines[k] && k == j) {
 //                             // printf("lnne and camera id = %d  min id = %d  resum = %d\n", k, min.cameraId, min.resum);
 //                             isline[j] = 0;
@@ -1394,7 +1430,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //             "%d, sum = %2d resum=%2d\n",
 //             tmp->lineId, tmp->cameraId, tmp->pos, tmp->sum, tmp->resum);
 //         printf("-------------------\n");
-//         for (i = 0; i < 100; i++) {
+//         for (i = 0; i < 600; i++) {
 //             if (tmp->lines[i] == 1) {
 //                 printf("line = %d\t", i);
 //                 ltmp = l->next;
@@ -1412,7 +1448,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //         }
 //         if (tmp->resum) {
 //             printf("+++++++++++++++++++\n");
-//             for (i = 0; i < 100; i++) {
+//             for (i = 0; i < 600; i++) {
 //                 if (tmp->reline[i] == 1) {
 //                     printf("reline = %d\t", tmp->reline[i]);
 //                     ltmp = l->next;
@@ -1447,7 +1483,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //     int i, j, k, flag;
 
 //     int max = 999;
-//     int isline[100] = {0};
+//     int isline[600] = {0};
 
 //     while(line) {
 //         isline[line->id] = 1;
@@ -1457,8 +1493,8 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //     line = l->next;
 //     while (line) {  //以线段为主体，对覆盖该线段的摄像头进行重复累加和最小的选择
 //         tmp = ch->next;
-//         min.resum = 1000;
-//         max = 1000;
+//         min.resum = 6000;
+//         max = 6000;
 //         while (tmp) {
 //             // printf("cameraId = %d  lines = %d, line=%d delete = %d\n",
 //             // line->id, tmp->lines[line->id], line->id, tmp->isdelete);
@@ -1487,7 +1523,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //         }
 //         if (min.resum < 999) {
 //             flag = 0;
-//                     for(k = 0 ; k < 100; k ++) {
+//                     for(k = 0 ; k < 600; k ++) {
 //                         if(min.lines[k] && k == line->id) {
 //                             flag=1;
 //                             //isline[j] = 0;
@@ -1503,10 +1539,10 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 //                             printf("\n\n k=%d,j=%d",k,j);
 //                         }
 //                     }
-//             // for(j = 0; j < 100; j++) {
+//             // for(j = 0; j < 600; j++) {
 //             //     if(isline[j]) {
 //             //         flag = 1;
-//             //         for(k=0;k<100;k++){
+//             //         for(k=0;k<600;k++){
 //             //             if(min.lines[k])
 //             //             printf("\n\n cameraid=%d,min.lines[k]=%d,id=s%d\n",min.cameraId,k,l->id);
 //             //         }
