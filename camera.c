@@ -97,7 +97,7 @@ int main(void)
     printf(" after sort\n");
     //point_out(&ph);
     point_delete(&ph);
-    // point_out(&ph);
+     point_out(&ph);
     line_create(&lh, &ph); // Connect the ground line to the intersection of                                  // the grid into a line segment
     line_out(&lh);
 
@@ -113,7 +113,7 @@ int main(void)
     resum_sum(&tch, &lh);
     resum_sort(&ch);
     // printf(" after sort\n\n");
-    resum_out(&ch);
+   // resum_out(&ch);
     //save_init(&one);
     algorithm_one1(&ch, &lh, &lih);
     //resum_out(&tch);
@@ -144,9 +144,10 @@ void newpoint_init(struct npoint *tmp)
 
 int newpoint(struct npoint *nh)
 {
+	int i, j, k = 1;
     struct npoint *tmp;
     newpoint_init(nh);
-    int i, j, k = 1;
+    
     for (i = 0; i < Y; i++)
     {
         for (j = 0; j < X; j++)
@@ -225,10 +226,11 @@ void point_sort1(struct point *ph)
 void resum_sort(struct camerainfo *ch)
 {
     struct camerainfo *temp;
+	struct camerainfo *p = ch;
+    struct camerainfo *q = ch->next;
     //int i = 0;
     temp = malloc(sizeof(struct camerainfo));
-    struct camerainfo *p = ch;
-    struct camerainfo *q = ch->next;
+    
     while (p)
     {
         while (q)
@@ -1044,12 +1046,13 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
 {
     struct camerainfo *cp, *tcp, *ctmp;
     struct lineinfo *lip, *ltmp;
+	int flag = 0;
     // printf(" head->cameraId= %d,\t\t pos=%d,\tl->id= %d\n", head->cameraId,pos, l->id);
     cp = ci;
     tcp = cp->next;
     lip = li;
     // tlp = li->next;
-    int flag = 0;
+    
     while (tcp)
     {
         if (tcp->cameraId == head->cameraId && tcp->pos == pos)
