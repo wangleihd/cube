@@ -296,25 +296,28 @@ void point_delete(struct point *ph)
 }
 
 // void point_create(struct point *ph) {// 124
-//     struct point *tmp;
-//     float limit_x = 19;
-//     float limit_y = 39;
+//  struct point *tmp;
+//     int limit_x = 19;
+//     int limit_y = 39;
 //     float x = 0, y;
 //     int num = 1;
-//     int temp;
+//     //int temp;
 //     point_init(ph);
 
-//     while (x <= limit_x && x >= 0 && y<=max_side_y && y >= 0) {
+//     while (x <= limit_x && x >= 0 && y <= max_y && y >= 0 && x <= max_x)
+//     {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
-//         y = 2 * x + 1;
-//         if(y>=max_side_y){
+//         y = 2* x + 1;
+//         if (y >= max_y)
+//         {
 //             break;
 //         }
 //         tmp->x = x;
 //         tmp->y = y;
 //         tmp->id = num;
-//         while (ph->next) {
+//         while (ph->next)
+//         {
 //             ph = ph->next;
 //         }
 //         ph->next = tmp;
@@ -322,17 +325,21 @@ void point_delete(struct point *ph)
 //         x += min_side_x;
 //         num += 1;
 //     }
-//     while (x <= 400 && x >= 0 && y<=max_side_y && y >= 0) {
+//     printf("2   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     while (x <= max_x && x >= 0 && y <= max_y && y >= 0)
+//     {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
 //         y = x + 20;
-//         if(y>=max_side_y){
+//         if (y >= max_y)
+//         {
 //             break;
 //         }
 //         tmp->x = x;
 //         tmp->y = y;
 //         tmp->id = num;
-//         while (ph->next) {
+//         while (ph->next)
+//         {
 //             ph = ph->next;
 //         }
 //         ph->next = tmp;
@@ -341,17 +348,22 @@ void point_delete(struct point *ph)
 //         num += 1;
 //     }
 //     y = min_side_y;
-//     while (y <= limit_y && y >= 0 && x<=max_side_x && x>=0) {
+//     x=0;
+//     printf("3   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     while (y <= limit_y && y >= 0 && x <= max_x && x >= 0 && y <= max_y)
+//     {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
 //         x = (y - 1) / 2;
-//          if(x<=0){
+//         if (x <= 0 )
+//         {
 //             break;
 //         }
 //         tmp->x = x;
 //         tmp->y = y;
 //         tmp->id = num;
-//         while (ph->next) {
+//         while (ph->next)
+//         {
 //             ph = ph->next;
 //         }
 //         ph->next = tmp;
@@ -359,19 +371,22 @@ void point_delete(struct point *ph)
 //         y += min_side_y;
 //         num += 1;
 //     }
-
-//    // y = limit_x - min_side_y;
-//     while (y <= 400 && y >= 0 && x<=max_side_x && x>=0) {
+//  printf("4   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     // y = limit_x - min_side_y;
+//     while (y <= max_y && y >= 0 && x <= max_x && x >= 0)
+//     {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
-//         x = y - 20;
-//          if(x<=0){
+//         x =  y- 20 ;
+//         if (x <= 0)
+//         {
 //             break;
 //         }
 //         tmp->x = x;
 //         tmp->y = y;
 //         tmp->id = num;
-//         while (ph->next) {
+//         while (ph->next)
+//         {
 //             ph = ph->next;
 //         }
 //         ph->next = tmp;
@@ -382,25 +397,28 @@ void point_delete(struct point *ph)
 // }
 
 // void point_create(struct point *ph) {// 141
-//     struct point *tmp;
-//     float limit_x = 72;
-//     float limit_y = 82;//两直线的交点坐标
+//    struct point *tmp;
+//     int limit_x = 72;
+//     int limit_y = 82;
 //     float x = 0, y;
 //     int num = 1;
-//     int temp;
+//     //int temp;
 //     point_init(ph);
 
-//     while (x <= limit_x && x >= 0 && y<=max_side_y && y >= 0) {
+//     while (x <= limit_x && x >= 0 && y <= max_y && y >= 0 && x <= max_x)
+//     {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
-//         y = x + 10;
-//         if(y>=max_side_y){
+//         y =  x + 10 ;
+//         if (y >= max_y)
+//         {
 //             break;
 //         }
 //         tmp->x = x;
 //         tmp->y = y;
 //         tmp->id = num;
-//         while (ph->next) {
+//         while (ph->next)
+//         {
 //             ph = ph->next;
 //         }
 //         ph->next = tmp;
@@ -408,17 +426,21 @@ void point_delete(struct point *ph)
 //         x += min_side_x;
 //         num += 1;
 //     }
-//     while (x <= 400 && x >= 0 && y<=max_side_y && y >= 0) {
+//     printf("2   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     while (x <= max_x && x >= 0 && y <= max_y && y >= 0)
+//     {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
-//         y = -1 * x + 154;
-//         if(y>=max_side_y){
+//         y = (-1) * x + 154 ;
+//         if (y >= max_y)
+//         {
 //             break;
 //         }
 //         tmp->x = x;
 //         tmp->y = y;
 //         tmp->id = num;
-//         while (ph->next) {
+//         while (ph->next)
+//         {
 //             ph = ph->next;
 //         }
 //         ph->next = tmp;
@@ -427,17 +449,22 @@ void point_delete(struct point *ph)
 //         num += 1;
 //     }
 //     y = min_side_y;
-//     while (y <= limit_y && y >= 0 && x<=max_side_x && x>=0) {
+//     x=0;
+//     printf("3   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     while (y <= limit_y && y >= 0 && x <= max_x && x >= 0 && y <= max_y)
+//     {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
 //         x = y - 10;
-//          if(x<=0){
+//         if (x <= 0 )
+//         {
 //             break;
 //         }
 //         tmp->x = x;
 //         tmp->y = y;
 //         tmp->id = num;
-//         while (ph->next) {
+//         while (ph->next)
+//         {
 //             ph = ph->next;
 //         }
 //         ph->next = tmp;
@@ -445,19 +472,123 @@ void point_delete(struct point *ph)
 //         y += min_side_y;
 //         num += 1;
 //     }
-
-//    // y = limit_x - min_side_y;
-//     while (y <= 400 && y >= 0 && x<=max_side_x && x>=0) {
+//  printf("4   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     // y = limit_x - min_side_y;
+//     while (y <= max_y && y >= 0 && x <= max_x && x >= 0)
+//     {
 //         tmp = malloc(sizeof(struct point));
 //         point_init(tmp);
-//         x = -1 * y +154;
-//          if(x<=0){
+//         x = (-1) * y +154 ;
+//         if (x <= 0)
+//         {
 //             break;
 //         }
 //         tmp->x = x;
 //         tmp->y = y;
 //         tmp->id = num;
-//         while (ph->next) {
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         y += min_side_y;
+//         num += 1;
+//     }
+// }
+// void point_create(struct point *ph)
+// { // 164  
+//     struct point *tmp;
+//     int limit_x = 80;
+//     int limit_y = 21;
+//     float x = 0, y;
+//     int num = 1;
+//     //int temp;
+//     point_init(ph);
+
+//     while (x <= limit_x && x >= 0 && y <= max_y && y >= 0 && x <= max_x)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         y = 0.25 * x + 1;
+//         if (y >= max_y)
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         x += min_side_x;
+//         num += 1;
+//     }
+//     printf("2   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     while (x <= max_x && x >= 0 && y <= max_y && y >= 0)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         y = (4) * x - 299;
+//         if (y >= max_y)
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         x += min_side_x;
+//         num += 1;
+//     }
+//     y = min_side_y;
+//     x=0;
+//     printf("3   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     while (y <= limit_y && y >= 0 && x <= max_x && x >= 0 && y <= max_y)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         x = 4*y - 4;
+//         if (x <= 0 )
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         y += min_side_y;
+//         num += 1;
+//     }
+//  printf("4   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     // y = limit_x - min_side_y;
+//     while (y <= max_y && y >= 0 && x <= max_x && x >= 0)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         x = ( y + 299) /4 ;
+//         if (x <= 0)
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
 //             ph = ph->next;
 //         }
 //         ph->next = tmp;
@@ -467,11 +598,111 @@ void point_delete(struct point *ph)
 //     }
 // }
 
-void point_create(struct point *ph)
-{ // 164   -》
-    struct point *tmp;
-    int limit_x = 80;
-    int limit_y = 21;
+// void point_create(struct point *ph) {// 181
+//    struct point *tmp;
+//     int limit_x = 49;
+//     int limit_y = 99;
+//     float x = 0, y;
+//     int num = 1;
+//     //int temp;
+//     point_init(ph);
+
+//     while (x <= limit_x && x >= 0 && y <= max_y && y >= 0 && x <= max_x)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         y = 2 * x + 1;
+//         if (y >= max_y)
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         x += min_side_x;
+//         num += 1;
+//     }
+//     printf("2   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     while (x <= max_x && x >= 0 && y <= max_y && y >= 0)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         y = (-1) * x + 148;
+//         if (y >= max_y)
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         x += min_side_x;
+//         num += 1;
+//     }
+//     y = min_side_y;
+//     x=0;
+//     printf("3   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     while (y <= limit_y && y >= 0 && x <= max_x && x >= 0 && y <= max_y)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         x = (y-1)/2;
+//         if (x <= 0 )
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         y += min_side_y;
+//         num += 1;
+//     }
+//  printf("4   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     // y = limit_x - min_side_y;
+//     while (y <= max_y && y >= 0 && x <= max_x && x >= 0)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         x = (-1) * y + 148;
+//         if (x <= 0)
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         y += min_side_y;
+//         num += 1;
+//     }
+// }
+
+void point_create(struct point *ph) {// 203
+   struct point *tmp;
+    float limit_x = 22.8;
+    float limit_y = 95.2;
     float x = 0, y;
     int num = 1;
     //int temp;
@@ -481,7 +712,7 @@ void point_create(struct point *ph)
     {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        y = 0.25 * x + 1;
+        y = 4 * x + 4;
         if (y >= max_y)
         {
             break;
@@ -503,7 +734,7 @@ void point_create(struct point *ph)
     {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        y = (4) * x - 299;
+        y = (-1) * x + 118;
         if (y >= max_y)
         {
             break;
@@ -527,7 +758,7 @@ void point_create(struct point *ph)
     {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        x = 4*y - 4;
+        x = (y - 4) / 4 ;
         if (x <= 0 )
         {
             break;
@@ -550,7 +781,7 @@ void point_create(struct point *ph)
     {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        x = ( y + 299) /4 ;
+        x = (-1) * y + 118 ;
         if (x <= 0)
         {
             break;
@@ -568,177 +799,6 @@ void point_create(struct point *ph)
         num += 1;
     }
 }
-// void point_create(struct point *ph) {// 181
-//     struct point *tmp;
-//     float limit_x = 49;
-//     float limit_y = 99;
-//     float x = 0, y;
-//     int num = 1;
-//     int temp;
-//     point_init(ph);
-
-//     while (x <= limit_x && x >= 0 && y<=max_side_y && y >= 0) {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         y = 2 * x + 1;
-//         if(y>=max_side_y){
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next) {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         x += min_side_x;
-//         num += 1;
-//     }
-//     while (x <= 400 && x >= 0 && y<=max_side_y && y >= 0) {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         y = -1 * x + 148;
-//         if(y>=max_side_y){
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next) {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         x += min_side_x;
-//         num += 1;
-//     }
-//     y = min_side_y;
-//     while (y <= limit_y && y >= 0 && x<=max_side_x && x>=0) {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         x = (y - 1) / 2;
-//          if(x<=0){
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next) {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         y += min_side_y;
-//         num += 1;
-//     }
-
-//    // y = limit_x - min_side_y;
-//     while (y <= 400 && y >= 0 && x<=max_side_x && x>=0) {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         x = -1 * y + 148;
-//          if(x<=0){
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next) {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         y += min_side_y;
-//         num += 1;
-//     }
-// }
-
-// void point_create(struct point *ph) {// 203
-//     struct point *tmp;
-//     float limit_x = 22.8;
-//     float limit_y = 95.2;
-//     float x = 0, y;
-//     int num = 1;
-//     int temp;
-//     point_init(ph);
-
-//     while (x <= limit_x && x >= 0 && y<=max_side_y && y >= 0) {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         y = 4 * x + 4;
-//         if(y>=max_side_y){
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next) {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         x += min_side_x;
-//         num += 1;
-//     }
-//     while (x <= 400 && x >= 0 && y<=max_side_y && y >= 0) {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         y = -1 * x + 118;
-//         if(y>=max_side_y){
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next) {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         x += min_side_x;
-//         num += 1;
-//     }
-//     y = min_side_y;
-//     while (y <= limit_y && y >= 0 && x<=max_side_x && x>=0) {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         x = (y - 4) / 4;
-//          if(x<=0){
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next) {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         y += min_side_y;
-//         num += 1;
-//     }
-
-//    // y = limit_x - min_side_y;
-//     while (y <= 400 && y >= 0 && x<=max_side_x && x>=0) {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         x = -1 * y + 118;
-//          if(x<=0){
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next) {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         y += min_side_y;
-//         num += 1;
-//     }
-// }
 
 void point_out(struct point *ph)
 {
