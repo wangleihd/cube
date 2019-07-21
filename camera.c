@@ -17,8 +17,8 @@ const float max = 20;
 
 const int max_side_x = 400;
 const int max_side_y = 400;
-const int min_side_x = 5;
-const int min_side_y = 5;
+const int min_side_x = 3;
+const int min_side_y = 3;
 const int height = 20; //max_side_x / min_side_x;
 
 struct point pitem[400];
@@ -598,111 +598,10 @@ void point_delete(struct point *ph)
 //     }
 // }
 
-// void point_create(struct point *ph) {// 181
-//    struct point *tmp;
-//     int limit_x = 49;
-//     int limit_y = 99;
-//     float x = 0, y;
-//     int num = 1;
-//     //int temp;
-//     point_init(ph);
-
-//     while (x <= limit_x && x >= 0 && y <= max_y && y >= 0 && x <= max_x)
-//     {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         y = 2 * x + 1;
-//         if (y >= max_y)
-//         {
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next)
-//         {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         x += min_side_x;
-//         num += 1;
-//     }
-//     printf("2   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
-//     while (x <= max_x && x >= 0 && y <= max_y && y >= 0)
-//     {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         y = (-1) * x + 148;
-//         if (y >= max_y)
-//         {
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next)
-//         {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         x += min_side_x;
-//         num += 1;
-//     }
-//     y = min_side_y;
-//     x=0;
-//     printf("3   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
-//     while (y <= limit_y && y >= 0 && x <= max_x && x >= 0 && y <= max_y)
-//     {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         x = (y-1)/2;
-//         if (x <= 0 )
-//         {
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next)
-//         {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         y += min_side_y;
-//         num += 1;
-//     }
-//  printf("4   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
-//     // y = limit_x - min_side_y;
-//     while (y <= max_y && y >= 0 && x <= max_x && x >= 0)
-//     {
-//         tmp = malloc(sizeof(struct point));
-//         point_init(tmp);
-//         x = (-1) * y + 148;
-//         if (x <= 0)
-//         {
-//             break;
-//         }
-//         tmp->x = x;
-//         tmp->y = y;
-//         tmp->id = num;
-//         while (ph->next)
-//         {
-//             ph = ph->next;
-//         }
-//         ph->next = tmp;
-//         tmp->pre = ph;
-//         y += min_side_y;
-//         num += 1;
-//     }
-// }
-
-void point_create(struct point *ph) {// 203
+void point_create(struct point *ph) {// 181
    struct point *tmp;
-    float limit_x = 22.8;
-    float limit_y = 95.2;
+    int limit_x = 49;
+    int limit_y = 99;
     float x = 0, y;
     int num = 1;
     //int temp;
@@ -712,7 +611,7 @@ void point_create(struct point *ph) {// 203
     {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        y = 4 * x + 4;
+        y = 2 * x + 1;
         if (y >= max_y)
         {
             break;
@@ -734,7 +633,7 @@ void point_create(struct point *ph) {// 203
     {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        y = (-1) * x + 118;
+        y = (-1) * x + 148;
         if (y >= max_y)
         {
             break;
@@ -758,7 +657,7 @@ void point_create(struct point *ph) {// 203
     {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        x = (y - 4) / 4 ;
+        x = (y-1)/2;
         if (x <= 0 )
         {
             break;
@@ -781,7 +680,7 @@ void point_create(struct point *ph) {// 203
     {
         tmp = malloc(sizeof(struct point));
         point_init(tmp);
-        x = (-1) * y + 118 ;
+        x = (-1) * y + 148;
         if (x <= 0)
         {
             break;
@@ -799,6 +698,107 @@ void point_create(struct point *ph) {// 203
         num += 1;
     }
 }
+
+// void point_create(struct point *ph) {// 203
+//    struct point *tmp;
+//     float limit_x = 22.8;
+//     float limit_y = 95.2;
+//     float x = 0, y;
+//     int num = 1;
+//     //int temp;
+//     point_init(ph);
+
+//     while (x <= limit_x && x >= 0 && y <= max_y && y >= 0 && x <= max_x)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         y = 4 * x + 4;
+//         if (y >= max_y)
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         x += min_side_x;
+//         num += 1;
+//     }
+//     printf("2   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     while (x <= max_x && x >= 0 && y <= max_y && y >= 0)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         y = (-1) * x + 118;
+//         if (y >= max_y)
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         x += min_side_x;
+//         num += 1;
+//     }
+//     y = min_side_y;
+//     x=0;
+//     printf("3   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     while (y <= limit_y && y >= 0 && x <= max_x && x >= 0 && y <= max_y)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         x = (y - 4) / 4 ;
+//         if (x <= 0 )
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         y += min_side_y;
+//         num += 1;
+//     }
+//  printf("4   x= %f,y=%f,max_x= %d,max_y=%d\n",x,y,max_x,max_y);
+//     // y = limit_x - min_side_y;
+//     while (y <= max_y && y >= 0 && x <= max_x && x >= 0)
+//     {
+//         tmp = malloc(sizeof(struct point));
+//         point_init(tmp);
+//         x = (-1) * y + 118 ;
+//         if (x <= 0)
+//         {
+//             break;
+//         }
+//         tmp->x = x;
+//         tmp->y = y;
+//         tmp->id = num;
+//         while (ph->next)
+//         {
+//             ph = ph->next;
+//         }
+//         ph->next = tmp;
+//         tmp->pre = ph;
+//         y += min_side_y;
+//         num += 1;
+//     }
+// }
 
 void point_out(struct point *ph)
 {
@@ -923,7 +923,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
     return 0;
 }
 
-// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 20
+// int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 20
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
 //     int ret = 0;
 //     float r2 = sqrt(0.0311) * h;
@@ -934,7 +934,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 20
+// int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 20
 //     int ret = 0;
 //     float fun, tma;
 //     if (flag) {// flag=1, left
@@ -952,7 +952,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 30
+// int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 30
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
 //     int ret = 0;
 //     float r2 = 0.27 * h;
@@ -963,7 +963,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 30
+// int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 30
 //     int ret = 0;
 //     float fun, tma;
 //     if (flag) {
@@ -981,7 +981,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 40
+// int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 40
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
 //     int ret = 0;
 //     float r2 = sqrt(0.1325) * h;
@@ -992,7 +992,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 40
+// int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 40
 //     int ret = 0;
 //     float fun, tma;
 //     if (flag) {// flag=1, left
@@ -1010,7 +1010,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineincircle(float x, float y, float x0, float y0, float h) {//cita = 50
+// int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 50
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
 //     int ret = 0;
 //     float r2 = sqrt(0.2174) * h;
@@ -1021,7 +1021,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineinOval(float x, float y, float x0, float y0, float h, int flag) {//cita = 50
+// int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 50
 //     int ret = 0;
 //     float fun, tma;
 //     if (flag) {// flag=1, left
