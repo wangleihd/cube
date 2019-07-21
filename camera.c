@@ -1108,20 +1108,38 @@ void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li)
     // printf(" after sort\n\n");
     while (cp->next)
     {
+        for (i = 0; i < 400; i++)
+        {
+            if (cp->lines[i])
+            {
+                lip = li->next;
+                while (lip)
+                {
+                    if (lip->lineId == i)
+                    {
+                        lip->cameraId[cp->cameraId] = 1;
+                        printf("lineId=%d,camerid =%d,pos=%d\n", i, cp->cameraId,cp->pos);
+                        break;
+                    }
+                    lip = lip->next;
+                }
+            }
+        }
         tcp = cp->next;
         while (tcp)
         {
             for (i = 0; i < 400; i++)
             {
                 if (cp->lines[i]) {
-                    lip = li->next;
-                    while(lip) {
-                        if(lip->lineId == i) {
-                            lip->cameraId [cp->cameraId] = 1;
-                            // printf("camerid =%d\n", cp->cameraId);
-                        }
-                        lip = lip ->next;
-                    }
+                    // lip = li->next;
+                    // while(lip) {
+                    //     if(lip->lineId == i) {
+                    //         lip->cameraId [cp->cameraId] = 1;
+                    //          printf("lineId=%d,camerid =%d\n", i,cp->cameraId);
+                    //          break;
+                    //     }
+                    //     lip = lip ->next;
+                    // }
 
                     if(tcp->lines[i]) {
                         cp -> reline[i] = 1;
@@ -1284,6 +1302,7 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li){
                     for(k = 0;k < 400; k++) {
                         if(lip->cameraId[k]) {
                             cp = ch -> next;
+                            //  printf("i=%d,k=%d\n", i, k);
                             while(cp) {
                                 if(k == cp->cameraId) {
                                     if(cp -> resum < min.resum) {
@@ -1295,13 +1314,14 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li){
                         }
                     }
                 }
-                lip = lip -> next;
+                lip = lip->next;
             }
-            printf("\nresum Min = cp->cameraId=%d resum = %f\n", min.cameraId, min.resum);
-            for(k = 0; k < 400;k++) {
-                if(min.reline[k])
-                printf("%d \t", min.reline[k]);
-            }
+           // printf("line=%d,camera=%d,pos=%d\n", i, k, cp->pos);
+            printf("\nline =%d,resum Min = cp->cameraId=%d pos=%d,resum = %f\n",i, min.cameraId,min.pos, min.resum);
+            // for(k = 0; k < 400;k++) {
+            //     if(min.reline[k])
+            //     printf("%d \t", min.reline[k]);
+            // }
             
             printf("\n\n");
             // 2. resum del
