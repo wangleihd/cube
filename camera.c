@@ -1228,7 +1228,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
     struct camerainfo *cp = ch->next;
     struct lineinfo *lip = li->next;
     struct line *ln = l->next;
-    int i = 0, k=0;
+    int i = 0, k=0,j;
     float sum_timestamp=0;
     int line[400] = {0};
     printf("\n\n\none: ===== \n\n\n");
@@ -1253,21 +1253,22 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
                         resum_del_reline(cp, i);
                         k++;
                         printf("\ncp->cameraId=%d,cp->pos=%d,line=%d,cp->resum=%f\n", cp->cameraId, cp->pos, i, cp->resum);
-                        // for (k = 0; k < 400; k++)
-                        // {
-                        //     while (cp->lines[k])
-                        //     {
-                        //         ln = l->next;
-                        //         while (ln)
-                        //         {
-                        //             if (ln->id == k)
-                        //             {
-                        //                 sum_timestamp += ln->timestamp;
-                        //             }
-                        //             ln = ln->next;
-                        //         }
-                        //     }
-                        // }
+                        for (j = 0; j < 400; j++)
+                        {
+                            if(cp->lines[j])
+                            {
+                                //printf("该摄像头覆盖的线段id=%d\n",k);
+                                ln = l->next;
+                                while (ln)
+                                {
+                                    if (ln->id == j)
+                                    {
+                                        sum_timestamp += ln->timestamp;
+                                    }
+                                    ln = ln->next;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1278,6 +1279,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
         cp = cp->next;
     }
     printf("camera sum=%d, sum_timestamp=%f\n",k,sum_timestamp);
+    printf("y=%f\n",sum_timestamp/k);
 }
 
 void resum_del_cam(struct camerainfo * cp) {
