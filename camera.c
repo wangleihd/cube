@@ -1118,7 +1118,7 @@ void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li)
                     if (lip->lineId == i)
                     {
                         lip->cameraId[cp->cameraId] = 1;
-                        printf("lineId=%d,camerid =%d,pos=%d\n", i, cp->cameraId,cp->pos);
+                       // printf("lineId=%d,camerid =%d,pos=%d\n", i, cp->cameraId,cp->pos);
                         break;
                     }
                     lip = lip->next;
@@ -1286,9 +1286,9 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li){
     int i = 0, k=0;
     int line[400] = {0};
     min = malloc(sizeof(struct camerainfo));
-    min->resum = 10000.00;
+    
 
-    printf("\n\n\ntwo: ===== \n\n\n");
+    printf("\n\n\ntwo: ===== \n");
     while(ln) {
         line[ln->id] = 1;
         ln = ln->next;
@@ -1298,47 +1298,55 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li){
             // 1. find resum = min and line = i;
             lip = li -> next;
             save_init(min);
-            while (lip) {
-                if(lip->lineId == i) {
-                            cp = ch -> next;
-                    for(k = 0;k < 400; k++) {
-                        if(lip->cameraId[k]) {
-                            //  printf("i=%d,k=%d\n", i, k);
-                            while(cp) {
-                                if(k == cp->cameraId) {
-                                    if(cp -> resum < min->resum) {
+            min->resum = 10000.00;
+            while (lip)
+            {
+                if (lip->lineId == i)
+                {
+                    cp = ch->next;
+                    for (k = 0; k < 400; k++)
+                    {
+                        if (lip->cameraId[k])
+                        {
+                             // printf("i=%d,k=%d\n", i, k);
+                            while (cp)
+                            {
+                                if (k == cp->cameraId)
+                                {
+                                    if (cp->resum < min->resum)
+                                    {
                                         memcpy(min, cp, sizeof(struct camerainfo));
                                     }
                                 }
-                                cp = cp -> next;
+                                cp = cp->next;
                             }
                         }
                     }
                 }
                 lip = lip->next;
             }
-           // printf("line=%d,camera=%d,pos=%d\n", i, k, cp->pos);
-            printf("\nline =%d,resum Min = cp->cameraId=%d pos=%d,resum = %f\n",i, min->cameraId,min->pos, min->resum);
+            // printf("line=%d,camera=%d,pos=%d\n", i, k, cp->pos);
+            printf("\nline =%d,cp->cameraId=%d pos=%d,resum = %f\n",i, min->cameraId,min->pos, min->resum);
             // for(k = 0; k < 400;k++) {
             //     if(min.reline[k])
             //     printf("%d \t", min.reline[k]);
             // }
             
-            printf("\n\n");
+           // printf("\n\n");
             // 2. resum del
-            // for(k = 0; k< 400; k++) {
-            //     if(min.reline[k]) {
-            //         // printf("reline: %d\n", i);
-            //         if(line[k]) {
-            //             line[k] = 0;
-            //             // printf("camerinfo: %d i=%d\n", cp->cameraId, i);
-            //             resum_del_reline(ch->next, k);
-            //             printf("\ncp->cameraId=%d,cp->pos=%d,i=%d,cp->resum=%f\n",min.cameraId,min.pos,k,min.resum);
-            //         }
+            for(k = 0; k< 400; k++) {
+                if(min->reline[k]) {
+                    // printf("reline: %d\n", i);
+                    if(line[k]) {
+                        line[k] = 0;
+                        // printf("camerinfo: %d i=%d\n", cp->cameraId, i);
+                        resum_del_reline(ch->next, k);
+                       // printf("\ncp->cameraId=%d,cp->pos=%d,i=%d,cp->resum=%f\n",min->cameraId,min->pos,k,min->resum);
+                    }
 
-            //     }
-            // }
-            // resum_sum(ch->next, l);
+                }
+            }
+            resum_sum(ch->next, l);
         }
     }
 
