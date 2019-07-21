@@ -81,14 +81,14 @@ typedef struct camerainfo {
     int sum;
     float resum;
     int isdelete;
-    int lines[600];
-    int reline[600];
+    int lines[400];
+    int reline[400];
     struct camerainfo *next;
 } cii;
 
 struct lineinfo {
     int lineId;
-    int cameraId[600];
+    int cameraId[400];
     int isdelete;
     int isCoverage;
     struct lineinfo *next;
@@ -98,7 +98,7 @@ struct retcam {
     int pos;
     int cameraId;
     int sum;
-    int lines[600];
+    int lines[400];
     int lineId;
     struct retcam *next;
 };
