@@ -1280,33 +1280,34 @@ void resum_del_reline(struct camerainfo *cp, int num){
 
 }
 void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li){
-    struct camerainfo *cp = ch->next, min;
+    struct camerainfo *cp = ch->next, *min;
     struct lineinfo *lip = li->next;
     struct line *ln = l->next;
     int i = 0, k=0;
     int line[400] = {0};
-    min.resum = 10000.00;
+    min = malloc(sizeof(struct camerainfo));
+    min->resum = 10000.00;
 
     printf("\n\n\ntwo: ===== \n\n\n");
     while(ln) {
         line[ln->id] = 1;
         ln = ln->next;
     }
-
     for(i = 0; i < 400; i++) {
         if(line[i]) {
             // 1. find resum = min and line = i;
             lip = li -> next;
+            save_init(min);
             while (lip) {
                 if(lip->lineId == i) {
+                            cp = ch -> next;
                     for(k = 0;k < 400; k++) {
                         if(lip->cameraId[k]) {
-                            cp = ch -> next;
                             //  printf("i=%d,k=%d\n", i, k);
                             while(cp) {
                                 if(k == cp->cameraId) {
-                                    if(cp -> resum < min.resum) {
-                                        memcpy(&min, cp, sizeof(struct camerainfo));
+                                    if(cp -> resum < min->resum) {
+                                        memcpy(min, cp, sizeof(struct camerainfo));
                                     }
                                 }
                                 cp = cp -> next;
@@ -1317,7 +1318,7 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li){
                 lip = lip->next;
             }
            // printf("line=%d,camera=%d,pos=%d\n", i, k, cp->pos);
-            printf("\nline =%d,resum Min = cp->cameraId=%d pos=%d,resum = %f\n",i, min.cameraId,min.pos, min.resum);
+            printf("\nline =%d,resum Min = cp->cameraId=%d pos=%d,resum = %f\n",i, min->cameraId,min->pos, min->resum);
             // for(k = 0; k < 400;k++) {
             //     if(min.reline[k])
             //     printf("%d \t", min.reline[k]);
@@ -1325,18 +1326,18 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li){
             
             printf("\n\n");
             // 2. resum del
-            for(k = 0; k< 400; k++) {
-                if(min.reline[k]) {
-                    // printf("reline: %d\n", i);
-                    if(line[k]) {
-                        line[k] = 0;
-                        // printf("camerinfo: %d i=%d\n", cp->cameraId, i);
-                        resum_del_reline(ch->next, k);
-                        printf("\ncp->cameraId=%d,cp->pos=%d,i=%d,cp->resum=%f\n",min.cameraId,min.pos,k,min.resum);
-                    }
+            // for(k = 0; k< 400; k++) {
+            //     if(min.reline[k]) {
+            //         // printf("reline: %d\n", i);
+            //         if(line[k]) {
+            //             line[k] = 0;
+            //             // printf("camerinfo: %d i=%d\n", cp->cameraId, i);
+            //             resum_del_reline(ch->next, k);
+            //             printf("\ncp->cameraId=%d,cp->pos=%d,i=%d,cp->resum=%f\n",min.cameraId,min.pos,k,min.resum);
+            //         }
 
-                }
-            }
+            //     }
+            // }
             // resum_sum(ch->next, l);
         }
     }
