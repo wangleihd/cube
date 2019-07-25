@@ -2,9 +2,9 @@
 #include "camera.h"
 
 // 摄像头的个数
-#define X 65    // 每行摄像头的数量
+#define X 20    // 每行摄像头的数量
 #define Y 10     // 每列摄像头的数量
-#define X_WIDTH 1.54// 每行相邻摄像头的间距
+#define X_WIDTH 5// 每行相邻摄像头的间距
 #define Y_WIDTH 10 // 每列相邻摄像头的间距
 #define H 3      // 摄像头水平高度
 
@@ -982,39 +982,39 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 40
-//     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
-//     int ret = 0;
-//     float r2 = sqrt(0.1325) * h;
-//     float l = r2 * r2;
-//     if (l >= r) {
-//         ret = 1;
-//     }
-//     return ret;
-// }
+int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 40
+    float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
+    int ret = 0;
+    float r2 = 0.364 * h;
+    float l = r2 * r2;
+    if (l >= r) {
+        ret = 1;
+    }
+    return ret;
+}
 
-// int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 40
-//     int ret = 0;
-//     float fun, tma;
-//     if (flag) {// flag=1, left
-//         tma = (x - x0 + 0.1763 * h);
-//     } else {
-//         tma = (x - x0 - 0.1763 * h);
-//     }
+int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 40
+    int ret = 0;
+    float fun, tma;
+    if (flag) {// flag=1, left
+        tma = (x - x0 + 0.684 * h);
+    } else {
+        tma = (x - x0 - 0.684 * h);
+    }
 
-//     fun =
-//         (( tma * tma) / (0.2578 * h * h)) + (((y - y0) * (y - y0)) / (0.1325 * h * h));
+    fun =
+        (( tma * tma) / (0.258 * h * h)) + (((y - y0) * (y - y0)) / (0.1325 * h * h));
 
-//     if (1 >= fun) {
-//         ret = 1;
-//     }
-//     return ret;
-// }
+    if (1 >= fun) {
+        ret = 1;
+    }
+    return ret;
+}
 
 // int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 50
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
 //     int ret = 0;
-//     float r2 = sqrt(0.2174) * h;
+//     float r2 =0.466 * h;
 //     float l = r2 * r2;
 //     if (l >= r) {
 //         ret = 1;
@@ -1026,13 +1026,13 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     int ret = 0;
 //     float fun, tma;
 //     if (flag) {// flag=1, left
-//         tma = (x - x0 + 0.0875 * h);
+//         tma = (x - x0 + 1.515 * h);
 //     } else {
-//         tma = (x - x0 - 0.0875 * h);
+//         tma = (x - x0 - 1.515 * h);
 //     }
 
 //     fun =
-//         (( tma * tma) / (0.4493 * h * h)) + (((y - y0) * (y - y0)) / (0.2174 * h * h));
+//         (( tma * tma) / (0.45 * h * h)) + (((y - y0) * (y - y0)) / (0.217 * h * h));
 
 //     if (1 >= fun) {
 //         ret = 1;
@@ -1040,11 +1040,10 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineincircle(float x, float y, int x0, int y0, int h)
-// { //cita = 60
+// int lineincircle(float x, float y, int x0, int y0, int h){ //cita = 60
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
 //     int ret = 0;
-//     float r2 = sqrt(3) / 3 * h;
+//     float r2 = 0.577 * h;
 //     float l = r2 * r2;
 //     if (l >= r)
 //     {
@@ -1055,21 +1054,20 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-// int lineinOval(float x, float y, int x0, int y0, int h, int flag)
-// { //cita = 60
+// int lineinOval(float x, float y, int x0, int y0, int h, int flag){ //cita = 60
 //     int ret = 0;
 //     float fun, tma;
 //     if (flag)
 //     {
-//         tma = (x - x0 + sqrt(3) / 2 * h);
+//         tma = (x - x0 + 0.866 * h);
 //     }
 //     else
 //     {
-//         tma = (x - x0 - sqrt(3) / 2 * h);
+//         tma = (x - x0 - 0.866 * h);
 //     }
 
 //     fun =
-//         ((4 * tma * tma) / (3 * h * h)) + ((3 * (y - y0) * (y - y0)) / (h * h));
+//         ((tma * tma) / (0.75 * h * h)) + (((y - y0) * (y - y0)) / (0.333 * h * h));
 
 //     if (1 >= fun)
 //     {
@@ -1079,34 +1077,34 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 70
-    float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
-    int ret = 0;
-    float r2 = 0.7 * h;
-    float l = r2 * r2;
-    if (l >= r) {
-        ret = 1;
-    }
-    return ret;
-}
+// int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 70
+//     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
+//     int ret = 0;
+//     float r2 = 0.7 * h;
+//     float l = r2 * r2;
+//     if (l >= r) {
+//         ret = 1;
+//     }
+//     return ret;
+// }
 
-int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 70
-    int ret = 0;
-    float fun, tma;
-    if (flag) {// flag=1, left
-        tma = (x - x0 + 0.0875 * h);
-    } else {
-        tma = (x - x0 - 0.0875 * h);
-    }
+// int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 70
+//     int ret = 0;
+//     float fun, tma;
+//     if (flag) {// flag=1, left
+//         tma = (x - x0 + 1.029 * h);
+//     } else {
+//         tma = (x - x0 - 1.029 * h);
+//     }
 
-    fun =
-        (( tma * tma) / (3.644 * h * h)) + (((y - y0) * (y - y0)) / (0.49 * h * h));
+//     fun =
+//         (( tma * tma) / (1.245 * h * h)) + (((y - y0) * (y - y0)) / (0.49 * h * h));
 
-    if (1 >= fun) {
-        ret = 1;
-    }
-    return ret;
-}
+//     if (1 >= fun) {
+//         ret = 1;
+//     }
+//     return ret;
+// }
 
 // int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 80
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
@@ -1123,19 +1121,20 @@ int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 70
 //     int ret = 0;
 //     float fun, tma;
 //     if (flag) {// flag=1, left
-//         tma = (x - x0 + 0.176 * h);
+//         tma = (x - x0 + 1.286 * h);
 //     } else {
-//         tma = (x - x0 - 0.176 * h);
+//         tma = (x - x0 - 1.286 * h);
 //     }
 
 //     fun =
-//         (( tma * tma) / (2.136 * h * h)) + (((y - y0) * (y - y0)) / (0.916 * h * h));
+//         (( tma * tma) / (2.136 * h * h)) + (((y - y0) * (y - y0)) / (0.704 * h * h));
 
 //     if (1 >= fun) {
 //         ret = 1;
 //     }
 //     return ret;
 // }
+
 void save_init(struct camerainfo *ctmp)
 {
     int i;
