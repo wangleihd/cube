@@ -62,7 +62,7 @@ void line_lengthSum(struct line *lh);
 void resum_sort(struct camerainfo *ch);
 
 void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li);
-void resum_del_cam(struct camerainfo * cp);
+void resum_del_cam(struct camerainfo * ch, struct camerainfo * cp);
 void resum_del_reline(struct camerainfo *cp, int num);
 
 void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li);
@@ -1248,16 +1248,6 @@ void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li)
             for (i = 0; i < 650; i++)
             {
                 if (cp->lines[i]) {
-                    // lip = li->next;
-                    // while(lip) {
-                    //     if(lip->lineId == i) {
-                    //         lip->cameraId [cp->cameraId] = 1;
-                    //          printf("lineId=%d,camerid =%d\n", i,cp->cameraId);
-                    //          break;
-                    //     }
-                    //     lip = lip ->next;
-                    // }
-
                     if(tcp->lines[i]) {
                         cp -> reline[i] = 1;
                         tcp -> reline[i] = 1;
@@ -1388,7 +1378,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
                     }
                 }
             }
-            resum_del_cam(cp);
+            resum_del_cam(ch, cp);
             resum_sum(cp, l);
         }
         resum_sort(cp);
@@ -1398,9 +1388,9 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
     printf("y=%f\n",sum_timestamp/k);
 }
 
-void resum_del_cam(struct camerainfo * cp) {
-    struct camerainfo * p = cp;
-    int camid = p->cameraId;
+void resum_del_cam(struct camerainfo * ch, struct camerainfo * cp) {
+    struct camerainfo * p = ch->next;
+    int camid = cp->cameraId;
     while(p) {
         if(p->cameraId == camid)
             p->isdelete = 1;
