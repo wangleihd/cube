@@ -1,4 +1,3 @@
-
 #include "camera.h"
 
 // 摄像头的个数
