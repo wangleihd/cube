@@ -1364,7 +1364,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
             {
                 if (cp->lines[i])
                 {
-                    // printf("reline: %d\n", i);
+                    // printf("line: %d\n", i);
                     if (line[i])
                     {
                         line[i] = 0;
@@ -1473,6 +1473,17 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li)
         line[ln->id] = 1;
         ln = ln->next;
     }
+
+    // for(i=0;i<650;i++){
+    //     if(line[i])
+    //     printf("%d\t",i);//传过来的确实是线段的个数
+    // }
+    while(lip){
+        if(lip)
+        printf("%d \n",lip->lineId);
+        lip=lip->next;
+    }
+    lip = li->next;
     for (i = 0; i < 650; i++)
     {
         if (line[i])
@@ -1483,12 +1494,12 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li)
             min->resum = 10000.00;
             while (lip)
             {
-                if (lip->lineId == i)
+                if (lip->lineId == i)//拿到线段的id是i，然后在线段的链里找id是i的线段
                 {
                     cp = ch->next;
                     for (k = 0; k < 650; k++)
                     {
-                        if (lip->cameraId[k])
+                        if (lip->cameraId[k])//找到覆盖线段i的摄像头id为k
                         {
                             // printf("i=%d,k=%d\n", i, k);
                             while (cp)
@@ -1503,11 +1514,11 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li)
                                 cp = cp->next;
                             }
                         }
+            // printf("line=%d,camera=%d,pos=%d\n", i, k, min->pos);
                     }
                 }
                 lip = lip->next;
             }
-            // printf("line=%d,camera=%d,pos=%d\n", i, k, cp->pos);
             printf("\nline =%d,cp->cameraId=%d pos=%d,resum = %f\n", i, min->cameraId, min->pos, min->resum);
             for (j = 0; j < 650; j++)
             {
