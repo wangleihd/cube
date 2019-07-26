@@ -225,59 +225,7 @@ void point_sort1(struct point *ph)
     }
 }
 
-void resum_sort(struct camerainfo *ch)
-{
-    struct camerainfo *temp;
-	struct camerainfo *p = ch;
-    struct camerainfo *q = ch->next;
-    //int i = 0;
-    temp = malloc(sizeof(struct camerainfo));
-    
-    while (p)
-    {
-        while (q)
-        {
-            if (q->resum < p->resum)
-            {
-                //temp = p;
-                //p = q;
-                //q = temp;
-                //temp = malloc(sizeof(struct camerainfo));
-                //memcpy(temp, p, sizeof(struct camerainfo));
-                temp->pos = p->pos;
-                temp->cameraId = p->cameraId;
-                temp->sum = p->sum;
-                temp->isdelete = p->isdelete;
-                temp->resum = p->resum;
-                memcpy(temp->reline, p->reline, 650 * sizeof(int));
-                memcpy(temp->lines, p->lines, 650 * sizeof(int));
 
-                // memcpy(p, q, sizeof(struct camerainfo));
-                p->pos = q->pos;
-                p->cameraId = q->cameraId;
-                p->sum = q->sum;
-                p->isdelete = q->isdelete;
-                p->resum = q->resum;
-                memcpy(p->reline, q->reline, 650 * sizeof(int));
-                memcpy(p->lines, q->lines, 650 * sizeof(int));
-                //  memcpy(q, temp, sizeof(struct camerainfo));
-
-                q->pos = temp->pos;
-                q->cameraId = temp->cameraId;
-                q->sum = temp->sum;
-                q->isdelete = temp->isdelete;
-                q->resum = temp->resum;
-                memcpy(q->reline, temp->reline, 650 * sizeof(int));
-                memcpy(q->lines, temp->lines, 650 * sizeof(int));
-                //i++;
-                //free(temp);
-            }
-            q = q->next; //冒泡，每次找到resum最小的，放到p所指向的位置。
-        }
-        p = p->next;
-        q = p;
-    }
-}
 void point_delete(struct point *ph)
 {
     struct point *p = ph;
@@ -1284,7 +1232,7 @@ void resum_sum(struct camerainfo * ch, struct line *l ) {
     while(ca) {
         ca -> resum = 0;
         for(i = 0; i < 650; i++ ) {
-            if(ca -> reline[i]) {
+            if(ca -> lines[i]) {
                 li = l ->next;
                 while(li) {
                     if(li ->id == i) {
@@ -1306,7 +1254,7 @@ void resum_out(struct camerainfo *ch)
     {
         printf(" cameraId=%d ,pos=%d, sum =%d, resum=%f \n", p->cameraId, p->pos, p->sum, p->resum);
         for(i = 0; i < 650; i ++) {
-            if(p->reline[i])
+            if(p->lines[i])
             printf("%d\t", i);
         }
         printf("\n");
@@ -1328,14 +1276,66 @@ void resum_out(struct camerainfo *ch)
 //         ch = ch->next;
 //     }
 // }
+void resum_sort(struct camerainfo *ch)
+{
+    struct camerainfo *temp;
+	struct camerainfo *p = ch;
+    struct camerainfo *q = ch->next;
+    //int i = 0;
+    temp = malloc(sizeof(struct camerainfo));
+    
+    while (p)
+    {
+        while (q)
+        {
+            if (q->resum < p->resum)
+            {
+                //temp = p;
+                //p = q;
+                //q = temp;
+                //temp = malloc(sizeof(struct camerainfo));
+                //memcpy(temp, p, sizeof(struct camerainfo));
+                temp->pos = p->pos;
+                temp->cameraId = p->cameraId;
+                temp->sum = p->sum;
+                temp->isdelete = p->isdelete;
+                temp->resum = p->resum;
+                memcpy(temp->reline, p->reline, 650 * sizeof(int));
+                memcpy(temp->lines, p->lines, 650 * sizeof(int));
 
+                // memcpy(p, q, sizeof(struct camerainfo));
+                p->pos = q->pos;
+                p->cameraId = q->cameraId;
+                p->sum = q->sum;
+                p->isdelete = q->isdelete;
+                p->resum = q->resum;
+                memcpy(p->reline, q->reline, 650 * sizeof(int));
+                memcpy(p->lines, q->lines, 650 * sizeof(int));
+                //  memcpy(q, temp, sizeof(struct camerainfo));
+
+                q->pos = temp->pos;
+                q->cameraId = temp->cameraId;
+                q->sum = temp->sum;
+                q->isdelete = temp->isdelete;
+                q->resum = temp->resum;
+                memcpy(q->reline, temp->reline, 650 * sizeof(int));
+                memcpy(q->lines, temp->lines, 650 * sizeof(int));
+                //i++;
+                //free(temp);
+            }
+            q = q->next; //冒泡，每次找到resum最小的，放到p所指向的位置。
+        }
+        p = p->next;
+        q = p;
+    }
+}
 void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
 {
     struct camerainfo *cp = ch->next;
     struct lineinfo *lip = li->next;
     struct line *ln = l->next;
     struct line  *lnext;
-    int i = 0, k=0,j;//k用来累计摄像头个数
+    int i = 0, k=0,j,m,n;//k用来累计摄像头个数,m用来判断线段是否被完全覆盖
     float sum_timestamp=0;
     int line[650] = {0};
     int camera[650] = {0};
@@ -1359,7 +1359,7 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
                         line[i] = 0;
                         // printf("camerinfo: %d i=%d\n", cp->cameraId, i);
                         resum_del_lines(cp, i);
-                        //camera[cp->cameraId]=1;
+                        camera[cp->cameraId]=1;
                         printf("\ncp->cameraId=%d,cp->pos=%d,line=%d,cp->resum=%f\n", cp->cameraId, cp->pos, i, cp->resum);
                         
                     }
@@ -1404,8 +1404,20 @@ void algorithm_one1(struct camerainfo *ch, struct line *l, struct lineinfo *li)
             }
         }
     }
+       // m = 0;
+    // for (n = 0; n < 650; n++)
+    // {
 
-    printf("camera sum=%d, sum_timestamp=%f\n",k,sum_timestamp);
+    //     m += line[n];
+    //     if (m == 0)
+    //     {
+    //         break;
+    //     }
+    //     else
+    //     {
+    //         m = 0;
+    //         n = 0;
+    printf("\ncamera sum=%d, sum_timestamp=%f\n",k,sum_timestamp);
     printf("y=%f\n",sum_timestamp/k);
 }
 
@@ -1513,7 +1525,7 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li)
             // 2. resum del
             for (k = 0; k < 650; k++)
             {
-                if (min->reline[k])
+                if (min->lines[k])
                 {
                     // printf("reline: %d\n", i);
                     if (line[k])
