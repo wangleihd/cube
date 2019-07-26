@@ -1,9 +1,9 @@
 #include "camera.h"
 
 // 摄像头的个数
-#define X 20    // 每行摄像头的数量
+#define X 60    // 每行摄像头的数量
 #define Y 10     // 每列摄像头的数量
-#define X_WIDTH 5// 每行相邻摄像头的间距
+#define X_WIDTH 1.67// 每行相邻摄像头的间距
 #define Y_WIDTH 10 // 每列相邻摄像头的间距
 #define H 3      // 摄像头水平高度
 
@@ -940,34 +940,34 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 40
-    float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
-    int ret = 0;
-    float r2 = 0.364 * h;
-    float l = r2 * r2;
-    if (l >= r) {
-        ret = 1;
-    }
-    return ret;
-}
+// int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 40
+//     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
+//     int ret = 0;
+//     float r2 = 0.364 * h;
+//     float l = r2 * r2;
+//     if (l >= r) {
+//         ret = 1;
+//     }
+//     return ret;
+// }
 
-int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 40
-    int ret = 0;
-    float fun, tma;
-    if (flag) {// flag=1, left
-        tma = (x - x0 + 0.684 * h);
-    } else {
-        tma = (x - x0 - 0.684 * h);
-    }
+// int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 40
+//     int ret = 0;
+//     float fun, tma;
+//     if (flag) {// flag=1, left
+//         tma = (x - x0 + 0.684 * h);
+//     } else {
+//         tma = (x - x0 - 0.684 * h);
+//     }
 
-    fun =
-        (( tma * tma) / (0.258 * h * h)) + (((y - y0) * (y - y0)) / (0.1325 * h * h));
+//     fun =
+//         (( tma * tma) / (0.258 * h * h)) + (((y - y0) * (y - y0)) / (0.1325 * h * h));
 
-    if (1 >= fun) {
-        ret = 1;
-    }
-    return ret;
-}
+//     if (1 >= fun) {
+//         ret = 1;
+//     }
+//     return ret;
+// }
 
 // int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 50
 //     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
@@ -1064,34 +1064,34 @@ int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 40
 //     return ret;
 // }
 
-// int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 80
-//     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
-//     int ret = 0;
-//     float r2 = 0.839 * h;
-//     float l = r2 * r2;
-//     if (l >= r) {
-//         ret = 1;
-//     }
-//     return ret;
-// }
+int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 80
+    float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
+    int ret = 0;
+    float r2 = 0.839 * h;
+    float l = r2 * r2;
+    if (l >= r) {
+        ret = 1;
+    }
+    return ret;
+}
 
-// int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 80
-//     int ret = 0;
-//     float fun, tma;
-//     if (flag) {// flag=1, left
-//         tma = (x - x0 + 1.286 * h);
-//     } else {
-//         tma = (x - x0 - 1.286 * h);
-//     }
+int lineinOval(float x, float y, int x0, int y0, int h, int flag) {//cita = 80
+    int ret = 0;
+    float fun, tma;
+    if (flag) {// flag=1, left
+        tma = (x - x0 + 1.286 * h);
+    } else {
+        tma = (x - x0 - 1.286 * h);
+    }
 
-//     fun =
-//         (( tma * tma) / (2.136 * h * h)) + (((y - y0) * (y - y0)) / (0.704 * h * h));
+    fun =
+        (( tma * tma) / (2.136 * h * h)) + (((y - y0) * (y - y0)) / (0.704 * h * h));
 
-//     if (1 >= fun) {
-//         ret = 1;
-//     }
-//     return ret;
-// }
+    if (1 >= fun) {
+        ret = 1;
+    }
+    return ret;
+}
 
 void save_init(struct camerainfo *ctmp)
 {
