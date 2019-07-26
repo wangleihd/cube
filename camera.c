@@ -838,6 +838,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
          struct lineinfo *li)
 {
     struct npoint *ph = head->next;
+    struct lineinfo *lip;
     struct line *plh;
     int i = 0;
     while (ph)
@@ -878,6 +879,11 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
             plh = plh->next;
         }
         ph = ph->next;
+    }
+    lip=li->next;
+       while(lip){
+        printf("%d\t\t",lip->lineId);
+        lip=lip->next;
     }
     return 0;
 }
@@ -1172,6 +1178,7 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
         lip = lip->next;
     }
     lip->next = ltmp;
+ 
 }
 
 void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li)
@@ -1479,8 +1486,7 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li)
     //     printf("%d\t",i);//传过来的确实是线段的个数
     // }
     while(lip){
-        if(lip)
-        printf("%d \n",lip->lineId);
+        printf("%d \t\t",lip->lineId);
         lip=lip->next;
     }
     lip = li->next;
