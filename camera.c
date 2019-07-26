@@ -807,11 +807,7 @@ void line_create(struct line *lh, struct point *ph)
         lh->next = tmp;
         p = p->next;
     }
-    while(lh){
-        lh->id=i;
-        i++;
-        lh=lh->next;
-    }
+
 }
 void line_lengthSum(struct line *lh)
 {
