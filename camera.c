@@ -1161,6 +1161,7 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
         ctmp->cameraId = head->cameraId;
         ctmp->sum += 1;
         ctmp->lines[l->id] = 1;
+        
         //printf(" \tl->id= %d\n",  l->id);
         while (cp->next)
         {
@@ -1173,12 +1174,13 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
     save_init_line(ltmp);
     ltmp->lineId = l->id;
     ltmp->cameraId[head->cameraId] = 1;
+    ltmp->pos = pos;
     while (lip->next)
     {
         lip = lip->next;
     }
     lip->next = ltmp;
- 
+    printf("\nhead->cameraId=%d,pos=%d,l-<id:%d\t",head->cameraId,pos,l->id);
 }
 
 void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li)
@@ -1485,11 +1487,11 @@ void algorithm_two(struct camerainfo *ch, struct line *l, struct lineinfo *li)
     //     if(line[i])
     //     printf("%d\t",i);//传过来的确实是线段的个数
     // }
-    while(lip){
-        printf("%d \t\t",lip->lineId);
-        lip=lip->next;
-    }
-    lip = li->next;
+    // while(lip){
+    //     printf("%d \t\t",lip->lineId);
+    //     lip=lip->next;
+    // }
+    // lip = li->next;
     for (i = 0; i < 650; i++)
     {
         if (line[i])

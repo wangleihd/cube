@@ -89,6 +89,7 @@ typedef struct camerainfo {
 struct lineinfo {
     int lineId;
     int cameraId[650];
+    int pos;
     int isdelete;
     int isCoverage;
     struct lineinfo *next;
