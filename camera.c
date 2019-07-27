@@ -1,9 +1,9 @@
 #include "camera.h"
 
 // 摄像头的个数
-#define X 20    // 每行摄像头的数量
+#define X 50    // 每行摄像头的数量
 #define Y 10     // 每列摄像头的数量
-#define X_WIDTH 5// 每行相邻摄像头的间距
+#define X_WIDTH 2// 每行相邻摄像头的间距
 #define Y_WIDTH 10 // 每列相邻摄像头的间距
 #define H 3      // 摄像头水平高度
 
@@ -106,18 +106,19 @@ int main(void)
     line(&nh, &lh, &ch, &lih);
     line(&nh, &lh, &tch, &lih); // The ground segment establishes contact with the camera
 
-    resum(&ch, &lh, &lih);
-    resum_sum(&ch, &lh);
-    resum_sort(&ch);
+    // resum(&ch, &lh, &lih);
+    // resum_sum(&ch, &lh);
+    // resum_sort(&ch);
     // resum_line_out(&lih);
 
     resum(&tch, &lh, &lih); // Calculate the repeated sum // resum_out(&ch);//输出摄像头的累加和结果
     resum_sum(&tch, &lh);
     resum_sort(&tch);
+
     // printf(" after sort\n\n");
    // resum_out(&ch);
     //save_init(&one);
-    algorithm_one1(&ch, &lh, &lih);
+   // algorithm_one1(&ch, &lh, &lih);
     algorithm_two(&tch, &lh, &lih);
     //resum_out(&tch);
     //save_out(&newch);//有错误，内存访问错误
@@ -882,7 +883,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
     }
     lip=li->next;
        while(lip){
-        printf("%d\t\t",lip->lineId);
+        printf("lineId=%d\t\t",lip->lineId);
         lip=lip->next;
     }
     return 0;
@@ -1041,7 +1042,7 @@ int line(struct npoint *head, struct line *lp, struct camerainfo *ci,
 //     return ret;
 // }
 
-int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 703  a=3.35  b=2.1
+int lineincircle(float x, float y, int x0, int y0, int h) {//cita = 70  a=3.35  b=2.1
     float r = (x - x0) * (x - x0) + (y - y0) * (y - y0);
     int ret = 0;
     float r2 = 0.7 * h;
@@ -1136,11 +1137,12 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
     cp = ci;
     tcp = cp->next;
     lip = li;
+    int i,flag1=0;//用来标记当前线段的li信息id是否已经存在，若存在，就把相同lineid的线段所属的摄像头传给已连在链上的结构体内，如不存在，就连在链上
     // tlp = li->next;
     
     while (tcp)
     {
-        if (tcp->cameraId == head->cameraId && tcp->pos == pos)
+        if (tcp->cameraId == head->cameraId && tcp->pos == pos)//这里是为了处理当一个摄像头照射多条线段的时候
         {
             flag = 1;
             break;
@@ -1155,7 +1157,7 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
     }
     else
     {
-        ctmp = malloc(sizeof(struct camerainfo));
+        ctmp = malloc(sizeof(struct camerainfo));//程序一开始走的是这一段
         save_init(ctmp);
         ctmp->pos = pos;
         ctmp->cameraId = head->cameraId;
@@ -1177,10 +1179,29 @@ void save(struct npoint *head, struct line *l, struct camerainfo *ci,
     ltmp->pos = pos;
     while (lip->next)
     {
+        if (ltmp->lineId == lip->lineId)
+        {
+            for (i = 0; i < 650; i++)
+            {
+                if (ltmp->cameraId[i])
+                {
+                    lip->cameraId[i] = 1; //找到ltmp里边的摄像头id  i赋给同lineid的lip里的cameraid数组内
+                    flag1 = 1;
+                }
+            }
+        }
+
         lip = lip->next;
     }
-    lip->next = ltmp;
-    printf("\nhead->cameraId=%d,pos=%d,l-<id:%d\t",head->cameraId,pos,l->id);
+    if (!flag1)
+    {
+
+        lip->next = ltmp;
+    }
+    else{
+        free(ltmp);
+    }
+   // printf("\nhead->cameraId=%d,pos=%d,l-<id:%d\t",head->cameraId,pos,l->id);
 }
 
 void resum(struct camerainfo *ch, struct line *l, struct lineinfo *li)
